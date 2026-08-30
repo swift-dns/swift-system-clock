@@ -17,7 +17,7 @@ extension WindowsClockID {
     ///
     /// [QueryPerformanceCounter](https://learn.microsoft.com/en-us/windows/win32/api/profileapi/nf-profileapi-queryperformancecounter)
     ///
-    /// Measures: Elapsed time, since the machine started
+    /// Measures Elapsed time, since the machine started
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -43,7 +43,7 @@ extension WindowsClockID {
     ///
     /// [GetSystemTimeAsFileTime](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getsystemtimeasfiletime)
     ///
-    /// Measures: Wall time, counted from 1970-01-01 UTC
+    /// Measures Wall time, counted from 1970-01-01 UTC
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -69,7 +69,7 @@ extension WindowsClockID {
     ///
     /// [GetSystemTimePreciseAsFileTime](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-getsystemtimepreciseasfiletime)
     ///
-    /// Measures: Wall time, counted from 1970-01-01 UTC
+    /// Measures Wall time, counted from 1970-01-01 UTC
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -95,7 +95,7 @@ extension WindowsClockID {
     ///
     /// [QueryInterruptTime](https://learn.microsoft.com/en-us/windows/win32/api/realtimeapiset/nf-realtimeapiset-queryinterrupttime)
     ///
-    /// Measures: Elapsed time, since the machine started
+    /// Measures Elapsed time, since the machine started
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -121,7 +121,7 @@ extension WindowsClockID {
     ///
     /// [QueryInterruptTimePrecise](https://learn.microsoft.com/en-us/windows/win32/api/realtimeapiset/nf-realtimeapiset-queryinterrupttimeprecise)
     ///
-    /// Measures: Elapsed time, since the machine started
+    /// Measures Elapsed time, since the machine started
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -147,7 +147,7 @@ extension WindowsClockID {
     ///
     /// [QueryUnbiasedInterruptTime](https://learn.microsoft.com/en-us/windows/win32/api/realtimeapiset/nf-realtimeapiset-queryunbiasedinterrupttime)
     ///
-    /// Measures: Elapsed time, since the machine started
+    /// Measures Elapsed time, since the machine started
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -173,7 +173,7 @@ extension WindowsClockID {
     ///
     /// [QueryUnbiasedInterruptTimePrecise](https://learn.microsoft.com/en-us/windows/win32/api/realtimeapiset/nf-realtimeapiset-queryunbiasedinterrupttimeprecise)
     ///
-    /// Measures: Elapsed time, since the machine started
+    /// Measures Elapsed time, since the machine started
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -199,7 +199,7 @@ extension WindowsClockID {
     ///
     /// [GetTickCount64](https://learn.microsoft.com/en-us/windows/win32/api/sysinfoapi/nf-sysinfoapi-gettickcount64)
     ///
-    /// Measures: Elapsed time, since the machine started
+    /// Measures Elapsed time, since the machine started
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -225,7 +225,7 @@ extension WindowsClockID {
     ///
     /// [GetProcessTimes](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getprocesstimes)
     ///
-    /// Measures: CPU time used by this process
+    /// Measures CPU time used by this process
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -251,7 +251,7 @@ extension WindowsClockID {
     ///
     /// [GetThreadTimes](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getthreadtimes)
     ///
-    /// Measures: CPU time used by this thread
+    /// Measures CPU time used by this thread
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.

@@ -15,7 +15,7 @@ extension OpenBSDClockID {
     ///
     /// [clock_gettime(2)](https://man.openbsd.org/clock_gettime.2)
     ///
-    /// Measures: Wall time, counted from 1970-01-01 UTC
+    /// Measures Wall time, counted from 1970-01-01 UTC
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -41,7 +41,7 @@ extension OpenBSDClockID {
     ///
     /// [clock_gettime(2)](https://man.openbsd.org/clock_gettime.2)
     ///
-    /// Measures: Elapsed time, from an arbitrary point
+    /// Measures Elapsed time, from an arbitrary point
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -67,7 +67,7 @@ extension OpenBSDClockID {
     ///
     /// [clock_gettime(2)](https://man.openbsd.org/clock_gettime.2)
     ///
-    /// Measures: Elapsed time, since the machine booted
+    /// Measures Elapsed time, since the machine booted
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -93,7 +93,7 @@ extension OpenBSDClockID {
     ///
     /// [clock_gettime(2)](https://man.openbsd.org/clock_gettime.2)
     ///
-    /// Measures: Elapsed time, since the machine booted
+    /// Measures Elapsed time, since the machine booted
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -119,7 +119,7 @@ extension OpenBSDClockID {
     ///
     /// [clock_gettime(2)](https://man.openbsd.org/clock_gettime.2)
     ///
-    /// Measures: CPU time used by this process
+    /// Measures CPU time used by this process
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -145,7 +145,7 @@ extension OpenBSDClockID {
     ///
     /// [clock_gettime(2)](https://man.openbsd.org/clock_gettime.2)
     ///
-    /// Measures: CPU time used by this thread
+    /// Measures CPU time used by this thread
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.

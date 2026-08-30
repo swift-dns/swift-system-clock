@@ -15,7 +15,7 @@ extension WASIClockID {
     ///
     /// [WASI preview1](https://github.com/WebAssembly/WASI/blob/snapshot-01/phases/snapshot/docs.md)
     ///
-    /// Measures: Wall time, counted from 1970-01-01 UTC
+    /// Measures Wall time, counted from 1970-01-01 UTC
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -41,7 +41,7 @@ extension WASIClockID {
     ///
     /// [WASI preview1](https://github.com/WebAssembly/WASI/blob/snapshot-01/phases/snapshot/docs.md)
     ///
-    /// Measures: Elapsed time, from an arbitrary point
+    /// Measures Elapsed time, from an arbitrary point
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
