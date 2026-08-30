@@ -3,7 +3,7 @@
 public import WinSDK
 public import CSystemClock
 
-/// The Windows end of ``PlatformClock``.
+/// The Windows end of ``_PlatformClockTypealias``.
 ///
 /// Windows has no `clockid_t`, so the id selects a Win32 function rather than naming anything
 /// the operating system defines. `CSystemClock` supplies only the calls Swift's `WinSDK` module

@@ -2,7 +2,7 @@
 
 public import Darwin
 
-/// The Darwin end of ``PlatformClock``.
+/// The Darwin end of ``_PlatformClockTypealias``.
 ///
 /// `clock_gettime_nsec_np(3)` answers whole nanoseconds, so a reading needs no division and no
 /// `timespec`. Darwin has no `clock_nanosleep(2)`, so a deadline is waited out as a relative

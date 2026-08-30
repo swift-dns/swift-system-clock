@@ -10,7 +10,7 @@ public import Android
 #error("The SystemClock module was unable to identify your C library.")
 #endif
 
-/// The end of ``PlatformClock`` for the platforms that reach their clocks through
+/// The end of ``_PlatformClockTypealias`` for the platforms that reach their clocks through
 /// `clock_gettime(2)`, which is every one Swift supports bar Darwin, Windows and WASI.
 ///
 /// The id is the platform's own `clockid_t`, so which ids are legal is a property of the

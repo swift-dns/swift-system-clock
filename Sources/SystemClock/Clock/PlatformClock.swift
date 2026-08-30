@@ -13,16 +13,16 @@
 
 #if canImport(Darwin)
 @usableFromInline
-typealias PlatformClock = DarwinClock
+typealias _PlatformClockTypealias = DarwinClock
 #elseif os(Linux) || os(Android) || os(FreeBSD) || os(OpenBSD)
 @usableFromInline
-typealias PlatformClock = POSIXClock
+typealias _PlatformClockTypealias = POSIXClock
 #elseif os(Windows)
 @usableFromInline
-typealias PlatformClock = WindowsClock
+typealias _PlatformClockTypealias = WindowsClock
 #elseif os(WASI)
 @usableFromInline
-typealias PlatformClock = WASIClock
+typealias _PlatformClockTypealias = WASIClock
 #else
 #error("The SystemClock module does not know which clock ids your platform uses.")
 #endif

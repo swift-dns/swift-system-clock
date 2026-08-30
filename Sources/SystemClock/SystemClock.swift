@@ -16,15 +16,8 @@
 @available(SwiftStdlib 5.7, *)
 public struct SystemClock<SCDuration>: Sendable {
 
-    /// The clock of the platform being compiled for, holding the id in whichever form that
-    /// platform takes.
     @usableFromInline
-    let clock: PlatformClock
-
-    @inlinable
-    init(clock: PlatformClock) {
-        self.clock = clock
-    }
+    let clock: _PlatformClockTypealias
 
     /// Creates a clock from the id belonging to the platform being compiled for.
     ///
@@ -39,17 +32,17 @@ public struct SystemClock<SCDuration>: Sendable {
         wasi: WASIClockID
     ) {
         #if canImport(Darwin)
-        self.init(clock: DarwinClock(id: darwin))
+        self.clock = DarwinClock(id: darwin)
         #elseif os(Linux) || os(Android)
-        self.init(clock: POSIXClock(id: linux.rawValue))
+        self.clock = POSIXClock(id: linux.rawValue)
         #elseif os(Windows)
-        self.init(clock: WindowsClock(id: windows))
+        self.clock = WindowsClock(id: windows)
         #elseif os(FreeBSD)
-        self.init(clock: POSIXClock(id: freebsd.rawValue))
+        self.clock = POSIXClock(id: freebsd.rawValue)
         #elseif os(OpenBSD)
-        self.init(clock: POSIXClock(id: openbsd.rawValue))
+        self.clock = POSIXClock(id: openbsd.rawValue)
         #elseif os(WASI)
-        self.init(clock: WASIClock(id: wasi))
+        self.clock = WASIClock(id: wasi)
         #else
         #error("The SystemClock module does not know which clock ids your platform uses.")
         #endif
@@ -64,7 +57,7 @@ extension SystemClock: Clock where SCDuration: SystemDurationProtocol {
     @inlinable
     public var now: Instant {
         guard let reading = self.clock.read() else {
-            _clockIDRejected(self.clock.rawID)
+            fatalError("SystemClock: the operating system rejected the clock's id")
         }
         return Instant(_value: .nanoseconds(reading.nanoseconds))
     }
@@ -76,15 +69,8 @@ extension SystemClock: Clock where SCDuration: SystemDurationProtocol {
     @inlinable
     public var minimumResolution: Self.Duration {
         guard let reading = self.clock.resolution() else {
-            _clockIDRejected(self.clock.rawID)
+            fatalError("SystemClock: the operating system rejected the clock's id")
         }
         return Self.Duration.nanoseconds(reading.nanoseconds)
     }
-}
-
-/// Outlined, and off the hot path, so that reading a clock stays a call and a compare.
-@inline(never)
-@usableFromInline
-func _clockIDRejected(_ id: Int32) -> Never {
-    fatalError("SystemClock: the operating system rejected clock id '\(id)'")
 }

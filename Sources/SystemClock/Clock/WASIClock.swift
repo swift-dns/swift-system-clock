@@ -3,7 +3,7 @@
 public import WASILibc
 internal import CSystemClock
 
-/// The WASI end of ``PlatformClock``.
+/// The WASI end of ``_PlatformClockTypealias``.
 ///
 /// wasi-libc spells `CLOCK_REALTIME` and `CLOCK_MONOTONIC` as the addresses of extern objects
 /// rather than as integers, so there is no number for Swift to import and the id is turned back
