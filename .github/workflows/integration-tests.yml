@@ -1,4 +1,4 @@
-name: unit-tests
+name: integration-tests
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -13,7 +13,7 @@ defaults:
     shell: bash --noprofile --norc -Eeuo pipefail {0}
 
 jobs:
-  linux-unit:
+  linux-integration-tests:
     strategy:
       fail-fast: false
       matrix:
@@ -33,9 +33,6 @@ jobs:
       actions: read # For reading the previous commit's workflow runs
       contents: read
 
-    env:
-      ASAN_OPTIONS: "detect_leaks=1"
-
     steps:
       - name: Check out ${{ github.event.repository.name }}
         uses: actions/checkout@v7
@@ -45,11 +42,12 @@ jobs:
       - name: Install dependencies
         run: |
           apt-get update
-          apt-get install -y zstd curl jq
+          apt-get install -y zstd curl tcpdump jq
 
       - name: Check relevance
         id: check-relevance
         env:
+          JOB_KEYS: "integration-tests"
           GITHUB_TOKEN: ${{ github.token }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
@@ -62,8 +60,8 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: .build
-          key: "${{ github.event.repository.name }}-unit-tests-${{ matrix.config.mode }}-build-${{ matrix.swift-image.name }}-${{ runner.os }}-${{ hashFiles('./Package.resolved') }}"
-          restore-keys: "${{ github.event.repository.name }}-unit-tests-${{ matrix.config.mode }}-build-${{ matrix.swift-image.name }}-${{ runner.os }}-"
+          key: "${{ github.event.repository.name }}-integration-tests-${{ matrix.config.mode }}-build-${{ matrix.swift-image.name }}-${{ runner.os }}-${{ hashFiles('./Package.resolved') }}"
+          restore-keys: "${{ github.event.repository.name }}-integration-tests-${{ matrix.config.mode }}-build-${{ matrix.swift-image.name }}-${{ runner.os }}-"
 
       - name: Build ${{ github.event.repository.name }}
         if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
@@ -71,8 +69,6 @@ jobs:
           swift build \
             --build-tests \
             --disable-xctest \
-            --enable-code-coverage \
-            --sanitize=address \
             --explicit-target-dependency-import-check error \
             -Xswiftc -require-explicit-sendable \
             -c ${{ matrix.config.mode }}
@@ -82,26 +78,52 @@ jobs:
         uses: actions/cache/save@v6
         with:
           path: .build
-          key: "${{ github.event.repository.name }}-unit-tests-${{ matrix.config.mode }}-build-${{ matrix.swift-image.name }}-${{ runner.os }}-${{ hashFiles('./Package.resolved') }}"
+          key: "${{ github.event.repository.name }}-integration-tests-${{ matrix.config.mode }}-build-${{ matrix.swift-image.name }}-${{ runner.os }}-${{ hashFiles('./Package.resolved') }}"
 
       - name: Run tests
         if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
+        id: tests-run
         run: |
+          tcpdump -w dns.pcap 'port 53 and (host 8.8.4.4 or host 240.1.2.3)' &
+          TCPDUMP_PID=$!
+
+          # Disable 'set -e' to prevent the script from exiting on non-zero exit codes
+          set +e
           swift test \
-            --skip "IntegrationTests." \
+            --filter "IntegrationTests." \
             --skip-build \
             --disable-xctest \
-            --enable-code-coverage \
-            --sanitize=address \
             -Xswiftc -require-explicit-sendable \
             -c ${{ matrix.config.mode }}
+          printf '%s\n' "exit-status=$?" >> "${GITHUB_OUTPUT}"
+          set -e
 
-      - name: Submit code coverage
+          kill "${TCPDUMP_PID}"
+
+      - name: Calculate capture file name
         if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
-        uses: vapor/swift-codecov-action@2f478f2fd22e06ca363967d0fb6c6593a8548cee # v0.3.5
+        id: calculate-capture-file-name
+        run: |
+          RESULT="${{ steps.tests-run.outputs.exit-status == 0 && 'success' || 'failure' }}"
+          TIMESTAMP="$(date -u +"%Y-%m-%d-%H-%M-%S")"
+          SHORT_SHA="$(printf '%s' '${{ github.sha }}' | cut -c 1-7)"
+          FILE_NAME="swift-dns_dns_capture_${TIMESTAMP}_${RESULT}_Linux_${{ matrix.swift-image.name }}_${{ matrix.config.mode }}_${SHORT_SHA}"
+          FILE_NAME="${FILE_NAME//:/_}"
+
+          printf '%s\n' "file_name=${FILE_NAME}" >> "${GITHUB_OUTPUT}"
+
+          mv dns.pcap "${FILE_NAME}.pcap"
+
+      - name: Archive packet capture
+        if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
+        uses: actions/upload-artifact@v7
         with:
-          build_parameters: "-c ${{ matrix.config.mode }}"
-          codecov_token: "${{ secrets.CODECOV_TOKEN }}"
+          name: "${{ steps.calculate-capture-file-name.outputs.file_name }}"
+          path: "${{ steps.calculate-capture-file-name.outputs.file_name }}.pcap"
+
+      - name: Exit with correct status
+        if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
+        run: exit ${{ steps.tests-run.outputs.exit-status }}
 
   cache-swiftly-toolchain-for-macos:
     strategy:
@@ -135,6 +157,7 @@ jobs:
       - name: Check relevance
         id: check-relevance
         env:
+          JOB_KEYS: "integration-tests"
           GITHUB_TOKEN: ${{ github.token }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
@@ -147,7 +170,7 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: "${{ env.SWIFTLY_HOME_DIR }}"
-          key: "${{ github.event.repository.name }}-swiftly-home-${{ matrix.swift.version }}-${{ runner.os }}"
+          key: "${{ github.event.repository.name }}-swiftly-home-integration-tests-${{ matrix.swift.version }}-${{ runner.os }}"
 
       - name: Restore swiftly bin
         if: ${{ steps.check-relevance.outputs.should-run == 'true' && runner.debug != '1' }}
@@ -155,7 +178,7 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: "${{ env.SWIFTLY_BIN_DIR }}"
-          key: "${{ github.event.repository.name }}-swiftly-bin-${{ matrix.swift.version }}-${{ runner.os }}"
+          key: "${{ github.event.repository.name }}-swiftly-bin-integration-tests-${{ matrix.swift.version }}-${{ runner.os }}"
 
       - name: Restore swiftly toolchains
         if: ${{ steps.check-relevance.outputs.should-run == 'true' && runner.debug != '1' }}
@@ -163,7 +186,7 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: "${{ env.SWIFTLY_TOOLCHAINS_DIR }}"
-          key: "${{ github.event.repository.name }}-swiftly-toolchain-${{ matrix.swift.version }}-${{ runner.os }}"
+          key: "${{ github.event.repository.name }}-swiftly-toolchain-integration-tests-${{ matrix.swift.version }}-${{ runner.os }}"
 
       - name: Update swift via Swiftly
         if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
@@ -186,23 +209,23 @@ jobs:
         uses: actions/cache/save@v6
         with:
           path: "${{ env.SWIFTLY_HOME_DIR }}"
-          key: "${{ github.event.repository.name }}-swiftly-home-${{ matrix.swift.version }}-${{ runner.os }}"
+          key: "${{ github.event.repository.name }}-swiftly-home-integration-tests-${{ matrix.swift.version }}-${{ runner.os }}"
 
       - name: Cache swiftly bin
         if: ${{ steps.check-relevance.outputs.should-run == 'true' && steps.restore-bin.outputs.cache-hit != 'true' }}
         uses: actions/cache/save@v6
         with:
           path: "${{ env.SWIFTLY_BIN_DIR }}"
-          key: "${{ github.event.repository.name }}-swiftly-bin-${{ matrix.swift.version }}-${{ runner.os }}"
+          key: "${{ github.event.repository.name }}-swiftly-bin-integration-tests-${{ matrix.swift.version }}-${{ runner.os }}"
 
       - name: Cache swiftly toolchains
         if: ${{ steps.check-relevance.outputs.should-run == 'true' && steps.restore-toolchains.outputs.cache-hit != 'true' }}
         uses: actions/cache/save@v6
         with:
           path: "${{ env.SWIFTLY_TOOLCHAINS_DIR }}"
-          key: "${{ github.event.repository.name }}-swiftly-toolchain-${{ matrix.swift.version }}-${{ runner.os }}"
+          key: "${{ github.event.repository.name }}-swiftly-toolchain-integration-tests-${{ matrix.swift.version }}-${{ runner.os }}"
 
-  macos-unit:
+  macos-integration-tests:
     strategy:
       fail-fast: false
       matrix:
@@ -219,18 +242,15 @@ jobs:
 
     runs-on: ${{ matrix.macos.version }}
 
-    needs: cache-swiftly-toolchain-for-macos
-
     timeout-minutes: 20
+
+    needs: cache-swiftly-toolchain-for-macos
 
     permissions:
       actions: read # For reading the previous commit's workflow runs
       contents: read
 
     env:
-      ASAN_OPTIONS: "detect_leaks=1"
-      LSAN_OPTIONS: "suppressions=.github/lsan-suppressions.txt:print_suppressions=1"
-      UBSAN_OPTIONS: "halt_on_error=1:print_stacktrace=1"
       SWIFTLY_HOME_DIR: "/Users/runner/.swiftly"
       SWIFTLY_BIN_DIR: "/Users/runner/.swiftly/bin"
       SWIFTLY_TOOLCHAINS_DIR: "/Users/runner/Library/Developer/Toolchains"
@@ -247,6 +267,7 @@ jobs:
       - name: Check relevance
         id: check-relevance
         env:
+          JOB_KEYS: "integration-tests"
           GITHUB_TOKEN: ${{ github.token }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
@@ -259,13 +280,17 @@ jobs:
         with:
           xcode-version: ${{ matrix.xcode.version }}
 
+      - name: Install tcpdump for packet capture
+        if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
+        run: brew install tcpdump
+
       - name: Restore swiftly home
         if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
         id: "restore-home"
         uses: actions/cache/restore@v6
         with:
           path: "${{ env.SWIFTLY_HOME_DIR }}"
-          key: "${{ github.event.repository.name }}-swiftly-home-${{ matrix.swift.version }}-${{ runner.os }}"
+          key: "${{ github.event.repository.name }}-swiftly-home-integration-tests-${{ matrix.swift.version }}-${{ runner.os }}"
 
       - name: Restore swiftly bin
         if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
@@ -273,7 +298,7 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: "${{ env.SWIFTLY_BIN_DIR }}"
-          key: "${{ github.event.repository.name }}-swiftly-bin-${{ matrix.swift.version }}-${{ runner.os }}"
+          key: "${{ github.event.repository.name }}-swiftly-bin-integration-tests-${{ matrix.swift.version }}-${{ runner.os }}"
 
       - name: Restore swiftly toolchains
         if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
@@ -281,7 +306,7 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: "${{ env.SWIFTLY_TOOLCHAINS_DIR }}"
-          key: "${{ github.event.repository.name }}-swiftly-toolchain-${{ matrix.swift.version }}-${{ runner.os }}"
+          key: "${{ github.event.repository.name }}-swiftly-toolchain-integration-tests-${{ matrix.swift.version }}-${{ runner.os }}"
 
       - name: Update swift via Swiftly
         if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
@@ -314,8 +339,8 @@ jobs:
         uses: actions/cache/restore@v6
         with:
           path: .build
-          key: "${{ github.event.repository.name }}-unit-tests-${{ matrix.config.mode }}-build-${{ matrix.swift.version }}-${{ matrix.macos.version }}-${{ hashFiles('./Package.resolved') }}"
-          restore-keys: "${{ github.event.repository.name }}-unit-tests-${{ matrix.config.mode }}-build-${{ matrix.swift.version }}-${{ matrix.macos.version }}-"
+          key: "${{ github.event.repository.name }}-integration-tests-${{ matrix.config.mode }}-build-${{ matrix.swift.version }}-${{ matrix.macos.version }}-${{ hashFiles('./Package.resolved') }}"
+          restore-keys: "${{ github.event.repository.name }}-integration-tests-${{ matrix.config.mode }}-build-${{ matrix.swift.version }}-${{ matrix.macos.version }}-"
 
       - name: Build ${{ github.event.repository.name }}
         if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
@@ -324,7 +349,6 @@ jobs:
             --build-tests \
             --disable-xctest \
             --enable-code-coverage \
-            --sanitize=address --sanitize=undefined \
             --explicit-target-dependency-import-check error \
             -Xswiftc -require-explicit-sendable \
             -c ${{ matrix.config.mode }}
@@ -334,90 +358,54 @@ jobs:
         uses: actions/cache/save@v6
         with:
           path: .build
-          key: "${{ github.event.repository.name }}-unit-tests-${{ matrix.config.mode }}-build-${{ matrix.swift.version }}-${{ matrix.macos.version }}-${{ hashFiles('./Package.resolved') }}"
+          key: "${{ github.event.repository.name }}-integration-tests-${{ matrix.config.mode }}-build-${{ matrix.swift.version }}-${{ matrix.macos.version }}-${{ hashFiles('./Package.resolved') }}"
 
-      - name: Run tests
+      - name: Run tests while capturing packets
         if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
+        id: tests-run
         run: |
+          sudo tcpdump -w dns.pcap 'port 53 and (host 8.8.4.4 or host 240.1.2.3)' &
+          TCPDUMP_PID=$!
+
+          # Disable 'set -e' to prevent the script from exiting on non-zero exit codes
+          set +e
           swift test \
-            --skip "IntegrationTests." \
-            --skip-build \
-            --disable-xctest \
-            --enable-code-coverage \
-            --sanitize=address --sanitize=undefined \
-            -Xswiftc -require-explicit-sendable \
-            -c ${{ matrix.config.mode }}
-
-      - name: Submit code coverage
-        if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
-        uses: vapor/swift-codecov-action@2f478f2fd22e06ca363967d0fb6c6593a8548cee # v0.3.5
-        with:
-          build_parameters: "-c ${{ matrix.config.mode }}"
-          codecov_token: "${{ secrets.CODECOV_TOKEN }}"
-
-  windows-unit:
-    strategy:
-      fail-fast: false
-      matrix:
-        windows:
-          - version: windows-2025
-        swift:
-          - version: 6.3.3
-        config:
-          - mode: "debug"
-          - mode: "release"
-
-    runs-on: ${{ matrix.windows.version }}
-
-    timeout-minutes: 20
-
-    permissions:
-      actions: read # For reading the previous commit's workflow runs
-      contents: read
-
-    steps:
-      - name: Check out ${{ github.event.repository.name }}
-        uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-
-      - name: Check relevance
-        id: check-relevance
-        env:
-          JOB_KEYS: "windows"
-          GITHUB_TOKEN: ${{ github.token }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        run: |
-          SHOULD_RUN="$(.github/scripts/check-relevance.sh)"
-          printf '%s\n' "should-run=${SHOULD_RUN}" >> "${GITHUB_OUTPUT}"
-
-      - name: Update swift
-        if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
-        uses: compnerd/gha-setup-swift@eeda069c5bc95ac8a9ac5cea7d4f588ae5420ca5 # v0.4.0
-        with:
-          swift-version: swift-${{ matrix.swift.version }}-release
-          swift-build: ${{ matrix.swift.version }}-RELEASE
-
-      - name: Build ${{ github.event.repository.name }}
-        if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
-        run: |
-          swift build \
-            --build-tests \
-            --explicit-target-dependency-import-check error \
-            -Xswiftc -require-explicit-sendable \
-            -c ${{ matrix.config.mode }}
-
-      - name: Run tests
-        if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
-        run: |
-          swift test \
-            --skip "IntegrationTests." \
+            --filter "IntegrationTests." \
             --skip-build \
             --disable-xctest \
             -Xswiftc -require-explicit-sendable \
             -c ${{ matrix.config.mode }}
+          printf '%s\n' "exit-status=$?" >> "${GITHUB_OUTPUT}"
+          set -e
 
-  android-unit:
+          kill "${TCPDUMP_PID}"
+
+      - name: Calculate capture file name
+        if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
+        id: calculate-capture-file-name
+        run: |
+          RESULT="${{ steps.tests-run.outputs.exit-status == 0 && 'success' || 'failure' }}"
+          TIMESTAMP="$(date -u +"%Y-%m-%d-%H-%M-%S")"
+          SHORT_SHA="$(printf '%s' '${{ github.sha }}' | cut -c 1-7)"
+          FILE_NAME="swift-dns_dns_capture_${TIMESTAMP}_${RESULT}_${{ matrix.macos.version }}_${{ matrix.swift.version }}_${{ matrix.config.mode }}_${{ matrix.xcode.version }}_${SHORT_SHA}"
+          FILE_NAME="${FILE_NAME//:/_}"
+
+          printf '%s\n' "file_name=${FILE_NAME}" >> "${GITHUB_OUTPUT}"
+
+          mv dns.pcap "${FILE_NAME}.pcap"
+
+      - name: Archive packet capture
+        if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: "${{ steps.calculate-capture-file-name.outputs.file_name }}"
+          path: "${{ steps.calculate-capture-file-name.outputs.file_name }}.pcap"
+
+      - name: Exit with correct status
+        if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
+        run: exit ${{ steps.tests-run.outputs.exit-status }}
+
+  android-integration-tests:
     strategy:
       fail-fast: false
       matrix:
@@ -436,7 +424,7 @@ jobs:
       contents: read
 
     steps:
-      - name: Check out ${{ github.event.repository.name }}
+      - name: Check out code
         uses: actions/checkout@v7
         with:
           persist-credentials: false
@@ -444,7 +432,7 @@ jobs:
       - name: Check relevance
         id: check-relevance
         env:
-          JOB_KEYS: "android"
+          JOB_KEYS: "integration-tests android"
           GITHUB_TOKEN: ${{ github.token }}
           HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: |
@@ -461,7 +449,7 @@ jobs:
         if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
         run: find . -type l -exec sh -c 'LINKED="$(readlink -f "{}")"; rm "{}"; cp -a "${LINKED}" "{}"' \;
 
-      - name: Run tests
+      - name: Run unit tests
         if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
         uses: skiptools/swift-android-action@2044b79660f201ccef8cbce62877e4ec5409f9c8 # v2.9.5
         with:
@@ -475,147 +463,4 @@ jobs:
           swift-build-flags: >-
             --build-tests
             --explicit-target-dependency-import-check error
-          swift-test-flags: --skip "IntegrationTests."
-
-  musl-unit:
-    strategy:
-      fail-fast: false
-      matrix:
-        swift-image:
-          - name: swift:6.3-noble
-        swift:
-          - version: 6.3
-        config:
-          - mode: "debug"
-          - mode: "release"
-
-    runs-on: ubuntu-latest
-
-    container: ${{ matrix.swift-image.name }}
-
-    timeout-minutes: 30
-
-    permissions:
-      actions: read # For reading the previous commit's workflow runs
-      contents: read
-
-    steps:
-      - name: Check out ${{ github.event.repository.name }}
-        uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-
-      - name: Install dependencies
-        run: |
-          apt-get update
-          apt-get install -y zstd curl jq
-
-      - name: Check relevance
-        id: check-relevance
-        env:
-          JOB_KEYS: "musl"
-          GITHUB_TOKEN: ${{ github.token }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        run: |
-          SHOULD_RUN="$(.github/scripts/check-relevance.sh)"
-          printf '%s\n' "should-run=${SHOULD_RUN}" >> "${GITHUB_OUTPUT}"
-
-      - name: Restore .build
-        if: ${{ steps.check-relevance.outputs.should-run == 'true' && runner.debug != '1' }}
-        id: "restore-cache"
-        uses: actions/cache/restore@v6
-        with:
-          path: .build
-          key: "${{ github.event.repository.name }}-unit-tests-musl-${{ matrix.config.mode }}-build-${{ matrix.swift-image.name }}-${{ runner.os }}-${{ hashFiles('./Package.resolved') }}"
-          restore-keys: "${{ github.event.repository.name }}-unit-tests-musl-${{ matrix.config.mode }}-build-${{ matrix.swift-image.name }}-${{ runner.os }}-"
-
-      # The Static Linux SDK ships no static swift-testing or XCTest, so the tests can only be compiled for glibc.
-      - name: Build ${{ github.event.repository.name }}
-        if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
-        env:
-          SDK: static
-          SWIFT_VERSION: ${{ matrix.swift.version }}
-          BUILD_MODE: ${{ matrix.config.mode }}
-          BUILD_FLAGS: >-
-            --explicit-target-dependency-import-check error
-            -Xswiftc -require-explicit-sendable
-        run: .github/scripts/build-with-sdk.sh
-
-      - name: Cache .build
-        if: ${{ steps.check-relevance.outputs.should-run == 'true' && steps.restore-cache.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v6
-        with:
-          path: .build
-          key: "${{ github.event.repository.name }}-unit-tests-musl-${{ matrix.config.mode }}-build-${{ matrix.swift-image.name }}-${{ runner.os }}-${{ hashFiles('./Package.resolved') }}"
-
-  wasi-unit:
-    strategy:
-      fail-fast: false
-      matrix:
-        swift-image:
-          - name: swift:6.3-noble
-        swift:
-          - version: 6.3
-        config:
-          - mode: "debug"
-          - mode: "release"
-
-    runs-on: ubuntu-latest
-
-    container: ${{ matrix.swift-image.name }}
-
-    timeout-minutes: 30
-
-    permissions:
-      actions: read # For reading the previous commit's workflow runs
-      contents: read
-
-    steps:
-      - name: Check out ${{ github.event.repository.name }}
-        uses: actions/checkout@v7
-        with:
-          persist-credentials: false
-
-      - name: Install dependencies
-        run: |
-          apt-get update
-          apt-get install -y zstd curl jq
-
-      - name: Check relevance
-        id: check-relevance
-        env:
-          JOB_KEYS: "wasm"
-          GITHUB_TOKEN: ${{ github.token }}
-          HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        run: |
-          SHOULD_RUN="$(.github/scripts/check-relevance.sh)"
-          printf '%s\n' "should-run=${SHOULD_RUN}" >> "${GITHUB_OUTPUT}"
-
-      - name: Restore .build
-        if: ${{ steps.check-relevance.outputs.should-run == 'true' && runner.debug != '1' }}
-        id: "restore-cache"
-        uses: actions/cache/restore@v6
-        with:
-          path: .build
-          key: "${{ github.event.repository.name }}-unit-tests-wasi-${{ matrix.config.mode }}-build-${{ matrix.swift-image.name }}-${{ runner.os }}-${{ hashFiles('./Package.resolved') }}"
-          restore-keys: "${{ github.event.repository.name }}-unit-tests-wasi-${{ matrix.config.mode }}-build-${{ matrix.swift-image.name }}-${{ runner.os }}-"
-
-      # WASI has no host to run the built tests on, so the test target is compiled but not run.
-      - name: Build ${{ github.event.repository.name }}
-        if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
-        env:
-          SDK: wasm
-          SWIFT_VERSION: ${{ matrix.swift.version }}
-          BUILD_MODE: ${{ matrix.config.mode }}
-          BUILD_FLAGS: >-
-            --build-tests
-            --explicit-target-dependency-import-check error
-            -Xswiftc -require-explicit-sendable
-        run: .github/scripts/build-with-sdk.sh
-
-      - name: Cache .build
-        if: ${{ steps.check-relevance.outputs.should-run == 'true' && steps.restore-cache.outputs.cache-hit != 'true' }}
-        uses: actions/cache/save@v6
-        with:
-          path: .build
-          key: "${{ github.event.repository.name }}-unit-tests-wasi-${{ matrix.config.mode }}-build-${{ matrix.swift-image.name }}-${{ runner.os }}-${{ hashFiles('./Package.resolved') }}"
+          swift-test-flags: --filter "IntegrationTests."
