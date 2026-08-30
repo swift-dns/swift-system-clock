@@ -19,8 +19,8 @@ extension WindowsClockID {
     ///
     /// Measures: Elapsed time, since the machine started
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -45,8 +45,8 @@ extension WindowsClockID {
     ///
     /// Measures: Wall time, counted from 1970-01-01 UTC
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -71,8 +71,8 @@ extension WindowsClockID {
     ///
     /// Measures: Wall time, counted from 1970-01-01 UTC
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value         |
     /// | --------------------------------- | ------------- |
@@ -97,8 +97,8 @@ extension WindowsClockID {
     ///
     /// Measures: Elapsed time, since the machine started
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -123,8 +123,8 @@ extension WindowsClockID {
     ///
     /// Measures: Elapsed time, since the machine started
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -149,8 +149,8 @@ extension WindowsClockID {
     ///
     /// Measures: Elapsed time, since the machine started
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -175,8 +175,8 @@ extension WindowsClockID {
     ///
     /// Measures: Elapsed time, since the machine started
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -201,8 +201,8 @@ extension WindowsClockID {
     ///
     /// Measures: Elapsed time, since the machine started
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -227,8 +227,8 @@ extension WindowsClockID {
     ///
     /// Measures: CPU time used by this process
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -253,8 +253,8 @@ extension WindowsClockID {
     ///
     /// Measures: CPU time used by this thread
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |

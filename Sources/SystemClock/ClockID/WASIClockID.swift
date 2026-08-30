@@ -17,8 +17,8 @@ extension WASIClockID {
     ///
     /// Measures: Wall time, counted from 1970-01-01 UTC
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value         |
     /// | --------------------------------- | ------------- |
@@ -43,8 +43,8 @@ extension WASIClockID {
     ///
     /// Measures: Elapsed time, from an arbitrary point
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value         |
     /// | --------------------------------- | ------------- |

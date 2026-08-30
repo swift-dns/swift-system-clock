@@ -17,8 +17,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: Wall time, counted from 1970-01-01 UTC
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -43,8 +43,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: Wall time, counted from 1970-01-01 UTC
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -69,8 +69,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: Wall time, counted from 1970-01-01 UTC
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -95,8 +95,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: Elapsed time, from an arbitrary point
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -121,8 +121,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: Elapsed time, from an arbitrary point
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -147,8 +147,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: Elapsed time, from an arbitrary point
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -173,8 +173,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: Elapsed time, from an arbitrary point
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -199,8 +199,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: Elapsed time, from an arbitrary point
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -225,8 +225,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: Elapsed time, from an arbitrary point
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -251,8 +251,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: Elapsed time, from an arbitrary point
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -277,8 +277,10 @@ extension FreeBSDClockID {
     ///
     /// Measures: Wall time, on the TAI timescale
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// Rejected with `EINVAL` until the machine's TAI offset has been set. Traps on runtime.
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -292,9 +294,6 @@ extension FreeBSDClockID {
     /// | Typical read cost                 | ~ 120ns @ 4GHz |
     /// | Cold read cost                    | ~ 695ns @ 4GHz |
     /// | Step granularity                  | 125ns          |
-    /// Rejected with `EINVAL` until the machine's TAI offset has been set, which on FreeBSD only
-    /// `ntpd` does through `ntp_adjtime`. On a machine that never runs it, every read of this
-    /// clock fails and yields the sentinel described in ``SystemClock/now``.
     @inlinable
     public static var tai: FreeBSDClockID {
         FreeBSDClockID(rawValue: csystem_clock_freebsd_tai)
@@ -306,8 +305,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: CPU time used by this process, user mode only
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -332,8 +331,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: CPU time used by this process
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -358,8 +357,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: Wall time, whole seconds only
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -384,8 +383,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: CPU time used by this process
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
@@ -410,8 +409,8 @@ extension FreeBSDClockID {
     ///
     /// Measures: CPU time used by this thread
     ///
-    /// The following values are usually accurate, but can occasionally contain inaccuracies.
-    /// For better accuracy, measure with your specific kernel and hardware.
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
     ///
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
