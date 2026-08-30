@@ -1,7 +1,5 @@
-internal import CSystemClock
-
 @available(SwiftStdlib 5.7, *)
-extension SystemClock {
+extension SystemClock where Self: Clock {
     /// Suspends until this clock reaches `deadline`, or throws `CancellationError` if the task
     /// is cancelled first.
     ///
@@ -22,14 +20,9 @@ extension SystemClock {
             if remaining <= .zero {
                 return
             }
-            let target = csystem_clock_reading(clamping: deadline._value)
-            let wait = csystem_clock_reading(clamping: remaining)
-            csystem_clock_sleep(
-                self.clockID,
-                target.seconds,
-                target.nanoseconds,
-                wait.seconds,
-                wait.nanoseconds
+            self.clock.sleep(
+                until: CompactDuration(nanoseconds: deadline._value.nanoseconds),
+                orFor: CompactDuration(nanoseconds: remaining.nanoseconds)
             )
         }
     }

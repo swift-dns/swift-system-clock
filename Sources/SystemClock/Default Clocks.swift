@@ -2,7 +2,7 @@
 extension SystemClock {
     /// The time of day.
     ///
-    /// Measures: Wall time, counted from 1970-01-01 UTC
+    /// Measures Wall time, counted from 1970-01-01 UTC
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -42,7 +42,7 @@ extension SystemClock {
 
     /// The time of day, read more cheaply.
     ///
-    /// Measures: Wall time, counted from 1970-01-01 UTC
+    /// Measures Wall time, counted from 1970-01-01 UTC
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -82,7 +82,7 @@ extension SystemClock {
 
     /// A stopwatch that keeps running while the machine is asleep.
     ///
-    /// Measures: Elapsed time, from an arbitrary point
+    /// Measures Elapsed time, from an arbitrary point
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -122,7 +122,7 @@ extension SystemClock {
 
     /// ``continuous``, read more cheaply.
     ///
-    /// Measures: Elapsed time, from an arbitrary point
+    /// Measures Elapsed time, from an arbitrary point
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -162,7 +162,7 @@ extension SystemClock {
 
     /// A stopwatch that stops while the machine is asleep.
     ///
-    /// Measures: Elapsed time, from an arbitrary point
+    /// Measures Elapsed time, from an arbitrary point
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -202,7 +202,7 @@ extension SystemClock {
 
     /// ``suspending``, read more cheaply.
     ///
-    /// Measures: Elapsed time, from an arbitrary point
+    /// Measures Elapsed time, from an arbitrary point
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -247,7 +247,7 @@ extension SystemClock {
     ///
     /// WASI declares no cpu-time clock, and falls back to ``WASIClockID/monotonic``.
     ///
-    /// Measures: CPU time used by this process
+    /// Measures CPU time used by this process
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -289,7 +289,7 @@ extension SystemClock {
     ///
     /// WASI declares no cpu-time clock, and falls back to ``WASIClockID/monotonic``.
     ///
-    /// Measures: CPU time used by this thread
+    /// Measures CPU time used by this thread
     ///
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
@@ -329,52 +329,52 @@ extension SystemClock {
 }
 
 @available(SwiftStdlib 5.7, *)
-extension Clock where Self == SystemClock {
-    /// ``SystemClock/realtime``.
+extension Clock where Self == SystemClock<CompactDuration> {
+    /// See ``SystemClock/realtime``.
     @inlinable
-    public static var systemRealtime: SystemClock {
+    public static var systemRealtime: SystemClock<CompactDuration> {
         SystemClock.realtime
     }
 
-    /// ``SystemClock/realtimeCoarse``.
+    /// See ``SystemClock/realtimeCoarse``.
     @inlinable
-    public static var systemRealtimeCoarse: SystemClock {
+    public static var systemRealtimeCoarse: SystemClock<CompactDuration> {
         SystemClock.realtimeCoarse
     }
 
-    /// ``SystemClock/continuous``.
+    /// See ``SystemClock/continuous``.
     @inlinable
-    public static var systemContinuous: SystemClock {
+    public static var systemContinuous: SystemClock<CompactDuration> {
         SystemClock.continuous
     }
 
-    /// ``SystemClock/continuousCoarse``.
+    /// See ``SystemClock/continuousCoarse``.
     @inlinable
-    public static var systemContinuousCoarse: SystemClock {
+    public static var systemContinuousCoarse: SystemClock<CompactDuration> {
         SystemClock.continuousCoarse
     }
 
-    /// ``SystemClock/suspending``.
+    /// See ``SystemClock/suspending``.
     @inlinable
-    public static var systemSuspending: SystemClock {
+    public static var systemSuspending: SystemClock<CompactDuration> {
         SystemClock.suspending
     }
 
-    /// ``SystemClock/suspendingCoarse``.
+    /// See ``SystemClock/suspendingCoarse``.
     @inlinable
-    public static var systemSuspendingCoarse: SystemClock {
+    public static var systemSuspendingCoarse: SystemClock<CompactDuration> {
         SystemClock.suspendingCoarse
     }
 
-    /// ``SystemClock/processCPUTime``.
+    /// See ``SystemClock/processCPUTime``.
     @inlinable
-    public static var systemProcessCPUTime: SystemClock {
+    public static var systemProcessCPUTime: SystemClock<CompactDuration> {
         SystemClock.processCPUTime
     }
 
-    /// ``SystemClock/threadCPUTime``.
+    /// See ``SystemClock/threadCPUTime``.
     @inlinable
-    public static var systemThreadCPUTime: SystemClock {
+    public static var systemThreadCPUTime: SystemClock<CompactDuration> {
         SystemClock.threadCPUTime
     }
 }

@@ -1,5 +1,3 @@
-public import CSystemClock
-
 /// A Swift `Clock` corresponding to an OS clock.
 ///
 /// The initializer names every platform Swift supports, and keeps only the id belonging to the
@@ -16,14 +14,16 @@ public import CSystemClock
 /// )
 /// ```
 @available(SwiftStdlib 5.7, *)
-public struct SystemClock: Sendable {
-    /// The id handed to the operating system, in whichever form the host platform takes.
+public struct SystemClock<SCDuration>: Sendable {
+
+    /// The clock of the platform being compiled for, holding the id in whichever form that
+    /// platform takes.
     @usableFromInline
-    let clockID: Int32
+    let clock: PlatformClock
 
     @inlinable
-    init(clockID: Int32) {
-        self.clockID = clockID
+    init(clock: PlatformClock) {
+        self.clock = clock
     }
 
     /// Creates a clock from the id belonging to the platform being compiled for.
@@ -39,17 +39,17 @@ public struct SystemClock: Sendable {
         wasi: WASIClockID
     ) {
         #if canImport(Darwin)
-        self.init(clockID: darwin.rawValue)
+        self.init(clock: DarwinClock(id: darwin))
         #elseif os(Linux) || os(Android)
-        self.init(clockID: linux.rawValue)
+        self.init(clock: POSIXClock(id: linux.rawValue))
         #elseif os(Windows)
-        self.init(clockID: windows.rawValue)
+        self.init(clock: WindowsClock(id: windows))
         #elseif os(FreeBSD)
-        self.init(clockID: freebsd.rawValue)
+        self.init(clock: POSIXClock(id: freebsd.rawValue))
         #elseif os(OpenBSD)
-        self.init(clockID: openbsd.rawValue)
+        self.init(clock: POSIXClock(id: openbsd.rawValue))
         #elseif os(WASI)
-        self.init(clockID: wasi.rawValue)
+        self.init(clock: WASIClock(id: wasi))
         #else
         #error("The SystemClock module does not know which clock ids your platform uses.")
         #endif
@@ -57,17 +57,16 @@ public struct SystemClock: Sendable {
 }
 
 @available(SwiftStdlib 5.7, *)
-extension SystemClock: Clock {
-    public typealias Duration = Swift.Duration
+extension SystemClock: Clock where SCDuration: SystemDurationProtocol {
+    public typealias Duration = SCDuration
 
     /// The current instant.
     @inlinable
     public var now: Instant {
-        let reading = csystem_clock_read(self.clockID)
-        if reading.isFailure {
-            fatalError("SystemClock: the operating system rejected clock id '\(self.clockID)'")
+        guard let reading = self.clock.read() else {
+            _clockIDRejected(self.clock.rawID)
         }
-        return Instant(_value: reading.duration)
+        return Instant(_value: .nanoseconds(reading.nanoseconds))
     }
 
     /// The smallest non-zero difference the clock reports between two instants.
@@ -75,11 +74,17 @@ extension SystemClock: Clock {
     /// This is a lower bound on resolution rather than a measurement of how precise the
     /// underlying hardware is.
     @inlinable
-    public var minimumResolution: Duration {
-        let reading = csystem_clock_resolution(self.clockID)
-        if reading.isFailure {
-            fatalError("SystemClock: the operating system rejected clock id '\(self.clockID)'")
+    public var minimumResolution: Self.Duration {
+        guard let reading = self.clock.resolution() else {
+            _clockIDRejected(self.clock.rawID)
         }
-        return reading.duration
+        return Self.Duration.nanoseconds(reading.nanoseconds)
     }
+}
+
+/// Outlined, and off the hot path, so that reading a clock stays a call and a compare.
+@inline(never)
+@usableFromInline
+func _clockIDRejected(_ id: Int32) -> Never {
+    fatalError("SystemClock: the operating system rejected clock id '\(id)'")
 }

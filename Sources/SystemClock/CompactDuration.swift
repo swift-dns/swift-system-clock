@@ -13,7 +13,6 @@
 /// temporal measurement component; specifically leap seconds should be
 /// represented as an additional accessor since that is specific only to certain
 /// clock implementations.
-@available(SwiftStdlib 5.7, *)
 public struct CompactDuration: Sendable {
     /// The number of nanoseconds represented by this `CompactDuration`.
     public var nanoseconds: Int64
@@ -52,7 +51,6 @@ extension CompactDuration {
     /// ```
     ///
     /// - Returns: A `CompactDuration` representing a given number of seconds.
-    @available(SwiftStdlib 5.7, *)
     @inlinable
     public static func seconds<T: BinaryInteger>(_ seconds: T) -> CompactDuration {
         CompactDuration(nanoseconds: Int64(seconds) * 1_000_000_000)
@@ -66,7 +64,6 @@ extension CompactDuration {
     /// ```
     ///
     /// - Returns: A `CompactDuration` representing a given number of seconds.
-    @available(SwiftStdlib 5.7, *)
     public static func seconds(_ seconds: Double) -> CompactDuration {
         CompactDuration(seconds, scale: 1_000_000_000)
     }
@@ -77,7 +74,6 @@ extension CompactDuration {
     ///       let d: CompactDuration = .milliseconds(645)
     ///
     /// - Returns: A `CompactDuration` representing a given number of milliseconds.
-    @available(SwiftStdlib 5.7, *)
     @inlinable
     public static func milliseconds<T: BinaryInteger>(_ milliseconds: T) -> CompactDuration {
         CompactDuration(nanoseconds: Int64(milliseconds) * 1_000_000)
@@ -91,7 +87,6 @@ extension CompactDuration {
     /// ```
     ///
     /// - Returns: A `CompactDuration` representing a given number of milliseconds.
-    @available(SwiftStdlib 5.7, *)
     public static func milliseconds(_ milliseconds: Double) -> CompactDuration {
         CompactDuration(milliseconds, scale: 1_000_000_000)
     }
@@ -104,7 +99,6 @@ extension CompactDuration {
     /// ```
     ///
     /// - Returns: A `CompactDuration` representing a given number of microseconds.
-    @available(SwiftStdlib 5.7, *)
     @inlinable
     public static func microseconds<T: BinaryInteger>(_ microseconds: T) -> CompactDuration {
         CompactDuration(nanoseconds: Int64(microseconds) * 1_000)
@@ -118,7 +112,6 @@ extension CompactDuration {
     /// ```
     ///
     /// - Returns: A `CompactDuration` representing a given number of microseconds.
-    @available(SwiftStdlib 5.7, *)
     public static func microseconds(_ microseconds: Double) -> CompactDuration {
         CompactDuration(nanoseconds: Int64(microseconds * 1_000_000))
     }
@@ -131,7 +124,6 @@ extension CompactDuration {
     /// ```
     ///
     /// - Returns: A `CompactDuration` representing a given number of nanoseconds.
-    @available(SwiftStdlib 5.7, *)
     @inlinable
     public static func nanoseconds<T: BinaryInteger>(_ nanoseconds: T) -> CompactDuration {
         CompactDuration(nanoseconds: Int64(nanoseconds))
@@ -151,17 +143,14 @@ extension CompactDuration {
     }
 }
 
-@available(SwiftStdlib 5.7, *)
 @_unavailableInEmbedded
 extension CompactDuration: Codable {
-    @available(SwiftStdlib 5.7, *)
     public init(from decoder: any Decoder) throws {
         let container = try decoder.singleValueContainer()
         let nanoseconds = try container.decode(Int64.self)
         self.init(nanoseconds: nanoseconds)
     }
 
-    @available(SwiftStdlib 5.7, *)
     public func encode(to encoder: any Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(nanoseconds)
@@ -170,7 +159,6 @@ extension CompactDuration: Codable {
 
 @available(SwiftStdlib 5.7, *)
 extension CompactDuration: Hashable {
-    @available(SwiftStdlib 5.7, *)
     public func hash(into hasher: inout Hasher) {
         hasher.combine(nanoseconds)
     }
@@ -178,7 +166,6 @@ extension CompactDuration: Hashable {
 
 @available(SwiftStdlib 5.7, *)
 extension CompactDuration: Equatable {
-    @available(SwiftStdlib 5.7, *)
     public static func == (_ lhs: CompactDuration, _ rhs: CompactDuration) -> Bool {
         lhs.nanoseconds == rhs.nanoseconds
     }
@@ -186,7 +173,6 @@ extension CompactDuration: Equatable {
 
 @available(SwiftStdlib 5.7, *)
 extension CompactDuration: Comparable {
-    @available(SwiftStdlib 5.7, *)
     public static func < (_ lhs: CompactDuration, _ rhs: CompactDuration) -> Bool {
         lhs.nanoseconds < rhs.nanoseconds
     }
@@ -194,25 +180,20 @@ extension CompactDuration: Comparable {
 
 @available(SwiftStdlib 5.7, *)
 extension CompactDuration: AdditiveArithmetic {
-    @available(SwiftStdlib 5.7, *)
     public static var zero: CompactDuration { CompactDuration(nanoseconds: 0) }
 
-    @available(SwiftStdlib 5.7, *)
     public static func + (_ lhs: CompactDuration, _ rhs: CompactDuration) -> CompactDuration {
         CompactDuration(nanoseconds: lhs.nanoseconds + rhs.nanoseconds)
     }
 
-    @available(SwiftStdlib 5.7, *)
     public static func - (_ lhs: CompactDuration, _ rhs: CompactDuration) -> CompactDuration {
         CompactDuration(nanoseconds: lhs.nanoseconds - rhs.nanoseconds)
     }
 
-    @available(SwiftStdlib 5.7, *)
     public static func += (_ lhs: inout CompactDuration, _ rhs: CompactDuration) {
         lhs = lhs + rhs
     }
 
-    @available(SwiftStdlib 5.7, *)
     public static func -= (_ lhs: inout CompactDuration, _ rhs: CompactDuration) {
         lhs = lhs - rhs
     }
@@ -220,17 +201,14 @@ extension CompactDuration: AdditiveArithmetic {
 
 @available(SwiftStdlib 5.7, *)
 extension CompactDuration {
-    @available(SwiftStdlib 5.7, *)
     public static func / (_ lhs: CompactDuration, _ rhs: Double) -> CompactDuration {
         CompactDuration(nanoseconds: Int64(Double(lhs.nanoseconds) / rhs))
     }
 
-    @available(SwiftStdlib 5.7, *)
     public static func /= (_ lhs: inout CompactDuration, _ rhs: Double) {
         lhs = lhs / rhs
     }
 
-    @available(SwiftStdlib 5.7, *)
     public static func / <T: BinaryInteger>(
         _ lhs: CompactDuration,
         _ rhs: T
@@ -238,22 +216,18 @@ extension CompactDuration {
         CompactDuration(nanoseconds: lhs.nanoseconds / Int64(rhs))
     }
 
-    @available(SwiftStdlib 5.7, *)
     public static func /= <T: BinaryInteger>(_ lhs: inout CompactDuration, _ rhs: T) {
         lhs = lhs / rhs
     }
 
-    @available(SwiftStdlib 5.7, *)
     public static func / (_ lhs: CompactDuration, _ rhs: CompactDuration) -> Double {
         Double(lhs.nanoseconds) / Double(rhs.nanoseconds)
     }
 
-    @available(SwiftStdlib 5.7, *)
     public static func * (_ lhs: CompactDuration, _ rhs: Double) -> CompactDuration {
         CompactDuration(nanoseconds: Int64(Double(lhs.nanoseconds) * rhs))
     }
 
-    @available(SwiftStdlib 5.7, *)
     public static func * <T: BinaryInteger>(
         _ lhs: CompactDuration,
         _ rhs: T
@@ -261,16 +235,13 @@ extension CompactDuration {
         CompactDuration(nanoseconds: lhs.nanoseconds * Int64(rhs))
     }
 
-    @available(SwiftStdlib 5.7, *)
     public static func *= <T: BinaryInteger>(_ lhs: inout CompactDuration, _ rhs: T) {
         lhs = lhs * rhs
     }
 }
 
-@available(SwiftStdlib 5.7, *)
 @_unavailableInEmbedded
 extension CompactDuration: CustomStringConvertible {
-    @available(SwiftStdlib 5.7, *)
     public var description: String {
         (Double(nanoseconds) / 1e9).description + " seconds"
     }
@@ -278,3 +249,6 @@ extension CompactDuration: CustomStringConvertible {
 
 @available(SwiftStdlib 5.7, *)
 extension CompactDuration: DurationProtocol {}
+
+@available(SwiftStdlib 5.7, *)
+extension CompactDuration: SystemDurationProtocol {}
