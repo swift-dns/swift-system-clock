@@ -1,7 +1,7 @@
 #if os(WASI)
 
 public import WASILibc
-internal import CSystemClock
+public import CSystemClock
 
 /// The WASI end of ``_PlatformClockTypealias``.
 ///

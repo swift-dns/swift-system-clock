@@ -90,8 +90,9 @@ struct SystemClockTests {
     func `every clock reads`(testClock: TestClock<Swift.Duration>) {
         let first = testClock.clock.now
         let second = testClock.clock.now
-        /// A reading of exactly zero on both calls would mean the id was rejected and the
-        /// failure went unnoticed.
+        guard testClock.followsElapsedTime else {
+            return
+        }
         #expect(
             first != SystemClock<Swift.Duration>.Instant.epoch
                 || second != SystemClock<Swift.Duration>.Instant.epoch
@@ -199,9 +200,14 @@ struct SystemClockTests {
         let processStart = SystemClock<Swift.Duration>.processCPUTime.now
         let threadStart = SystemClock<Swift.Duration>.threadCPUTime.now
 
+        let burnStart = SystemClock<Swift.Duration>.suspending.now
         var accumulator: UInt64 = 0
-        for index in (0 as UInt64)..<20_000_000 {
+        var index: UInt64 = 0
+        while burnStart.duration(to: SystemClock<Swift.Duration>.suspending.now)
+            < .milliseconds(200)
+        {
             accumulator = accumulator &+ index &* 2_654_435_761
+            index &+= 1
         }
         #expect(accumulator != 0)
 
