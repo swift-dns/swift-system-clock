@@ -1,13 +1,13 @@
 <p>
-    <a href="https://github.com/MahdiBM/swift-system-clock/actions/workflows/unit-tests.yml">
+    <a href="https://github.com/swift-dns/swift-system-clock/actions/workflows/unit-tests.yml">
         <img
-            src="https://img.shields.io/github/actions/workflow/status/MahdiBM/swift-system-clock/unit-tests.yml?event=push&style=plastic&logo=github&label=unit-tests&logoColor=%23ccc"
+            src="https://img.shields.io/github/actions/workflow/status/swift-dns/swift-system-clock/unit-tests.yml?event=push&style=plastic&logo=github&label=unit-tests&logoColor=%23ccc"
             alt="Unit Tests CI"
         >
     </a>
-    <a href="https://github.com/MahdiBM/swift-system-clock/actions/workflows/benchmarks.yml">
+    <a href="https://github.com/swift-dns/swift-system-clock/actions/workflows/benchmarks.yml">
         <img
-            src="https://img.shields.io/github/actions/workflow/status/MahdiBM/swift-system-clock/benchmarks.yml?event=push&style=plastic&logo=github&label=benchmarks&logoColor=%23ccc"
+            src="https://img.shields.io/github/actions/workflow/status/swift-dns/swift-system-clock/benchmarks.yml?event=push&style=plastic&logo=github&label=benchmarks&logoColor=%23ccc"
             alt="Benchmarks CI"
         >
     </a>
