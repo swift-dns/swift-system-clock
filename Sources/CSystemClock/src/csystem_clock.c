@@ -1,16 +1,3 @@
-// The ids live in ../include/csystem_clock_ids.h so they fold into their callers. This file
-// holds the checks that tie those ids back to the host's own headers, and gives the target a
-// translation unit.
-//
-// An id is written down for every platform, not only the one being compiled for, so nothing
-// here can check an id off its own platform. What it can do is fail the build the moment the
-// host's headers stop agreeing with what this library says the host uses. Where an id is
-// optional, the check is skipped rather than guessed: an id the host's headers do not declare
-// is one the header comments explain is asked of the kernel regardless.
-//
-// WASI and Windows ids are this library's own and name nothing the operating system defines, so
-// they have nothing to be checked against.
-
 #include "../include/CSystemClock.h"
 
 #if defined(__FreeBSD__)

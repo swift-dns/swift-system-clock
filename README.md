@@ -22,3 +22,55 @@
 # swift-system-clock
 
 Implements `SystemClock` which reads the operating system clock with no overhead.
+
+## Table of Contents
+- [Usage](#usage)
+  - [Default Clocks](#default-clocks)
+  - [Custom Clocks](#custom-clocks)
+  - [Sleeping](#sleeping)
+- [Performance](#performance)
+
+## Usage
+
+### Default Clocks
+
+`SystemClock` conforms to `Clock`, so it works just like stdlib's `ContinuousClock`/`SuspendingClock`:
+
+```swift
+import SystemClock
+
+let elapsed = SystemClock.suspending.measure {
+    expensiveWork()
+}
+
+let now = SystemClock.realtime.now
+```
+
+### Custom Clocks
+
+You can hand-craft a system clock that uses your desired clocks on each platform:
+
+```swift
+let clock = SystemClock(
+    darwin: .monotonicRaw,
+    linux: .monotonicRaw,
+    windows: .performanceCounter,
+    freebsd: .monotonicPrecise,
+    openbsd: .monotonic,
+    wasi: .monotonic
+)
+```
+
+Every Apple platforms takes `darwin`. Android takes `linux`.
+
+### Sleeping
+
+Currently the sleep functions are blocking and are discouraged to use.
+Later they'll either not exist (crash on call) or become non-blocking.
+
+## Performance
+
+| Benchmark        | swift-system-clock | Standard library |
+| ---------------- | ------------------ | ---------------- |
+| `continuous.now` | 10.9 ns            | 26.8 ns          |
+| `suspending.now` | 11.1 ns            | 26.5 ns          |
