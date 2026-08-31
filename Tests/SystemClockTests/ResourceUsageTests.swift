@@ -134,11 +134,18 @@ struct ResourceUsageTests {
     )
     func `busy work advances the user half`(clock: SystemClock<Swift.Duration>) {
         let start = clock.now
+
+        let burnStart = SystemClock<Swift.Duration>.suspending.now
         var accumulator: UInt64 = 0
-        for index in UInt64(0)..<2_000_000 {
+        var index: UInt64 = 0
+        while burnStart.duration(to: SystemClock<Swift.Duration>.suspending.now)
+            < .milliseconds(200)
+        {
             accumulator = accumulator &+ index &* 2_654_435_761
+            index &+= 1
         }
         #expect(accumulator != 0)
+
         #expect(start.duration(to: clock.now) > .zero)
     }
 

@@ -14,7 +14,9 @@ public import WASILibc
 #error("The SystemClock module was unable to identify your C library.")
 #endif
 
+#if !os(WASI)
 public import CSystemClock
+#endif
 
 /// The conversions and the wait that every `clock_gettime(2)` platform shares, which is every
 /// one Swift supports bar Windows.
