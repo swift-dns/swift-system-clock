@@ -1,7 +1,7 @@
 #ifndef CSYSTEM_CLOCK_RUSAGE_H
 #define CSYSTEM_CLOCK_RUSAGE_H
 
-#if !defined(_WIN32) && !defined(__wasi__)
+#if !defined(_WIN32) && !defined(__wasi__) && __has_include(<sys/resource.h>)
 
 #include <stdint.h>
 #include <sys/resource.h>
@@ -24,6 +24,6 @@ static inline int csystem_clock_getrusage(int32_t who, struct rusage *usage) {
 }
 #endif
 
-#endif // !_WIN32 && !__wasi__
+#endif // !_WIN32 && !__wasi__ && __has_include(<sys/resource.h>)
 
 #endif // CSYSTEM_CLOCK_RUSAGE_H

@@ -1,4 +1,4 @@
-#if os(Linux) || os(Android) || os(FreeBSD) || os(OpenBSD)
+#if (os(Linux) || os(Android) || os(FreeBSD) || os(OpenBSD)) && !$Embedded
 
 #if canImport(Glibc)
 public import Glibc
@@ -23,6 +23,7 @@ struct POSIXClock: Sendable {
     }
 
     @inlinable
+    @inline(always)
     func read() -> CompactDuration? {
         switch self.id {
         case csystem_clock_process_user_cpu_time:
@@ -39,6 +40,7 @@ struct POSIXClock: Sendable {
     }
 
     @inlinable
+    @inline(always)
     func resolution() -> CompactDuration? {
         switch self.id {
         case csystem_clock_process_user_cpu_time, csystem_clock_process_system_cpu_time,
@@ -54,6 +56,7 @@ struct POSIXClock: Sendable {
     }
 
     @inlinable
+    @inline(always)
     func sleep(until deadline: CompactDuration, orFor remaining: CompactDuration) {
         var target = POSIX.clampedTimespec(from: deadline)
         let status = unsafe clock_nanosleep(self.id, TIMER_ABSTIME, &target, nil)

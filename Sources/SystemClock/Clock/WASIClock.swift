@@ -1,4 +1,4 @@
-#if os(WASI)
+#if os(WASI) && !$Embedded
 
 public import WASILibc
 public import CSystemClock
@@ -24,6 +24,7 @@ struct WASIClock: Sendable {
     }
 
     @inlinable
+    @inline(always)
     func read() -> CompactDuration? {
         var value = timespec()
         guard let clock = self.platformID,
@@ -35,6 +36,7 @@ struct WASIClock: Sendable {
     }
 
     @inlinable
+    @inline(always)
     func resolution() -> CompactDuration? {
         var value = timespec()
         guard let clock = self.platformID,
@@ -46,6 +48,7 @@ struct WASIClock: Sendable {
     }
 
     @inlinable
+    @inline(always)
     func sleep(until deadline: CompactDuration, orFor remaining: CompactDuration) {
         POSIX.sleep(for: remaining)
     }

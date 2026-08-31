@@ -143,7 +143,7 @@ extension CompactDuration {
     }
 }
 
-@_unavailableInEmbedded
+#if !$Embedded
 extension CompactDuration: Codable {
     public init(from decoder: any Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -156,6 +156,7 @@ extension CompactDuration: Codable {
         try container.encode(nanoseconds)
     }
 }
+#endif
 
 @available(SwiftStdlib 5.7, *)
 extension CompactDuration: Hashable {

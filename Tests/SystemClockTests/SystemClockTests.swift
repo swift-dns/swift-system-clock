@@ -214,18 +214,5 @@ struct SystemClockTests {
         #expect(processStart.duration(to: SystemClock<Swift.Duration>.processCPUTime.now) > .zero)
         #expect(threadStart.duration(to: SystemClock<Swift.Duration>.threadCPUTime.now) > .zero)
     }
-
-    /// A cpu-time clock only advances while its thread is on a CPU, so blocking must not move
-    /// it anywhere near as far as elapsed time.
-    ///
-    /// Blocking rather than suspending keeps the test on one thread, and the thread rather than
-    /// the process keeps the other tests' work out of the reading.
-    @Test func `thread cpu time barely advances while blocked`() {
-        let start = SystemClock<Swift.Duration>.threadCPUTime.now
-        SystemClock<Swift.Duration>.suspending._blockingSleep(for: .milliseconds(200))
-        #expect(
-            start.duration(to: SystemClock<Swift.Duration>.threadCPUTime.now) < .milliseconds(100)
-        )
-    }
     #endif
 }

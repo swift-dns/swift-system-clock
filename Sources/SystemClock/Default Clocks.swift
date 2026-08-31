@@ -1,4 +1,5 @@
 @available(SwiftStdlib 5.7, *)
+@_unavailableInEmbedded
 extension SystemClock {
     /// The time of day.
     ///
@@ -242,6 +243,7 @@ extension SystemClock {
 }
 
 @available(SwiftStdlib 5.7, *)
+@_unavailableInEmbedded
 extension SystemClock {
     /// CPU time this process has used.
     ///
@@ -328,6 +330,7 @@ extension SystemClock {
     }
 }
 
+#if !$Embedded
 @available(SwiftStdlib 5.7, *)
 extension Clock where Self == SystemClock<CompactDuration> {
     /// See ``SystemClock/realtime``.
@@ -378,3 +381,4 @@ extension Clock where Self == SystemClock<CompactDuration> {
         SystemClock.threadCPUTime
     }
 }
+#endif

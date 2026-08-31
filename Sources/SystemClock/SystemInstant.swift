@@ -7,6 +7,7 @@
 /// let elapsed: SystemClock.Duration = start.duration(to: SystemClock.suspending.now)
 /// ```
 @available(SwiftStdlib 5.7, *)
+@_unavailableInEmbedded
 @_assemblyVision
 @_semantics("optremark")
 public struct SystemInstant<Duration> {
@@ -20,6 +21,7 @@ public struct SystemInstant<Duration> {
 }
 
 @available(SwiftStdlib 5.7, *)
+@_unavailableInEmbedded
 extension SystemInstant: InstantProtocol where Duration: SystemDurationProtocol {
     /// The instant whose reading is zero, which is the clock's own epoch.
     @inlinable
@@ -34,9 +36,11 @@ extension SystemInstant: InstantProtocol where Duration: SystemDurationProtocol 
 }
 
 @available(SwiftStdlib 5.7, *)
+@_unavailableInEmbedded
 extension SystemInstant: Sendable where Duration: Sendable {}
 
 @available(SwiftStdlib 5.7, *)
+@_unavailableInEmbedded
 extension SystemInstant: Equatable where Duration: Equatable {
     @inlinable
     public static func == (lhs: Self, rhs: Self) -> Bool {
@@ -45,6 +49,7 @@ extension SystemInstant: Equatable where Duration: Equatable {
 }
 
 @available(SwiftStdlib 5.7, *)
+@_unavailableInEmbedded
 extension SystemInstant: Hashable where Duration: Hashable {
     @inlinable
     public func hash(into hasher: inout Hasher) {
@@ -53,6 +58,7 @@ extension SystemInstant: Hashable where Duration: Hashable {
 }
 
 @available(SwiftStdlib 5.7, *)
+@_unavailableInEmbedded
 extension SystemInstant: Comparable where Duration: Comparable {
     @inlinable
     public static func < (lhs: Self, rhs: Self) -> Bool {
@@ -60,6 +66,7 @@ extension SystemInstant: Comparable where Duration: Comparable {
     }
 }
 
+#if !$Embedded
 @available(SwiftStdlib 5.7, *)
 extension SystemInstant: Encodable where Duration: Encodable {
     @inlinable
@@ -77,8 +84,10 @@ extension SystemInstant: Decodable where Duration: Decodable {
         self._value = try container.decode(Duration.self)
     }
 }
+#endif
 
 @available(SwiftStdlib 5.7, *)
+@_unavailableInEmbedded
 extension SystemInstant where Duration: AdditiveArithmetic {
     @inlinable
     public func advanced(by duration: Duration) -> Self {

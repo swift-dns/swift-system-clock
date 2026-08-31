@@ -3,22 +3,13 @@
 
 #include <stdint.h>
 
-#if !defined(_WIN32)
+#if !defined(_WIN32) && __has_include(<time.h>)
 #include <time.h>
 #endif
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-// In the header, not a `.c` file, so each id folds into the caller as an immediate operand.
-// Every id is the number its own platform's headers give it, on every platform, so an id reads
-// the same whether or not it belongs to the platform being compiled for. `SystemClock` only
-// hands the operating system the id of the platform it was compiled for.
-//
-// The numbers are spelled twice on purpose: as a macro, which is an integer constant expression
-// `_Static_assert` accepts, and as the constant Swift imports. `csystem_clock.c` checks every
-// macro against the host's own headers, so an id that moves fails the build.
 
 // MARK: - Darwin
 // clock_gettime(3), available since macOS 10.12. From the `clockid_t` enum in the SDK's
@@ -49,10 +40,6 @@ static const int32_t csystem_clock_darwin_thread_cpu_time =
 // MARK: - Linux
 // clock_gettime(2). From <linux/time.h>, which is kernel ABI, so the numbers are frozen; glibc,
 // musl and Bionic all repeat them. Also covers Android.
-//
-// An id is written down here even where the host's C library is too old to declare it, since
-// the number is the kernel's, not the library's: a new enough kernel then answers it anyway,
-// and an older one rejects it the same way it rejects any id it does not know.
 
 #define CSYSTEM_CLOCK_LINUX_REALTIME 0
 #define CSYSTEM_CLOCK_LINUX_MONOTONIC 1
@@ -156,9 +143,7 @@ static const int32_t csystem_clock_openbsd_boottime = CSYSTEM_CLOCK_OPENBSD_BOOT
 
 // MARK: - Resource usage
 // No platform has a clock id for one half of its cpu time; the halves come from `getrusage(2)`,
-// or `thread_info(2)` where `getrusage(2)` is not per-thread. Like the WASI and Windows ids they
-// are this library's own, so `csystem_clock.c` has nothing to check, and one set serves every
-// platform. Numbered far above every real clock id; no reading hands one to `clock_gettime(2)`.
+// or `thread_info(2)` where `getrusage(2)` is not per-thread.
 
 #define CSYSTEM_CLOCK_PROCESS_USER_CPU_TIME 1001
 #define CSYSTEM_CLOCK_PROCESS_SYSTEM_CPU_TIME 1002
@@ -174,13 +159,6 @@ static const int32_t csystem_clock_thread_system_cpu_time =
     CSYSTEM_CLOCK_THREAD_SYSTEM_CPU_TIME;
 
 // MARK: - WASI
-// wasi-libc's `clockid_t` is a pointer, and `CLOCK_REALTIME` and `CLOCK_MONOTONIC` are the
-// addresses of extern objects rather than integers, so there is no number to take. These ids
-// are this library's own, turned back into a real `clockid_t` at the call site, and there is
-// nothing for `csystem_clock.c` to check them against.
-//
-// WASI preview1 also defines process and thread cpu-time clocks, but wasi-libc declares
-// neither, so neither is reachable from the C library Swift builds on.
 
 #define CSYSTEM_CLOCK_WASI_REALTIME 1
 #define CSYSTEM_CLOCK_WASI_MONOTONIC 2
@@ -219,9 +197,7 @@ static inline int csystem_clock_wasi_getres(int32_t id, struct timespec *out) {
 #endif
 
 // MARK: - Windows
-// Windows has no `clockid_t`. These ids are this library's own; each selects a Win32 time
-// function rather than naming anything the operating system defines, so there is nothing for
-// `csystem_clock.c` to check them against.
+// Windows has no `clockid_t`. These ids are this library's own identifiers.
 
 #define CSYSTEM_CLOCK_WINDOWS_PERFORMANCE_COUNTER 1
 #define CSYSTEM_CLOCK_WINDOWS_SYSTEM_TIME 2

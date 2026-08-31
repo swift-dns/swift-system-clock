@@ -1,4 +1,4 @@
-#if canImport(Darwin)
+#if canImport(Darwin) && !$Embedded
 
 public import Darwin
 public import CSystemClock
@@ -19,6 +19,7 @@ struct DarwinClock: Sendable {
     }
 
     @inlinable
+    @inline(always)
     func read() -> CompactDuration? {
         switch self.swiftyID {
         case csystem_clock_process_user_cpu_time:
@@ -35,6 +36,7 @@ struct DarwinClock: Sendable {
     }
 
     @inlinable
+    @inline(always)
     func resolution() -> CompactDuration? {
         switch self.swiftyID {
         case csystem_clock_process_user_cpu_time, csystem_clock_process_system_cpu_time,
@@ -51,6 +53,7 @@ struct DarwinClock: Sendable {
     }
 
     @inlinable
+    @inline(always)
     func sleep(until deadline: CompactDuration, orFor remaining: CompactDuration) {
         POSIX.sleep(for: remaining)
     }

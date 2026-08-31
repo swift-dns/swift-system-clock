@@ -14,6 +14,7 @@
 /// )
 /// ```
 @available(SwiftStdlib 5.7, *)
+@_unavailableInEmbedded
 @_assemblyVision
 @_semantics("optremark")
 public struct SystemClock<Duration>: Sendable {
@@ -34,7 +35,9 @@ public struct SystemClock<Duration>: Sendable {
         openbsd: OpenBSDClockID,
         wasi: WASIClockID
     ) {
-        #if canImport(Darwin)
+        #if $Embedded
+        self.clock = UnavailableClock()
+        #elseif canImport(Darwin)
         self.clock = DarwinClock(id: darwin)
         #elseif os(Linux) || os(Android)
         self.clock = POSIXClock(id: linux.rawValue)
@@ -53,7 +56,8 @@ public struct SystemClock<Duration>: Sendable {
 }
 
 @available(SwiftStdlib 5.7, *)
-extension SystemClock: Clock where Duration: SystemDurationProtocol {
+@_unavailableInEmbedded
+extension SystemClock where Duration: SystemDurationProtocol {
     /// The current instant.
     @inlinable
     public var now: Instant {
@@ -68,10 +72,30 @@ extension SystemClock: Clock where Duration: SystemDurationProtocol {
     /// This is a lower bound on resolution rather than a measurement of how precise the
     /// underlying hardware is.
     @inlinable
-    public var minimumResolution: Self.Duration {
+    public var minimumResolution: Duration {
         guard let reading = self.clock.resolution() else {
             fatalError("SystemClock: the operating system rejected the clock's id")
         }
-        return Self.Duration.nanoseconds(reading.nanoseconds)
+        return Duration.nanoseconds(reading.nanoseconds)
+    }
+
+    /// Suspends until this clock reaches `deadline`, or throws `CancellationError` if the task
+    /// is cancelled first.
+    ///
+    /// TODO: Don't block the thread.
+    /// TODO: Cancellation support.
+    @inlinable
+    public func sleep(until deadline: Instant, tolerance: Duration? = nil) async throws {
+        let compactDuration = CompactDuration(nanoseconds: deadline._value.nanoseconds)
+        let now = CompactDuration(nanoseconds: self.now._value.nanoseconds)
+        self.clock.sleep(
+            until: compactDuration,
+            orFor: compactDuration - now
+        )
     }
 }
+
+#if !$Embedded
+@available(SwiftStdlib 5.7, *)
+extension SystemClock: Clock where Duration: SystemDurationProtocol {}
+#endif

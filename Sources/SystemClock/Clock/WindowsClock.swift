@@ -1,4 +1,4 @@
-#if os(Windows)
+#if os(Windows) && !$Embedded
 
 public import WinSDK
 public import CSystemClock
@@ -18,6 +18,7 @@ struct WindowsClock: Sendable {
     }
 
     @inlinable
+    @inline(always)
     func read() -> CompactDuration? {
         switch self.id {
         case .performanceCounter:
@@ -86,6 +87,7 @@ struct WindowsClock: Sendable {
     }
 
     @inlinable
+    @inline(always)
     func resolution() -> CompactDuration? {
         switch self.id {
         case .performanceCounter:
@@ -112,6 +114,7 @@ struct WindowsClock: Sendable {
     /// Windows has no clock-bound wait, so the deadline is unused and the remainder is rounded
     /// up to the millisecond `SleepEx` takes.
     @inlinable
+    @inline(always)
     func sleep(until deadline: CompactDuration, orFor remaining: CompactDuration) {
         var milliseconds: Int64 = 0
         if remaining.nanoseconds > 0 {

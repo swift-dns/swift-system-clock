@@ -35,40 +35,4 @@ struct SleepTests {
             try await task.value
         }
     }
-
-    @Test(
-        arguments: [
-            SystemClock<Swift.Duration>.continuous,
-            SystemClock<Swift.Duration>.suspending,
-            SystemClock<Swift.Duration>.realtime,
-        ]
-    )
-    func `blocking sleep wakes at or after the deadline`(clock: SystemClock<Swift.Duration>) {
-        let deadline = clock.now.advanced(by: .milliseconds(50))
-        clock._blockingSleep(until: deadline)
-        #expect(clock.now >= deadline)
-    }
-
-    @Test func `blocking sleep for a duration waits at least that long`() {
-        let clock = SystemClock<Swift.Duration>.continuous
-        let start = clock.now
-        clock._blockingSleep(for: .milliseconds(50))
-        #expect(start.duration(to: clock.now) >= .milliseconds(50))
-    }
-
-    @Test func `blocking sleep returns at once for a deadline already passed`() {
-        let clock = SystemClock<Swift.Duration>.continuous
-        clock._blockingSleep(until: clock.now.advanced(by: .seconds(-10)))
-    }
-
-    /// `measure` comes from the `Clock` protocol, so this is really a check that the
-    /// conformance is wired up.
-    @Test func `measure reports the time the work took`() {
-        let clock = SystemClock<Swift.Duration>.continuous
-        let measured = clock.measure {
-            SystemClock<Swift.Duration>.continuous._blockingSleep(for: .milliseconds(20))
-        }
-        #expect(measured >= .milliseconds(20))
-        #expect(measured < .seconds(5))
-    }
 }

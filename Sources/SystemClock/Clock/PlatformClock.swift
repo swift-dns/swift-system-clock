@@ -10,7 +10,10 @@
 // both the deadline and the wait left over from it, because a platform that can wait on the
 // clock itself wants the first and one that cannot wants the second.
 
-#if canImport(Darwin)
+#if $Embedded
+@usableFromInline
+typealias _PlatformClockTypealias = UnavailableClock
+#elseif canImport(Darwin)
 @usableFromInline
 typealias _PlatformClockTypealias = DarwinClock
 #elseif os(Linux) || os(Android) || os(FreeBSD) || os(OpenBSD)

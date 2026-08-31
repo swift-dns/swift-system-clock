@@ -1,4 +1,4 @@
-#if !os(Windows)
+#if !os(Windows) && !$Embedded
 
 #if canImport(Darwin)
 public import Darwin
