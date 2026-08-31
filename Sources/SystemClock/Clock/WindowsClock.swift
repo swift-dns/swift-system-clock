@@ -3,11 +3,6 @@
 public import WinSDK
 public import CSystemClock
 
-/// The Windows end of ``_PlatformClockTypealias``.
-///
-/// Windows has no `clockid_t`, so the id selects a Win32 function rather than naming anything
-/// the operating system defines. `CSystemClock` supplies only the calls Swift's `WinSDK` module
-/// map leaves unreachable; every reading is turned into a `CompactDuration` here.
 @usableFromInline
 struct WindowsClock: Sendable {
     /// 100-nanosecond intervals between the FILETIME epoch of 1601 and the Unix epoch.
@@ -23,11 +18,6 @@ struct WindowsClock: Sendable {
     }
 
     @inlinable
-    var rawID: Int32 {
-        self.id.rawValue
-    }
-
-    @inlinable
     func read() -> CompactDuration? {
         switch self.id {
         case .performanceCounter:
@@ -40,58 +30,56 @@ struct WindowsClock: Sendable {
             /// 9.22 GHz, so it is divided at full width. The quotient cannot overrun, since
             /// the remainder is below the frequency and so the answer is below a billion.
             let scaled = (ticks % frequency).multipliedFullWidth(by: 1_000_000_000)
-            return CompactDuration(
-                nanoseconds: (ticks / frequency) * 1_000_000_000
-                    + frequency.dividingFullWidth(scaled).quotient
-            )
+            let seconds = (ticks / frequency) * 1_000_000_000
+            let subSeconds = frequency.dividingFullWidth(scaled).quotient
+            return CompactDuration(nanoseconds: seconds + subSeconds)
         case .systemTime:
             var time = FILETIME()
             unsafe GetSystemTimeAsFileTime(&time)
-            return CompactDuration(
-                hundredNanosecondIntervals: time.intervals - Self.fileTimeToUnixEpoch
+            return Self.duration(
+                hundredNanosecondIntervals: Self.intervals(of: time) - Self.fileTimeToUnixEpoch
             )
         case .systemTimePrecise:
             var time = FILETIME()
             unsafe GetSystemTimePreciseAsFileTime(&time)
-            return CompactDuration(
-                hundredNanosecondIntervals: time.intervals - Self.fileTimeToUnixEpoch
+            return Self.duration(
+                hundredNanosecondIntervals: Self.intervals(of: time) - Self.fileTimeToUnixEpoch
             )
         case .interruptTime:
             let intervals = csystem_clock_windows_query_interrupt_time()
-            return CompactDuration(hundredNanosecondIntervals: Int64(intervals))
+            return Self.duration(hundredNanosecondIntervals: Int64(intervals))
         case .interruptTimePrecise:
             let intervals = csystem_clock_windows_query_interrupt_time_precise()
-            return CompactDuration(hundredNanosecondIntervals: Int64(intervals))
+            return Self.duration(hundredNanosecondIntervals: Int64(intervals))
         case .unbiasedInterruptTime:
             let intervals = csystem_clock_windows_query_unbiased_interrupt_time()
             guard intervals >= 0 else {
                 return nil
             }
-            return CompactDuration(hundredNanosecondIntervals: intervals)
+            return Self.duration(hundredNanosecondIntervals: intervals)
         case .unbiasedInterruptTimePrecise:
             let intervals = csystem_clock_windows_query_unbiased_interrupt_time_precise()
-            return CompactDuration(hundredNanosecondIntervals: Int64(intervals))
+            return Self.duration(hundredNanosecondIntervals: Int64(intervals))
         case .tickCount:
             return CompactDuration(nanoseconds: Int64(GetTickCount64()) * 1_000_000)
-        case .processTime, .threadTime:
-            var creation = FILETIME()
-            var exit = FILETIME()
-            var kernel = FILETIME()
-            var user = FILETIME()
-            let ok =
-                self.id == .processTime
-                ? unsafe GetProcessTimes(
-                    GetCurrentProcess(),
-                    &creation,
-                    &exit,
-                    &kernel,
-                    &user
-                )
-                : unsafe GetThreadTimes(GetCurrentThread(), &creation, &exit, &kernel, &user)
-            guard ok else {
+        case .processTime:
+            guard let times = Self.readProcessTimes() else {
                 return nil
             }
-            return CompactDuration(hundredNanosecondIntervals: kernel.intervals + user.intervals)
+            return times.user + times.system
+        case .threadTime:
+            guard let times = Self.readThreadTimes() else {
+                return nil
+            }
+            return times.user + times.system
+        case .processUserTime:
+            return Self.readProcessTimes()?.user
+        case .processKernelTime:
+            return Self.readProcessTimes()?.system
+        case .threadUserTime:
+            return Self.readThreadTimes()?.user
+        case .threadKernelTime:
+            return Self.readThreadTimes()?.system
         default:
             return nil
         }
@@ -111,7 +99,8 @@ struct WindowsClock: Sendable {
         case .systemTimePrecise, .interruptTimePrecise, .unbiasedInterruptTimePrecise:
             return CompactDuration(nanoseconds: 100)
         case .systemTime, .interruptTime, .unbiasedInterruptTime, .tickCount, .processTime,
-            .threadTime:
+            .threadTime, .processUserTime, .processKernelTime, .threadUserTime,
+            .threadKernelTime:
             /// One system clock tick. Microsoft documents 0.5 to 15.625 ms, hardware
             /// dependent; 15.625 ms is the usual default.
             return CompactDuration(nanoseconds: 15_625_000)
@@ -131,21 +120,45 @@ struct WindowsClock: Sendable {
         milliseconds = min(milliseconds, Int64(INFINITE - 1))
         SleepEx(DWORD(milliseconds), true)
     }
-}
 
-extension FILETIME {
     @inlinable
-    var intervals: Int64 {
-        Int64(bitPattern: UInt64(self.dwHighDateTime) << 32 | UInt64(self.dwLowDateTime))
+    static func readProcessTimes() -> (user: CompactDuration, system: CompactDuration)? {
+        var creation = FILETIME()
+        var exit = FILETIME()
+        var kernel = FILETIME()
+        var user = FILETIME()
+        guard unsafe GetProcessTimes(GetCurrentProcess(), &creation, &exit, &kernel, &user) else {
+            return nil
+        }
+        return (
+            Self.duration(hundredNanosecondIntervals: Self.intervals(of: user)),
+            Self.duration(hundredNanosecondIntervals: Self.intervals(of: kernel))
+        )
     }
-}
 
-extension CompactDuration {
-    /// A count of the 100-nanosecond intervals every Windows time function but `GetTickCount64`
-    /// reports.
     @inlinable
-    init(hundredNanosecondIntervals intervals: Int64) {
-        self.init(nanoseconds: intervals * 100)
+    static func readThreadTimes() -> (user: CompactDuration, system: CompactDuration)? {
+        var creation = FILETIME()
+        var exit = FILETIME()
+        var kernel = FILETIME()
+        var user = FILETIME()
+        guard unsafe GetThreadTimes(GetCurrentThread(), &creation, &exit, &kernel, &user) else {
+            return nil
+        }
+        return (
+            Self.duration(hundredNanosecondIntervals: Self.intervals(of: user)),
+            Self.duration(hundredNanosecondIntervals: Self.intervals(of: kernel))
+        )
+    }
+
+    @inlinable
+    static func intervals(of value: FILETIME) -> Int64 {
+        Int64(bitPattern: UInt64(value.dwHighDateTime) << 32 | UInt64(value.dwLowDateTime))
+    }
+
+    @inlinable
+    static func duration(hundredNanosecondIntervals intervals: Int64) -> CompactDuration {
+        CompactDuration(nanoseconds: intervals * 100)
     }
 }
 

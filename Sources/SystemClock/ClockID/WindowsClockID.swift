@@ -3,6 +3,8 @@ public import CSystemClock
 /// One of the Win32 time functions.
 ///
 /// Windows has no `clockid_t`, so `rawValue` is this library's own arbitrary identifier for the clock.
+@_assemblyVision
+@_semantics("optremark")
 public struct WindowsClockID: Sendable, Hashable, RawRepresentable {
     public let rawValue: Int32
 
@@ -271,5 +273,117 @@ extension WindowsClockID {
     @inlinable
     public static var threadTime: WindowsClockID {
         WindowsClockID(rawValue: csystem_clock_windows_thread_time)
+    }
+
+    /// `GetProcessTimes`
+    ///
+    /// [GetProcessTimes](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getprocesstimes)
+    ///
+    /// One half of the pair `GetProcessTimes` reports; `processTime` and `threadTime` read them summed.
+    ///
+    /// Measures CPU time this process spent running its own code
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value            |
+    /// | --------------------------------- | ---------------- |
+    /// | Affected by OS clock changes      | ✅ No            |
+    /// | Affected by NTP changes           | ✅ No            |
+    /// | Affected by system suspension     | ✅ No            |
+    /// | Affected by process de-scheduling | ✅ No            |
+    /// | Appears to go backwards           | ✅ No            |
+    /// | Reads a cached value              | ✅ No            |
+    /// | Possible staleness                | ✅ None          |
+    /// | Typical read cost                 | Not yet measured |
+    /// | Cold read cost                    | Not yet measured |
+    /// | Step granularity                  | 15.625ms         |
+    @inlinable
+    public static var processUserTime: WindowsClockID {
+        WindowsClockID(rawValue: csystem_clock_process_user_cpu_time)
+    }
+
+    /// `GetProcessTimes`
+    ///
+    /// [GetProcessTimes](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getprocesstimes)
+    ///
+    /// One half of the pair `GetProcessTimes` reports; `processTime` and `threadTime` read them summed.
+    ///
+    /// Measures CPU time the kernel spent on this process's behalf
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value            |
+    /// | --------------------------------- | ---------------- |
+    /// | Affected by OS clock changes      | ✅ No            |
+    /// | Affected by NTP changes           | ✅ No            |
+    /// | Affected by system suspension     | ✅ No            |
+    /// | Affected by process de-scheduling | ✅ No            |
+    /// | Appears to go backwards           | ✅ No            |
+    /// | Reads a cached value              | ✅ No            |
+    /// | Possible staleness                | ✅ None          |
+    /// | Typical read cost                 | Not yet measured |
+    /// | Cold read cost                    | Not yet measured |
+    /// | Step granularity                  | 15.625ms         |
+    @inlinable
+    public static var processKernelTime: WindowsClockID {
+        WindowsClockID(rawValue: csystem_clock_process_system_cpu_time)
+    }
+
+    /// `GetThreadTimes`
+    ///
+    /// [GetThreadTimes](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getthreadtimes)
+    ///
+    /// One half of the pair `GetThreadTimes` reports; `processTime` and `threadTime` read them summed.
+    ///
+    /// Measures CPU time this thread spent running its own code
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value            |
+    /// | --------------------------------- | ---------------- |
+    /// | Affected by OS clock changes      | ✅ No            |
+    /// | Affected by NTP changes           | ✅ No            |
+    /// | Affected by system suspension     | ✅ No            |
+    /// | Affected by process de-scheduling | ✅ No            |
+    /// | Appears to go backwards           | ✅ No            |
+    /// | Reads a cached value              | ✅ No            |
+    /// | Possible staleness                | ✅ None          |
+    /// | Typical read cost                 | Not yet measured |
+    /// | Cold read cost                    | Not yet measured |
+    /// | Step granularity                  | 15.625ms         |
+    @inlinable
+    public static var threadUserTime: WindowsClockID {
+        WindowsClockID(rawValue: csystem_clock_thread_user_cpu_time)
+    }
+
+    /// `GetThreadTimes`
+    ///
+    /// [GetThreadTimes](https://learn.microsoft.com/en-us/windows/win32/api/processthreadsapi/nf-processthreadsapi-getthreadtimes)
+    ///
+    /// One half of the pair `GetThreadTimes` reports; `processTime` and `threadTime` read them summed.
+    ///
+    /// Measures CPU time the kernel spent on this thread's behalf
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value            |
+    /// | --------------------------------- | ---------------- |
+    /// | Affected by OS clock changes      | ✅ No            |
+    /// | Affected by NTP changes           | ✅ No            |
+    /// | Affected by system suspension     | ✅ No            |
+    /// | Affected by process de-scheduling | ✅ No            |
+    /// | Appears to go backwards           | ✅ No            |
+    /// | Reads a cached value              | ✅ No            |
+    /// | Possible staleness                | ✅ None          |
+    /// | Typical read cost                 | Not yet measured |
+    /// | Cold read cost                    | Not yet measured |
+    /// | Step granularity                  | 15.625ms         |
+    @inlinable
+    public static var threadKernelTime: WindowsClockID {
+        WindowsClockID(rawValue: csystem_clock_thread_system_cpu_time)
     }
 }

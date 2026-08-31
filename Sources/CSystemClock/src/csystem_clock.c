@@ -163,3 +163,17 @@ _Static_assert(CLOCK_BOOTTIME == CSYSTEM_CLOCK_OPENBSD_BOOTTIME, "CLOCK_BOOTTIME
 #endif
 
 #endif
+
+// The `getrusage(2)` selectors, which every platform that has the call at all numbers the same
+// way, so they are checked once rather than per platform. Darwin declares no `RUSAGE_THREAD`,
+// and glibc hides it behind `__USE_GNU`, which is what the guard is for.
+
+#if !defined(_WIN32) && !defined(__wasi__)
+
+_Static_assert(RUSAGE_SELF == CSYSTEM_CLOCK_RUSAGE_SELF, "RUSAGE_SELF moved");
+
+#if defined(RUSAGE_THREAD)
+_Static_assert(RUSAGE_THREAD == CSYSTEM_CLOCK_RUSAGE_THREAD, "RUSAGE_THREAD moved");
+#endif
+
+#endif

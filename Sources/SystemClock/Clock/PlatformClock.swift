@@ -2,7 +2,6 @@
 // clock is expected to provide, with no protocol saying so:
 //
 //     init(id: <the platform's clock id type>)
-//     var rawID: Int32 { get }
 //     func read() -> Duration?
 //     func resolution() -> Duration?
 //     func sleep(until deadline: Duration, orFor remaining: Duration)
