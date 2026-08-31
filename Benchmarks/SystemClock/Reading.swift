@@ -16,14 +16,16 @@ let readingBenchmarks: @Sendable () -> Void = {
     }
 
     Benchmark(
-        "Reading_Realtime_Instructions",
+        "Reading_Realtime_Instructions_10K",
         configuration: .init(
             metrics: [.instructions],
             warmupIterations: 1,
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemRealtime.now)
+        for _ in 0..<10_000 {
+            blackHole(SystemClock<CompactDuration>.systemRealtime.now)
+        }
     }
 
     // MARK: - Reading_Realtime_Coarse
@@ -40,14 +42,16 @@ let readingBenchmarks: @Sendable () -> Void = {
     }
 
     Benchmark(
-        "Reading_Realtime_Coarse_Instructions",
+        "Reading_Realtime_Coarse_Instructions_10K",
         configuration: .init(
             metrics: [.instructions],
             warmupIterations: 1,
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemRealtimeCoarse.now)
+        for _ in 0..<10_000 {
+            blackHole(SystemClock<CompactDuration>.systemRealtimeCoarse.now)
+        }
     }
 
     // MARK: - Reading_Continuous
@@ -64,14 +68,16 @@ let readingBenchmarks: @Sendable () -> Void = {
     }
 
     Benchmark(
-        "Reading_Continuous_Instructions",
+        "Reading_Continuous_Instructions_10K",
         configuration: .init(
             metrics: [.instructions],
             warmupIterations: 1,
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemContinuous.now)
+        for _ in 0..<10_000 {
+            blackHole(SystemClock<CompactDuration>.systemContinuous.now)
+        }
     }
 
     // MARK: - Reading_Continuous_Coarse
@@ -88,14 +94,16 @@ let readingBenchmarks: @Sendable () -> Void = {
     }
 
     Benchmark(
-        "Reading_Continuous_Coarse_Instructions",
+        "Reading_Continuous_Coarse_Instructions_10K",
         configuration: .init(
             metrics: [.instructions],
             warmupIterations: 1,
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemContinuousCoarse.now)
+        for _ in 0..<10_000 {
+            blackHole(SystemClock<CompactDuration>.systemContinuousCoarse.now)
+        }
     }
 
     // MARK: - Reading_Suspending
@@ -112,14 +120,16 @@ let readingBenchmarks: @Sendable () -> Void = {
     }
 
     Benchmark(
-        "Reading_Suspending_Instructions",
+        "Reading_Suspending_Instructions_10K",
         configuration: .init(
             metrics: [.instructions],
             warmupIterations: 1,
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemSuspending.now)
+        for _ in 0..<10_000 {
+            blackHole(SystemClock<CompactDuration>.systemSuspending.now)
+        }
     }
 
     // MARK: - Reading_Suspending_Coarse
@@ -136,14 +146,16 @@ let readingBenchmarks: @Sendable () -> Void = {
     }
 
     Benchmark(
-        "Reading_Suspending_Coarse_Instructions",
+        "Reading_Suspending_Coarse_Instructions_10K",
         configuration: .init(
             metrics: [.instructions],
             warmupIterations: 1,
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemSuspendingCoarse.now)
+        for _ in 0..<10_000 {
+            blackHole(SystemClock<CompactDuration>.systemSuspendingCoarse.now)
+        }
     }
 
     // MARK: - Reading_Process_CPU_Time
@@ -160,14 +172,16 @@ let readingBenchmarks: @Sendable () -> Void = {
     }
 
     Benchmark(
-        "Reading_Process_CPU_Time_Instructions",
+        "Reading_Process_CPU_Time_Instructions_10K",
         configuration: .init(
             metrics: [.instructions],
             warmupIterations: 1,
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemProcessCPUTime.now)
+        for _ in 0..<10_000 {
+            blackHole(SystemClock<CompactDuration>.systemProcessCPUTime.now)
+        }
     }
 
     // MARK: - Reading_Thread_CPU_Time
@@ -184,13 +198,15 @@ let readingBenchmarks: @Sendable () -> Void = {
     }
 
     Benchmark(
-        "Reading_Thread_CPU_Time_Instructions",
+        "Reading_Thread_CPU_Time_Instructions_10K",
         configuration: .init(
             metrics: [.instructions],
             warmupIterations: 1,
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemThreadCPUTime.now)
+        for _ in 0..<10_000 {
+            blackHole(SystemClock<CompactDuration>.systemThreadCPUTime.now)
+        }
     }
 }
