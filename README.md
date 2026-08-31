@@ -5,6 +5,12 @@
             alt="Unit Tests CI"
         >
     </a>
+    <a href="https://github.com/MahdiBM/swift-system-clock/actions/workflows/benchmarks.yml">
+        <img
+            src="https://img.shields.io/github/actions/workflow/status/MahdiBM/swift-system-clock/benchmarks.yml?event=push&style=plastic&logo=github&label=benchmarks&logoColor=%23ccc"
+            alt="Benchmarks CI"
+        >
+    </a>
     <a href="https://swift.org">
         <img
             src="https://design.vapor.codes/images/swift63up.svg"
