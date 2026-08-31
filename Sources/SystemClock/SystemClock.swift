@@ -14,7 +14,10 @@
 /// )
 /// ```
 @available(SwiftStdlib 5.7, *)
-public struct SystemClock<SCDuration>: Sendable {
+@_assemblyVision
+@_semantics("optremark")
+public struct SystemClock<Duration>: Sendable {
+    public typealias Instant = SystemInstant<Duration>
 
     @usableFromInline
     let clock: _PlatformClockTypealias
@@ -50,9 +53,7 @@ public struct SystemClock<SCDuration>: Sendable {
 }
 
 @available(SwiftStdlib 5.7, *)
-extension SystemClock: Clock where SCDuration: SystemDurationProtocol {
-    public typealias Duration = SCDuration
-
+extension SystemClock: Clock where Duration: SystemDurationProtocol {
     /// The current instant.
     @inlinable
     public var now: Instant {
