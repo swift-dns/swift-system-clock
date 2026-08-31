@@ -4,23 +4,23 @@ public import WASILibc
 public import CSystemClock
 
 /// The WASI end of ``_PlatformClockTypealias``.
-///
-/// wasi-libc spells `CLOCK_REALTIME` and `CLOCK_MONOTONIC` as the addresses of extern objects
-/// rather than as integers, so there is no number for Swift to import and the id is turned back
-/// into a `clockid_t` by `CSystemClock`. WASI has no `clock_nanosleep(2)`.
 @usableFromInline
 struct WASIClock: Sendable {
     @usableFromInline
     let id: WASIClockID
 
     @inlinable
-    init(id: WASIClockID) {
-        self.id = id
+    var platformID: clockid_t? {
+        var clock: clockid_t?
+        guard unsafe csystem_clock_wasi_clockid(self.id.rawValue, &clock) == 0 else {
+            return nil
+        }
+        return clock
     }
 
     @inlinable
-    var rawID: Int32 {
-        self.id.rawValue
+    init(id: WASIClockID) {
+        self.id = id
     }
 
     @inlinable
@@ -31,7 +31,7 @@ struct WASIClock: Sendable {
         else {
             return nil
         }
-        return CompactDuration(value)
+        return POSIX.duration(from: value)
     }
 
     @inlinable
@@ -42,21 +42,12 @@ struct WASIClock: Sendable {
         else {
             return nil
         }
-        return CompactDuration(value)
+        return POSIX.duration(from: value)
     }
 
     @inlinable
     func sleep(until deadline: CompactDuration, orFor remaining: CompactDuration) {
-        posixSleep(for: remaining)
-    }
-
-    @inlinable
-    var platformID: clockid_t? {
-        var clock: clockid_t?
-        guard unsafe csystem_clock_wasi_clockid(self.id.rawValue, &clock) == 0 else {
-            return nil
-        }
-        return clock
+        POSIX.sleep(for: remaining)
     }
 }
 

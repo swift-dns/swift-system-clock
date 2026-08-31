@@ -154,6 +154,25 @@ static const int32_t csystem_clock_openbsd_thread_cpu_time =
 static const int32_t csystem_clock_openbsd_uptime = CSYSTEM_CLOCK_OPENBSD_UPTIME;
 static const int32_t csystem_clock_openbsd_boottime = CSYSTEM_CLOCK_OPENBSD_BOOTTIME;
 
+// MARK: - Resource usage
+// No platform has a clock id for one half of its cpu time; the halves come from `getrusage(2)`,
+// or `thread_info(2)` where `getrusage(2)` is not per-thread. Like the WASI and Windows ids they
+// are this library's own, so `csystem_clock.c` has nothing to check, and one set serves every
+// platform. Numbered far above every real clock id; no reading hands one to `clock_gettime(2)`.
+
+#define CSYSTEM_CLOCK_PROCESS_USER_CPU_TIME 1001
+#define CSYSTEM_CLOCK_PROCESS_SYSTEM_CPU_TIME 1002
+#define CSYSTEM_CLOCK_THREAD_USER_CPU_TIME 1003
+#define CSYSTEM_CLOCK_THREAD_SYSTEM_CPU_TIME 1004
+
+static const int32_t csystem_clock_process_user_cpu_time =
+    CSYSTEM_CLOCK_PROCESS_USER_CPU_TIME;
+static const int32_t csystem_clock_process_system_cpu_time =
+    CSYSTEM_CLOCK_PROCESS_SYSTEM_CPU_TIME;
+static const int32_t csystem_clock_thread_user_cpu_time = CSYSTEM_CLOCK_THREAD_USER_CPU_TIME;
+static const int32_t csystem_clock_thread_system_cpu_time =
+    CSYSTEM_CLOCK_THREAD_SYSTEM_CPU_TIME;
+
 // MARK: - WASI
 // wasi-libc's `clockid_t` is a pointer, and `CLOCK_REALTIME` and `CLOCK_MONOTONIC` are the
 // addresses of extern objects rather than integers, so there is no number to take. These ids

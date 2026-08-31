@@ -1,6 +1,8 @@
 public import CSystemClock
 
 /// A Linux clock identifier that can be passed to `clock_gettime(2)`.
+@_assemblyVision
+@_semantics("optremark")
 public struct LinuxClockID: Sendable, Hashable, RawRepresentable {
     public let rawValue: Int32
 
@@ -295,5 +297,117 @@ extension LinuxClockID {
     @inlinable
     public static var threadCPUTime: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_linux_thread_cpu_time)
+    }
+
+    /// `getrusage(2)`, `RUSAGE_SELF`
+    ///
+    /// [getrusage(2)](https://man7.org/linux/man-pages/man2/getrusage.2.html)
+    ///
+    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    ///
+    /// Measures CPU time this process spent running its own code
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value            |
+    /// | --------------------------------- | ---------------- |
+    /// | Affected by OS clock changes      | ✅ No            |
+    /// | Affected by NTP changes           | ✅ No            |
+    /// | Affected by system suspension     | ✅ No            |
+    /// | Affected by process de-scheduling | ✅ No            |
+    /// | Appears to go backwards           | ✅ No            |
+    /// | Reads a cached value              | ✅ No            |
+    /// | Possible staleness                | ✅ None          |
+    /// | Typical read cost                 | Not yet measured |
+    /// | Cold read cost                    | Not yet measured |
+    /// | Step granularity                  | 1µs              |
+    @inlinable
+    public static var processUserTime: LinuxClockID {
+        LinuxClockID(rawValue: csystem_clock_process_user_cpu_time)
+    }
+
+    /// `getrusage(2)`, `RUSAGE_SELF`
+    ///
+    /// [getrusage(2)](https://man7.org/linux/man-pages/man2/getrusage.2.html)
+    ///
+    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    ///
+    /// Measures CPU time the kernel spent on this process's behalf
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value            |
+    /// | --------------------------------- | ---------------- |
+    /// | Affected by OS clock changes      | ✅ No            |
+    /// | Affected by NTP changes           | ✅ No            |
+    /// | Affected by system suspension     | ✅ No            |
+    /// | Affected by process de-scheduling | ✅ No            |
+    /// | Appears to go backwards           | ✅ No            |
+    /// | Reads a cached value              | ✅ No            |
+    /// | Possible staleness                | ✅ None          |
+    /// | Typical read cost                 | Not yet measured |
+    /// | Cold read cost                    | Not yet measured |
+    /// | Step granularity                  | 1µs              |
+    @inlinable
+    public static var processSystemTime: LinuxClockID {
+        LinuxClockID(rawValue: csystem_clock_process_system_cpu_time)
+    }
+
+    /// `getrusage(2)`, `RUSAGE_THREAD`
+    ///
+    /// [getrusage(2)](https://man7.org/linux/man-pages/man2/getrusage.2.html)
+    ///
+    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    ///
+    /// Measures CPU time this thread spent running its own code
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value            |
+    /// | --------------------------------- | ---------------- |
+    /// | Affected by OS clock changes      | ✅ No            |
+    /// | Affected by NTP changes           | ✅ No            |
+    /// | Affected by system suspension     | ✅ No            |
+    /// | Affected by process de-scheduling | ✅ No            |
+    /// | Appears to go backwards           | ✅ No            |
+    /// | Reads a cached value              | ✅ No            |
+    /// | Possible staleness                | ✅ None          |
+    /// | Typical read cost                 | Not yet measured |
+    /// | Cold read cost                    | Not yet measured |
+    /// | Step granularity                  | 1µs              |
+    @inlinable
+    public static var threadUserTime: LinuxClockID {
+        LinuxClockID(rawValue: csystem_clock_thread_user_cpu_time)
+    }
+
+    /// `getrusage(2)`, `RUSAGE_THREAD`
+    ///
+    /// [getrusage(2)](https://man7.org/linux/man-pages/man2/getrusage.2.html)
+    ///
+    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    ///
+    /// Measures CPU time the kernel spent on this thread's behalf
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value            |
+    /// | --------------------------------- | ---------------- |
+    /// | Affected by OS clock changes      | ✅ No            |
+    /// | Affected by NTP changes           | ✅ No            |
+    /// | Affected by system suspension     | ✅ No            |
+    /// | Affected by process de-scheduling | ✅ No            |
+    /// | Appears to go backwards           | ✅ No            |
+    /// | Reads a cached value              | ✅ No            |
+    /// | Possible staleness                | ✅ None          |
+    /// | Typical read cost                 | Not yet measured |
+    /// | Cold read cost                    | Not yet measured |
+    /// | Step granularity                  | 1µs              |
+    @inlinable
+    public static var threadSystemTime: LinuxClockID {
+        LinuxClockID(rawValue: csystem_clock_thread_system_cpu_time)
     }
 }

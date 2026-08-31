@@ -1,6 +1,8 @@
 public import CSystemClock
 
 /// A WASI clock identifier that can be passed to `clock_time_get`.
+@_assemblyVision
+@_semantics("optremark")
 public struct WASIClockID: Sendable, Hashable, RawRepresentable {
     public let rawValue: Int32
 

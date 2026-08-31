@@ -1,6 +1,8 @@
 public import CSystemClock
 
 /// A FreeBSD clock identifier that can be passed to `clock_gettime(2)`.
+@_assemblyVision
+@_semantics("optremark")
 public struct FreeBSDClockID: Sendable, Hashable, RawRepresentable {
     public let rawValue: Int32
 
@@ -427,5 +429,117 @@ extension FreeBSDClockID {
     @inlinable
     public static var threadCPUTime: FreeBSDClockID {
         FreeBSDClockID(rawValue: csystem_clock_freebsd_thread_cpu_time)
+    }
+
+    /// `getrusage(2)`, `RUSAGE_SELF`
+    ///
+    /// [getrusage(2)](https://man.freebsd.org/cgi/man.cgi?query=getrusage&sektion=2)
+    ///
+    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    ///
+    /// Measures CPU time this process spent running its own code
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value            |
+    /// | --------------------------------- | ---------------- |
+    /// | Affected by OS clock changes      | ✅ No            |
+    /// | Affected by NTP changes           | ✅ No            |
+    /// | Affected by system suspension     | ✅ No            |
+    /// | Affected by process de-scheduling | ✅ No            |
+    /// | Appears to go backwards           | ✅ No            |
+    /// | Reads a cached value              | ✅ No            |
+    /// | Possible staleness                | ✅ None          |
+    /// | Typical read cost                 | Not yet measured |
+    /// | Cold read cost                    | Not yet measured |
+    /// | Step granularity                  | 1µs              |
+    @inlinable
+    public static var processUserTime: FreeBSDClockID {
+        FreeBSDClockID(rawValue: csystem_clock_process_user_cpu_time)
+    }
+
+    /// `getrusage(2)`, `RUSAGE_SELF`
+    ///
+    /// [getrusage(2)](https://man.freebsd.org/cgi/man.cgi?query=getrusage&sektion=2)
+    ///
+    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    ///
+    /// Measures CPU time the kernel spent on this process's behalf
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value            |
+    /// | --------------------------------- | ---------------- |
+    /// | Affected by OS clock changes      | ✅ No            |
+    /// | Affected by NTP changes           | ✅ No            |
+    /// | Affected by system suspension     | ✅ No            |
+    /// | Affected by process de-scheduling | ✅ No            |
+    /// | Appears to go backwards           | ✅ No            |
+    /// | Reads a cached value              | ✅ No            |
+    /// | Possible staleness                | ✅ None          |
+    /// | Typical read cost                 | Not yet measured |
+    /// | Cold read cost                    | Not yet measured |
+    /// | Step granularity                  | 1µs              |
+    @inlinable
+    public static var processSystemTime: FreeBSDClockID {
+        FreeBSDClockID(rawValue: csystem_clock_process_system_cpu_time)
+    }
+
+    /// `getrusage(2)`, `RUSAGE_THREAD`
+    ///
+    /// [getrusage(2)](https://man.freebsd.org/cgi/man.cgi?query=getrusage&sektion=2)
+    ///
+    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    ///
+    /// Measures CPU time this thread spent running its own code
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value            |
+    /// | --------------------------------- | ---------------- |
+    /// | Affected by OS clock changes      | ✅ No            |
+    /// | Affected by NTP changes           | ✅ No            |
+    /// | Affected by system suspension     | ✅ No            |
+    /// | Affected by process de-scheduling | ✅ No            |
+    /// | Appears to go backwards           | ✅ No            |
+    /// | Reads a cached value              | ✅ No            |
+    /// | Possible staleness                | ✅ None          |
+    /// | Typical read cost                 | Not yet measured |
+    /// | Cold read cost                    | Not yet measured |
+    /// | Step granularity                  | 1µs              |
+    @inlinable
+    public static var threadUserTime: FreeBSDClockID {
+        FreeBSDClockID(rawValue: csystem_clock_thread_user_cpu_time)
+    }
+
+    /// `getrusage(2)`, `RUSAGE_THREAD`
+    ///
+    /// [getrusage(2)](https://man.freebsd.org/cgi/man.cgi?query=getrusage&sektion=2)
+    ///
+    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    ///
+    /// Measures CPU time the kernel spent on this thread's behalf
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value            |
+    /// | --------------------------------- | ---------------- |
+    /// | Affected by OS clock changes      | ✅ No            |
+    /// | Affected by NTP changes           | ✅ No            |
+    /// | Affected by system suspension     | ✅ No            |
+    /// | Affected by process de-scheduling | ✅ No            |
+    /// | Appears to go backwards           | ✅ No            |
+    /// | Reads a cached value              | ✅ No            |
+    /// | Possible staleness                | ✅ None          |
+    /// | Typical read cost                 | Not yet measured |
+    /// | Cold read cost                    | Not yet measured |
+    /// | Step granularity                  | 1µs              |
+    @inlinable
+    public static var threadSystemTime: FreeBSDClockID {
+        FreeBSDClockID(rawValue: csystem_clock_thread_system_cpu_time)
     }
 }

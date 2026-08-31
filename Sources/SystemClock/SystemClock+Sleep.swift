@@ -15,6 +15,10 @@ extension SystemClock where Self: Clock {
     ///
     /// Waking is guaranteed to happen at or after `duration`, never before.
     public func _blockingSleep(until deadline: Instant) {
+        precondition(
+            deadline._value.nanoseconds >= 0,
+            "SystemClock: cannot sleep for a negative duration"
+        )
         while true {
             let remaining = self.now.duration(to: deadline)
             if remaining <= .zero {
@@ -33,6 +37,7 @@ extension SystemClock where Self: Clock {
     ///
     /// Waking is guaranteed to happen at or after `duration`, never before.
     public func _blockingSleep(for duration: Duration) {
+        precondition(duration.nanoseconds >= 0, "SystemClock: cannot sleep for a negative duration")
         self._blockingSleep(until: self.now.advanced(by: duration))
     }
 }
