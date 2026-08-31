@@ -57,6 +57,32 @@ let readingBenchmarks: @Sendable () -> Void = {
     // MARK: - Reading_Continuous
 
     Benchmark(
+        "Reading_Continuous_CPU_16M",
+        configuration: .init(
+            metrics: [.cpuUser],
+            warmupIterations: 5,
+            maxIterations: 1000
+        )
+    ) { benchmark in
+        for _ in 0..<16_000_000 {
+            blackHole(SystemClock<CompactDuration>.systemContinuous.now)
+        }
+    }
+
+    Benchmark(
+        "Reading_Continuous_Stdlib_CPU_8M",
+        configuration: .init(
+            metrics: [.cpuUser],
+            warmupIterations: 5,
+            maxIterations: 1000
+        )
+    ) { benchmark in
+        for _ in 0..<8_000_000 {
+            blackHole(ContinuousClock.now)
+        }
+    }
+
+    Benchmark(
         "Reading_Continuous_Malloc",
         configuration: .init(
             metrics: [.mallocCountTotal],
@@ -107,6 +133,32 @@ let readingBenchmarks: @Sendable () -> Void = {
     }
 
     // MARK: - Reading_Suspending
+
+    Benchmark(
+        "Reading_Suspending_CPU_16M",
+        configuration: .init(
+            metrics: [.cpuUser],
+            warmupIterations: 5,
+            maxIterations: 1000
+        )
+    ) { benchmark in
+        for _ in 0..<16_000_000 {
+            blackHole(SystemClock<CompactDuration>.systemSuspending.now)
+        }
+    }
+
+    Benchmark(
+        "Reading_Suspending_Stdlib_CPU_8M",
+        configuration: .init(
+            metrics: [.cpuUser],
+            warmupIterations: 5,
+            maxIterations: 1000
+        )
+    ) { benchmark in
+        for _ in 0..<8_000_000 {
+            blackHole(SuspendingClock.now)
+        }
+    }
 
     Benchmark(
         "Reading_Suspending_Malloc",
