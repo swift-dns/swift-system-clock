@@ -1,5 +1,5 @@
 .DS_Store
-/.build*
+/.build
 /Packages
 xcuserdata/
 DerivedData/
@@ -9,10 +9,5 @@ DerivedData/
 .vscode/settings.json
 *.vsix
 __LocalProfilingTests.swift
-.vscode/tasks.json
-AGENTS.md
-.claude/
-Fuzzing
-Benchmarks/.benchmarkBaselines/
 
-investigations/
+.vscode/tasks.json
