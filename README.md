@@ -24,6 +24,7 @@
 Implements `SystemClock` which reads the operating system clock with no overhead.
 
 ## Table of Contents
+
 - [Usage](#usage)
   - [Default Clocks](#default-clocks)
   - [Custom Clocks](#custom-clocks)
