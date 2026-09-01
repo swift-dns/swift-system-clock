@@ -1,4 +1,4 @@
-// ``SystemClock`` reaches the operating system through this and nothing else. Every platform
+// ``GenericSystemClock`` reaches the operating system through this and nothing else. Every platform
 // clock is expected to provide, with no protocol saying so:
 //
 //     init(id: <the platform's clock id type>)

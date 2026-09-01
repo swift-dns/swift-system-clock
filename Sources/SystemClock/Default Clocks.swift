@@ -1,6 +1,6 @@
 @available(SwiftStdlib 5.7, *)
 @_unavailableInEmbedded
-extension SystemClock {
+extension GenericSystemClock {
     /// The time of day.
     ///
     /// Measures Wall time, counted from 1970-01-01 UTC
@@ -30,8 +30,8 @@ extension SystemClock {
     /// | OpenBSD        | ``OpenBSDClockID/realtime``          |
     /// | WASI           | ``WASIClockID/realtime``             |
     @inlinable
-    public static var realtime: SystemClock {
-        SystemClock(
+    public static var realtime: GenericSystemClock {
+        GenericSystemClock(
             darwin: .realtime,
             linux: .realtime,
             windows: .systemTimePrecise,
@@ -70,8 +70,8 @@ extension SystemClock {
     /// | OpenBSD        | ``OpenBSDClockID/realtime``     |
     /// | WASI           | ``WASIClockID/realtime``        |
     @inlinable
-    public static var realtimeCoarse: SystemClock {
-        SystemClock(
+    public static var realtimeCoarse: GenericSystemClock {
+        GenericSystemClock(
             darwin: .realtime,
             linux: .realtimeCoarse,
             windows: .systemTime,
@@ -110,8 +110,8 @@ extension SystemClock {
     /// | OpenBSD        | ``OpenBSDClockID/boottime``             | N/A                 |
     /// | WASI           | ``WASIClockID/monotonic``               | ✅                  |
     @inlinable
-    public static var continuous: SystemClock {
-        SystemClock(
+    public static var continuous: GenericSystemClock {
+        GenericSystemClock(
             darwin: .monotonicRaw,
             linux: .boottime,
             windows: .interruptTimePrecise,
@@ -150,8 +150,8 @@ extension SystemClock {
     /// | OpenBSD        | ``OpenBSDClockID/boottime``               |
     /// | WASI           | ``WASIClockID/monotonic``                 |
     @inlinable
-    public static var continuousCoarse: SystemClock {
-        SystemClock(
+    public static var continuousCoarse: GenericSystemClock {
+        GenericSystemClock(
             darwin: .monotonicRawApproximate,
             linux: .boottime,
             windows: .interruptTime,
@@ -190,8 +190,8 @@ extension SystemClock {
     /// | OpenBSD        | ``OpenBSDClockID/uptime``                       |
     /// | WASI           | ``WASIClockID/monotonic``                       |
     @inlinable
-    public static var suspending: SystemClock {
-        SystemClock(
+    public static var suspending: GenericSystemClock {
+        GenericSystemClock(
             darwin: .uptimeRaw,
             linux: .monotonic,
             windows: .unbiasedInterruptTimePrecise,
@@ -230,8 +230,8 @@ extension SystemClock {
     /// | OpenBSD        | ``OpenBSDClockID/uptime``                |
     /// | WASI           | ``WASIClockID/monotonic``                |
     @inlinable
-    public static var suspendingCoarse: SystemClock {
-        SystemClock(
+    public static var suspendingCoarse: GenericSystemClock {
+        GenericSystemClock(
             darwin: .uptimeRawApproximate,
             linux: .monotonicCoarse,
             windows: .unbiasedInterruptTime,
@@ -244,7 +244,7 @@ extension SystemClock {
 
 @available(SwiftStdlib 5.7, *)
 @_unavailableInEmbedded
-extension SystemClock {
+extension GenericSystemClock {
     /// CPU time this process has used.
     ///
     /// WASI declares no cpu-time clock, and falls back to ``WASIClockID/monotonic``.
@@ -276,8 +276,8 @@ extension SystemClock {
     /// | OpenBSD        | ``OpenBSDClockID/processCPUTime`` |
     /// | WASI           | ``WASIClockID/monotonic``         |
     @inlinable
-    public static var processCPUTime: SystemClock {
-        SystemClock(
+    public static var processCPUTime: GenericSystemClock {
+        GenericSystemClock(
             darwin: .processCPUTime,
             linux: .processCPUTime,
             windows: .processTime,
@@ -318,8 +318,8 @@ extension SystemClock {
     /// | OpenBSD        | ``OpenBSDClockID/threadCPUTime`` |
     /// | WASI           | ``WASIClockID/monotonic``        |
     @inlinable
-    public static var threadCPUTime: SystemClock {
-        SystemClock(
+    public static var threadCPUTime: GenericSystemClock {
+        GenericSystemClock(
             darwin: .threadCPUTime,
             linux: .threadCPUTime,
             windows: .threadTime,
@@ -332,53 +332,53 @@ extension SystemClock {
 
 #if !$Embedded
 @available(SwiftStdlib 5.7, *)
-extension Clock where Self == SystemClock<CompactDuration> {
-    /// See ``SystemClock/realtime``.
+extension Clock where Self == GenericSystemClock<CompactDuration> {
+    /// See ``GenericSystemClock/realtime``.
     @inlinable
-    public static var systemRealtime: SystemClock<CompactDuration> {
-        SystemClock.realtime
+    public static var systemRealtime: GenericSystemClock<CompactDuration> {
+        GenericSystemClock.realtime
     }
 
-    /// See ``SystemClock/realtimeCoarse``.
+    /// See ``GenericSystemClock/realtimeCoarse``.
     @inlinable
-    public static var systemRealtimeCoarse: SystemClock<CompactDuration> {
-        SystemClock.realtimeCoarse
+    public static var systemRealtimeCoarse: GenericSystemClock<CompactDuration> {
+        GenericSystemClock.realtimeCoarse
     }
 
-    /// See ``SystemClock/continuous``.
+    /// See ``GenericSystemClock/continuous``.
     @inlinable
-    public static var systemContinuous: SystemClock<CompactDuration> {
-        SystemClock.continuous
+    public static var systemContinuous: GenericSystemClock<CompactDuration> {
+        GenericSystemClock.continuous
     }
 
-    /// See ``SystemClock/continuousCoarse``.
+    /// See ``GenericSystemClock/continuousCoarse``.
     @inlinable
-    public static var systemContinuousCoarse: SystemClock<CompactDuration> {
-        SystemClock.continuousCoarse
+    public static var systemContinuousCoarse: GenericSystemClock<CompactDuration> {
+        GenericSystemClock.continuousCoarse
     }
 
-    /// See ``SystemClock/suspending``.
+    /// See ``GenericSystemClock/suspending``.
     @inlinable
-    public static var systemSuspending: SystemClock<CompactDuration> {
-        SystemClock.suspending
+    public static var systemSuspending: GenericSystemClock<CompactDuration> {
+        GenericSystemClock.suspending
     }
 
-    /// See ``SystemClock/suspendingCoarse``.
+    /// See ``GenericSystemClock/suspendingCoarse``.
     @inlinable
-    public static var systemSuspendingCoarse: SystemClock<CompactDuration> {
-        SystemClock.suspendingCoarse
+    public static var systemSuspendingCoarse: GenericSystemClock<CompactDuration> {
+        GenericSystemClock.suspendingCoarse
     }
 
-    /// See ``SystemClock/processCPUTime``.
+    /// See ``GenericSystemClock/processCPUTime``.
     @inlinable
-    public static var systemProcessCPUTime: SystemClock<CompactDuration> {
-        SystemClock.processCPUTime
+    public static var systemProcessCPUTime: GenericSystemClock<CompactDuration> {
+        GenericSystemClock.processCPUTime
     }
 
-    /// See ``SystemClock/threadCPUTime``.
+    /// See ``GenericSystemClock/threadCPUTime``.
     @inlinable
-    public static var systemThreadCPUTime: SystemClock<CompactDuration> {
-        SystemClock.threadCPUTime
+    public static var systemThreadCPUTime: GenericSystemClock<CompactDuration> {
+        GenericSystemClock.threadCPUTime
     }
 }
 #endif

@@ -5,7 +5,7 @@ import Testing
 /// each one, so that every test below covers all of them.
 struct TestClock<Duration: SystemDurationProtocol>: Sendable, CustomStringConvertible {
     var name: String
-    var clock: SystemClock<Duration>
+    var clock: GenericSystemClock<Duration>
     /// Whether two readings must come back in order.
     var isMonotonic: Bool
     /// Whether it advances with elapsed time rather than with work done.
@@ -94,8 +94,8 @@ struct SystemClockTests {
             return
         }
         #expect(
-            first != SystemClock<Swift.Duration>.Instant.epoch
-                || second != SystemClock<Swift.Duration>.Instant.epoch
+            first != GenericSystemClock<Swift.Duration>.Instant.epoch
+                || second != GenericSystemClock<Swift.Duration>.Instant.epoch
         )
     }
 
@@ -135,8 +135,8 @@ struct SystemClockTests {
 
     /// `realtime` counts from the Unix epoch, so its reading has to land in a plausible year.
     @Test func `realtime reads a plausible calendar time`() {
-        let seconds = SystemClock<Swift.Duration>.Instant.epoch.duration(
-            to: SystemClock<Swift.Duration>.realtime.now
+        let seconds = GenericSystemClock<Swift.Duration>.Instant.epoch.duration(
+            to: GenericSystemClock<Swift.Duration>.realtime.now
         ).components
             .seconds
         /// 2025-01-01 and 2100-01-01.
@@ -148,22 +148,22 @@ struct SystemClockTests {
     @Test(
         arguments: [
             (
-                coarse: SystemClock<Swift.Duration>.realtimeCoarse,
-                precise: SystemClock<Swift.Duration>.realtime
+                coarse: GenericSystemClock<Swift.Duration>.realtimeCoarse,
+                precise: GenericSystemClock<Swift.Duration>.realtime
             ),
             (
-                coarse: SystemClock<Swift.Duration>.continuousCoarse,
-                precise: SystemClock<Swift.Duration>.continuous
+                coarse: GenericSystemClock<Swift.Duration>.continuousCoarse,
+                precise: GenericSystemClock<Swift.Duration>.continuous
             ),
             (
-                coarse: SystemClock<Swift.Duration>.suspendingCoarse,
-                precise: SystemClock<Swift.Duration>.suspending
+                coarse: GenericSystemClock<Swift.Duration>.suspendingCoarse,
+                precise: GenericSystemClock<Swift.Duration>.suspending
             ),
         ]
     )
     func `a coarse clock stays close to its precise sibling`(
-        coarse: SystemClock<Swift.Duration>,
-        precise: SystemClock<Swift.Duration>
+        coarse: GenericSystemClock<Swift.Duration>,
+        precise: GenericSystemClock<Swift.Duration>
     ) {
         let coarseReading = coarse.now
         let preciseReading = precise.now
@@ -175,16 +175,16 @@ struct SystemClockTests {
     /// `continuous` and `suspending` read the same underlying clocks the standard library's
     /// `ContinuousClock` and `SuspendingClock` do on this platform.
     @Test func `continuous and suspending track the standard library clocks`() {
-        let systemContinuous = SystemClock<Swift.Duration>.continuous.now
+        let systemContinuous = GenericSystemClock<Swift.Duration>.continuous.now
         let stdlibContinuous = ContinuousClock().now
 
-        let systemSuspending = SystemClock<Swift.Duration>.suspending.now
+        let systemSuspending = GenericSystemClock<Swift.Duration>.suspending.now
         let stdlibSuspending = SuspendingClock().now
 
-        let continuousElapsed = SystemClock<Swift.Duration>.Instant.epoch.duration(
+        let continuousElapsed = GenericSystemClock<Swift.Duration>.Instant.epoch.duration(
             to: systemContinuous
         )
-        let suspendingElapsed = SystemClock<Swift.Duration>.Instant.epoch.duration(
+        let suspendingElapsed = GenericSystemClock<Swift.Duration>.Instant.epoch.duration(
             to: systemSuspending
         )
 
@@ -197,13 +197,13 @@ struct SystemClockTests {
 
     #if !os(WASI)
     @Test func `cpu time clocks advance while burning cpu`() {
-        let processStart = SystemClock<Swift.Duration>.processCPUTime.now
-        let threadStart = SystemClock<Swift.Duration>.threadCPUTime.now
+        let processStart = GenericSystemClock<Swift.Duration>.processCPUTime.now
+        let threadStart = GenericSystemClock<Swift.Duration>.threadCPUTime.now
 
-        let burnStart = SystemClock<Swift.Duration>.suspending.now
+        let burnStart = GenericSystemClock<Swift.Duration>.suspending.now
         var accumulator: UInt64 = 0
         var index: UInt64 = 0
-        while burnStart.duration(to: SystemClock<Swift.Duration>.suspending.now)
+        while burnStart.duration(to: GenericSystemClock<Swift.Duration>.suspending.now)
             < .milliseconds(200)
         {
             accumulator = accumulator &+ index &* 2_654_435_761
@@ -211,8 +211,12 @@ struct SystemClockTests {
         }
         #expect(accumulator != 0)
 
-        #expect(processStart.duration(to: SystemClock<Swift.Duration>.processCPUTime.now) > .zero)
-        #expect(threadStart.duration(to: SystemClock<Swift.Duration>.threadCPUTime.now) > .zero)
+        #expect(
+            processStart.duration(to: GenericSystemClock<Swift.Duration>.processCPUTime.now) > .zero
+        )
+        #expect(
+            threadStart.duration(to: GenericSystemClock<Swift.Duration>.threadCPUTime.now) > .zero
+        )
     }
     #endif
 }

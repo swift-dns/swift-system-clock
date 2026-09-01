@@ -13,11 +13,27 @@
 ///     wasi: .monotonic
 /// )
 /// ```
+///
+/// `SystemClock` is a typealias for `GenericSystemClock<CompactDuration>`.
+/// If you desire so, you can use `GenericSystemClock<Swift.Duration>` instead.
+/// This is generally not recommended but can be useful in certain cases.
+/// `GenericSystemClock<Swift.Duration>` doesn't add noticeable overhead either.
+///
+/// ```swift
+/// let clock = GenericSystemClock<Duration>(
+///     darwin: .uptimeRaw,
+///     linux: .monotonic,
+///     windows: .unbiasedInterruptTimePrecise,
+///     freebsd: .uptime,
+///     openbsd: .uptime,
+///     wasi: .monotonic
+/// )
+/// ```
 @available(SwiftStdlib 5.7, *)
 @_unavailableInEmbedded
 @_assemblyVision
 @_semantics("optremark")
-public struct SystemClock<Duration>: Sendable {
+public struct GenericSystemClock<Duration>: Sendable {
     public typealias Instant = SystemInstant<Duration>
 
     @usableFromInline
@@ -76,9 +92,14 @@ public struct SystemClock<Duration>: Sendable {
     }
 }
 
+/// A ``GenericSystemClock`` that reports ``CompactDuration``.
 @available(SwiftStdlib 5.7, *)
 @_unavailableInEmbedded
-extension SystemClock where Duration: SystemDurationProtocol {
+public typealias SystemClock = GenericSystemClock<CompactDuration>
+
+@available(SwiftStdlib 5.7, *)
+@_unavailableInEmbedded
+extension GenericSystemClock where Duration: SystemDurationProtocol {
     /// The current instant.
     @inlinable
     public var now: Instant {
@@ -103,7 +124,7 @@ extension SystemClock where Duration: SystemDurationProtocol {
 
 #if !$Embedded
 @available(SwiftStdlib 5.7, *)
-extension SystemClock where Duration: SystemDurationProtocol {
+extension GenericSystemClock where Duration: SystemDurationProtocol {
     /// Suspends until this clock reaches `deadline`, or throws `CancellationError` if the task
     /// is cancelled first.
     ///
@@ -121,5 +142,5 @@ extension SystemClock where Duration: SystemDurationProtocol {
 }
 
 @available(SwiftStdlib 5.7, *)
-extension SystemClock: Clock where Duration: SystemDurationProtocol {}
+extension GenericSystemClock: Clock where Duration: SystemDurationProtocol {}
 #endif

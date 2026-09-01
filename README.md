@@ -51,12 +51,17 @@ Also compiles on embedded platforms in a similar fashion to Swift standard libra
 ```swift
 import SystemClock
 
-let elapsed = SystemClock.suspending.measure {
+let elapsed: CompactDuration = SystemClock.suspending.measure {
     expensiveWork()
 }
 
 let now = SystemClock.realtime.now
 ```
+
+> [!NOTE]
+> `SystemClock` defaults to using `CompactDuration` although `Swift`'s `Duration` is also supported.   
+> `CompactDuration` is a lower-precision `Duration` that only keeps `nanoseconds`.   
+> The extra precision is unneeded 99+% of the time in a system-clock context and would be a waste of resources.
 
 ### Custom Clocks
 
@@ -81,7 +86,7 @@ Every Apple platforms takes `darwin`. Android takes `linux`.
 ### Sleeping
 
 > [!WARNING]
-> Currently the sleep functions are blocking and are discouraged to use.
+> Currently the sleep functions are blocking and are discouraged to use.   
 > Later they'll either not exist (crash on call) or become non-blocking.
 
 
@@ -95,19 +100,29 @@ Every Apple platforms takes `darwin`. Android takes `linux`.
 
 These were performed on my M1 Pro MacBook, on macOS 27.
 
-| Benchmark        | `SystemClock` (ns/op) | stdlib (ns/op) | `SystemClock` instructions | stdlib instructions |
-| ---------------- | --------------------- | -------------- | -------------------------- | ------------------- |
-| `continuous.now` | 10.6 ns               | 25.6 ns        | 94                         | 205                 |
-| `suspending.now` | 10.8 ns               | 25.3 ns        | 101                        | 210                 |
+| Benchmark        | `SystemClock` (ns/op) | Standard Library (ns/op) | Speedup |
+| ---------------- | --------------------- | ------------------------ | ------- |
+| `continuous.now` | 10.6 ns               | 25.6 ns                  | 2.41x   |
+| `suspending.now` | 10.8 ns               | 25.3 ns                  | 2.33x   |
+
+| Benchmark        | `SystemClock` instructions | Standard Library instructions |
+| ---------------- | -------------------------- | ----------------------------- |
+| `continuous.now` | 94                         | 205                           |
+| `suspending.now` | 101                        | 210                           |
 
 ### Against glibc
 
 These were performed on a dedicated-cpu-core AMD EPYC-Milan VM from Hetzner, on Ubuntu 24.04.
 
-| Benchmark        | `SystemClock` (ns/op) | stdlib (ns/op) | `SystemClock` instructions | stdlib instructions |
-| ---------------- | --------------------- | -------------- | -------------------------- | ------------------- |
-| `continuous.now` | 26.8 ns               | 29.8 ns        | 133                        | 200                 |
-| `suspending.now` | 26.8 ns               | 29.5 ns        | 133                        | 198                 |
+| Benchmark        | `SystemClock` (ns/op) | Standard Library (ns/op) | Speedup |
+| ---------------- | --------------------- | ------------------------ | ------- |
+| `continuous.now` | 26.8 ns               | 29.8 ns                  | 1.11x   |
+| `suspending.now` | 26.8 ns               | 29.5 ns                  | 1.10x   |
+
+| Benchmark        | `SystemClock` instructions | Standard Library instructions |
+| ---------------- | -------------------------- | ----------------------------- |
+| `continuous.now` | 133                        | 200                           |
+| `suspending.now` | 133                        | 198                           |
 
 #### Additional Notes
 

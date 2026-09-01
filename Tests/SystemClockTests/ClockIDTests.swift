@@ -116,7 +116,7 @@ struct ClockIDTests {
     }
 
     @Test func `an explicitly built clock reports the currentClockID it was given`() {
-        let clock = SystemClock<Swift.Duration>(
+        let clock = GenericSystemClock<Swift.Duration>(
             darwin: .monotonic,
             linux: .monotonicRaw,
             windows: .tickCount,
@@ -144,7 +144,7 @@ struct ClockIDTests {
 /// be checked against the table it is documented by.
 struct ClockIDExpectation: Sendable, CustomStringConvertible {
     var name: String
-    var clock: SystemClock<Swift.Duration>
+    var clock: GenericSystemClock<Swift.Duration>
     var id: AnySystemClockID
 
     var description: String {
@@ -224,7 +224,7 @@ extension ClockIDExpectation {
         #error("The SystemClock tests do not know which clock ids your platform uses.")
         #endif
 
-        let clocks: [(String, SystemClock<Swift.Duration>)] = [
+        let clocks: [(String, GenericSystemClock<Swift.Duration>)] = [
             ("realtime", .realtime),
             ("realtimeCoarse", .realtimeCoarse),
             ("continuous", .continuous),

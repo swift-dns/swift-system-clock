@@ -13,7 +13,7 @@ let benchmarks: @Sendable () -> Void = {
         )
     ) { benchmark in
         for _ in 0..<1_000 {
-            blackHole(SystemClock<CompactDuration>.systemContinuous.now)
+            blackHole(GenericSystemClock<CompactDuration>.systemContinuous.now)
         }
     }
 

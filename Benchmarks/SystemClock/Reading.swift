@@ -12,7 +12,7 @@ let readingBenchmarks: @Sendable () -> Void = {
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemRealtime.now)
+        blackHole(GenericSystemClock<CompactDuration>.systemRealtime.now)
     }
 
     Benchmark(
@@ -24,7 +24,7 @@ let readingBenchmarks: @Sendable () -> Void = {
         )
     ) { benchmark in
         for _ in 0..<10_000 {
-            blackHole(SystemClock<CompactDuration>.systemRealtime.now)
+            blackHole(GenericSystemClock<CompactDuration>.systemRealtime.now)
         }
     }
 
@@ -38,7 +38,7 @@ let readingBenchmarks: @Sendable () -> Void = {
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemRealtimeCoarse.now)
+        blackHole(GenericSystemClock<CompactDuration>.systemRealtimeCoarse.now)
     }
 
     Benchmark(
@@ -50,7 +50,7 @@ let readingBenchmarks: @Sendable () -> Void = {
         )
     ) { benchmark in
         for _ in 0..<10_000 {
-            blackHole(SystemClock<CompactDuration>.systemRealtimeCoarse.now)
+            blackHole(GenericSystemClock<CompactDuration>.systemRealtimeCoarse.now)
         }
     }
 
@@ -65,7 +65,7 @@ let readingBenchmarks: @Sendable () -> Void = {
         )
     ) { benchmark in
         for _ in 0..<4_000_000 {
-            blackHole(SystemClock<CompactDuration>.systemContinuous.now)
+            blackHole(GenericSystemClock<CompactDuration>.systemContinuous.now)
         }
     }
 
@@ -90,7 +90,7 @@ let readingBenchmarks: @Sendable () -> Void = {
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemContinuous.now)
+        blackHole(GenericSystemClock<CompactDuration>.systemContinuous.now)
     }
 
     Benchmark(
@@ -113,7 +113,7 @@ let readingBenchmarks: @Sendable () -> Void = {
         )
     ) { benchmark in
         for _ in 0..<10_000 {
-            blackHole(SystemClock<CompactDuration>.systemContinuous.now)
+            blackHole(GenericSystemClock<CompactDuration>.systemContinuous.now)
         }
     }
 
@@ -140,7 +140,7 @@ let readingBenchmarks: @Sendable () -> Void = {
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemContinuousCoarse.now)
+        blackHole(GenericSystemClock<CompactDuration>.systemContinuousCoarse.now)
     }
 
     Benchmark(
@@ -152,7 +152,7 @@ let readingBenchmarks: @Sendable () -> Void = {
         )
     ) { benchmark in
         for _ in 0..<10_000 {
-            blackHole(SystemClock<CompactDuration>.systemContinuousCoarse.now)
+            blackHole(GenericSystemClock<CompactDuration>.systemContinuousCoarse.now)
         }
     }
 
@@ -167,7 +167,7 @@ let readingBenchmarks: @Sendable () -> Void = {
         )
     ) { benchmark in
         for _ in 0..<4_000_000 {
-            blackHole(SystemClock<CompactDuration>.systemSuspending.now)
+            blackHole(GenericSystemClock<CompactDuration>.systemSuspending.now)
         }
     }
 
@@ -192,7 +192,7 @@ let readingBenchmarks: @Sendable () -> Void = {
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemSuspending.now)
+        blackHole(GenericSystemClock<CompactDuration>.systemSuspending.now)
     }
 
     Benchmark(
@@ -215,7 +215,7 @@ let readingBenchmarks: @Sendable () -> Void = {
         )
     ) { benchmark in
         for _ in 0..<10_000 {
-            blackHole(SystemClock<CompactDuration>.systemSuspending.now)
+            blackHole(GenericSystemClock<CompactDuration>.systemSuspending.now)
         }
     }
 
@@ -242,7 +242,7 @@ let readingBenchmarks: @Sendable () -> Void = {
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemSuspendingCoarse.now)
+        blackHole(GenericSystemClock<CompactDuration>.systemSuspendingCoarse.now)
     }
 
     Benchmark(
@@ -254,7 +254,7 @@ let readingBenchmarks: @Sendable () -> Void = {
         )
     ) { benchmark in
         for _ in 0..<10_000 {
-            blackHole(SystemClock<CompactDuration>.systemSuspendingCoarse.now)
+            blackHole(GenericSystemClock<CompactDuration>.systemSuspendingCoarse.now)
         }
     }
 
@@ -268,7 +268,7 @@ let readingBenchmarks: @Sendable () -> Void = {
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemProcessCPUTime.now)
+        blackHole(GenericSystemClock<CompactDuration>.systemProcessCPUTime.now)
     }
 
     Benchmark(
@@ -280,7 +280,7 @@ let readingBenchmarks: @Sendable () -> Void = {
         )
     ) { benchmark in
         for _ in 0..<10_000 {
-            blackHole(SystemClock<CompactDuration>.systemProcessCPUTime.now)
+            blackHole(GenericSystemClock<CompactDuration>.systemProcessCPUTime.now)
         }
     }
 
@@ -294,7 +294,7 @@ let readingBenchmarks: @Sendable () -> Void = {
             maxIterations: 10
         )
     ) { benchmark in
-        blackHole(SystemClock<CompactDuration>.systemThreadCPUTime.now)
+        blackHole(GenericSystemClock<CompactDuration>.systemThreadCPUTime.now)
     }
 
     Benchmark(
@@ -306,7 +306,7 @@ let readingBenchmarks: @Sendable () -> Void = {
         )
     ) { benchmark in
         for _ in 0..<10_000 {
-            blackHole(SystemClock<CompactDuration>.systemThreadCPUTime.now)
+            blackHole(GenericSystemClock<CompactDuration>.systemThreadCPUTime.now)
         }
     }
 }

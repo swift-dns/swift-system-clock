@@ -3,9 +3,9 @@
 import SystemClock
 import Testing
 
-extension SystemClock where Duration: SystemDurationProtocol {
-    static var processUserTime: SystemClock {
-        SystemClock(
+extension GenericSystemClock where Duration: SystemDurationProtocol {
+    static var processUserTime: GenericSystemClock {
+        GenericSystemClock(
             darwin: .processUserTime,
             linux: .processUserTime,
             windows: .processUserTime,
@@ -15,8 +15,8 @@ extension SystemClock where Duration: SystemDurationProtocol {
         )
     }
 
-    static var processSystemTime: SystemClock {
-        SystemClock(
+    static var processSystemTime: GenericSystemClock {
+        GenericSystemClock(
             darwin: .processSystemTime,
             linux: .processSystemTime,
             windows: .processKernelTime,
@@ -26,8 +26,8 @@ extension SystemClock where Duration: SystemDurationProtocol {
         )
     }
 
-    static var threadUserTime: SystemClock {
-        SystemClock(
+    static var threadUserTime: GenericSystemClock {
+        GenericSystemClock(
             darwin: .threadUserTime,
             linux: .threadUserTime,
             windows: .threadUserTime,
@@ -37,8 +37,8 @@ extension SystemClock where Duration: SystemDurationProtocol {
         )
     }
 
-    static var threadSystemTime: SystemClock {
-        SystemClock(
+    static var threadSystemTime: GenericSystemClock {
+        GenericSystemClock(
             darwin: .threadSystemTime,
             linux: .threadSystemTime,
             windows: .threadKernelTime,
@@ -105,40 +105,40 @@ struct ResourceUsageTests {
     @Test(
         arguments: [
             (
-                user: SystemClock<Swift.Duration>.processUserTime,
-                system: SystemClock<Swift.Duration>.processSystemTime,
-                whole: SystemClock<Swift.Duration>.processCPUTime
+                user: GenericSystemClock<Swift.Duration>.processUserTime,
+                system: GenericSystemClock<Swift.Duration>.processSystemTime,
+                whole: GenericSystemClock<Swift.Duration>.processCPUTime
             ),
             (
-                user: SystemClock<Swift.Duration>.threadUserTime,
-                system: SystemClock<Swift.Duration>.threadSystemTime,
-                whole: SystemClock<Swift.Duration>.threadCPUTime
+                user: GenericSystemClock<Swift.Duration>.threadUserTime,
+                system: GenericSystemClock<Swift.Duration>.threadSystemTime,
+                whole: GenericSystemClock<Swift.Duration>.threadCPUTime
             ),
         ]
     )
     func `the halves add up to the whole`(
-        user: SystemClock<Swift.Duration>,
-        system: SystemClock<Swift.Duration>,
-        whole: SystemClock<Swift.Duration>
+        user: GenericSystemClock<Swift.Duration>,
+        system: GenericSystemClock<Swift.Duration>,
+        whole: GenericSystemClock<Swift.Duration>
     ) {
-        let epoch = SystemClock<Swift.Duration>.Instant.epoch
+        let epoch = GenericSystemClock<Swift.Duration>.Instant.epoch
         let total = epoch.duration(to: user.now) + epoch.duration(to: system.now)
         #expect(isClose(total, epoch.duration(to: whole.now), within: .milliseconds(50)))
     }
 
     @Test(
         arguments: [
-            SystemClock<Swift.Duration>.processUserTime,
-            SystemClock<Swift.Duration>.threadUserTime,
+            GenericSystemClock<Swift.Duration>.processUserTime,
+            GenericSystemClock<Swift.Duration>.threadUserTime,
         ]
     )
-    func `busy work advances the user half`(clock: SystemClock<Swift.Duration>) {
+    func `busy work advances the user half`(clock: GenericSystemClock<Swift.Duration>) {
         let start = clock.now
 
-        let burnStart = SystemClock<Swift.Duration>.suspending.now
+        let burnStart = GenericSystemClock<Swift.Duration>.suspending.now
         var accumulator: UInt64 = 0
         var index: UInt64 = 0
-        while burnStart.duration(to: SystemClock<Swift.Duration>.suspending.now)
+        while burnStart.duration(to: GenericSystemClock<Swift.Duration>.suspending.now)
             < .milliseconds(200)
         {
             accumulator = accumulator &+ index &* 2_654_435_761
@@ -152,20 +152,20 @@ struct ResourceUsageTests {
     @Test(
         arguments: [
             (
-                thread: SystemClock<Swift.Duration>.threadUserTime,
-                process: SystemClock<Swift.Duration>.processUserTime
+                thread: GenericSystemClock<Swift.Duration>.threadUserTime,
+                process: GenericSystemClock<Swift.Duration>.processUserTime
             ),
             (
-                thread: SystemClock<Swift.Duration>.threadSystemTime,
-                process: SystemClock<Swift.Duration>.processSystemTime
+                thread: GenericSystemClock<Swift.Duration>.threadSystemTime,
+                process: GenericSystemClock<Swift.Duration>.processSystemTime
             ),
         ]
     )
     func `a thread never outruns its process`(
-        thread: SystemClock<Swift.Duration>,
-        process: SystemClock<Swift.Duration>
+        thread: GenericSystemClock<Swift.Duration>,
+        process: GenericSystemClock<Swift.Duration>
     ) {
-        let epoch = SystemClock<Swift.Duration>.Instant.epoch
+        let epoch = GenericSystemClock<Swift.Duration>.Instant.epoch
         let threadTime = epoch.duration(to: thread.now)
         let processTime = epoch.duration(to: process.now)
         #expect(threadTime <= processTime + .milliseconds(50))
