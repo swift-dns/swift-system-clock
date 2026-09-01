@@ -31,8 +31,6 @@
 /// ```
 @available(SwiftStdlib 5.7, *)
 @_unavailableInEmbedded
-@_assemblyVision
-@_semantics("optremark")
 public struct GenericSystemClock<Duration>: Sendable {
     public typealias Instant = SystemInstant<Duration>
 

@@ -328,6 +328,182 @@ extension GenericSystemClock {
             wasi: .monotonic
         )
     }
+
+    /// CPU time this process has used running its own code.
+    ///
+    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    ///
+    /// WASI declares no cpu-time clock, and falls back to ``WASIClockID/monotonic``.
+    ///
+    /// Measures CPU time this process spent running its own code
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value                                 |
+    /// | --------------------------------- | ------------------------------------- |
+    /// | Affected by OS clock changes      | ✅ No                                 |
+    /// | Affected by NTP changes           | ✅ No                                 |
+    /// | Affected by system suspension     | ✅ No                                 |
+    /// | Affected by process de-scheduling | ✅ No                                 |
+    /// | Appears to go backwards           | ✅ No                                 |
+    /// | Reads a cached value              | ✅ No                                 |
+    /// | Possible staleness                | ✅ None                               |
+    /// | Typical read cost                 | Platform dependent; ~ 56-460ns @ 4GHz |
+    /// | Cold read cost                    | Platform dependent; not yet measured  |
+    /// | Step granularity                  | Platform dependent; 42ns-15.6ms       |
+    ///
+    /// | Platform       | Clock                              |
+    /// | -------------- | ---------------------------------- |
+    /// | Darwin         | ``DarwinClockID/processUserTime``  |
+    /// | Linux, Android | ``LinuxClockID/processUserTime``   |
+    /// | Windows        | ``WindowsClockID/processUserTime`` |
+    /// | FreeBSD        | ``FreeBSDClockID/processUserTime`` |
+    /// | OpenBSD        | ``OpenBSDClockID/processUserTime`` |
+    /// | WASI           | ``WASIClockID/monotonic``          |
+    @inlinable
+    public static var processUserTime: GenericSystemClock {
+        GenericSystemClock(
+            darwin: .processUserTime,
+            linux: .processUserTime,
+            windows: .processUserTime,
+            freebsd: .processUserTime,
+            openbsd: .processUserTime,
+            wasi: .monotonic
+        )
+    }
+
+    /// CPU time the kernel has used on this process's behalf.
+    ///
+    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    ///
+    /// WASI declares no cpu-time clock, and falls back to ``WASIClockID/monotonic``.
+    ///
+    /// Measures CPU time the kernel spent on this process's behalf
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value                                 |
+    /// | --------------------------------- | ------------------------------------- |
+    /// | Affected by OS clock changes      | ✅ No                                 |
+    /// | Affected by NTP changes           | ✅ No                                 |
+    /// | Affected by system suspension     | ✅ No                                 |
+    /// | Affected by process de-scheduling | ✅ No                                 |
+    /// | Appears to go backwards           | ✅ No                                 |
+    /// | Reads a cached value              | ✅ No                                 |
+    /// | Possible staleness                | ✅ None                               |
+    /// | Typical read cost                 | Platform dependent; ~ 56-460ns @ 4GHz |
+    /// | Cold read cost                    | Platform dependent; not yet measured  |
+    /// | Step granularity                  | Platform dependent; 42ns-15.6ms       |
+    ///
+    /// | Platform       | Clock                                |
+    /// | -------------- | ------------------------------------ |
+    /// | Darwin         | ``DarwinClockID/processSystemTime``  |
+    /// | Linux, Android | ``LinuxClockID/processSystemTime``   |
+    /// | Windows        | ``WindowsClockID/processKernelTime`` |
+    /// | FreeBSD        | ``FreeBSDClockID/processSystemTime`` |
+    /// | OpenBSD        | ``OpenBSDClockID/processSystemTime`` |
+    /// | WASI           | ``WASIClockID/monotonic``            |
+    @inlinable
+    public static var processSystemTime: GenericSystemClock {
+        GenericSystemClock(
+            darwin: .processSystemTime,
+            linux: .processSystemTime,
+            windows: .processKernelTime,
+            freebsd: .processSystemTime,
+            openbsd: .processSystemTime,
+            wasi: .monotonic
+        )
+    }
+
+    /// CPU time the calling thread has used running its own code.
+    ///
+    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    ///
+    /// WASI declares no cpu-time clock, and falls back to ``WASIClockID/monotonic``.
+    ///
+    /// Measures CPU time this thread spent running its own code
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value                                 |
+    /// | --------------------------------- | ------------------------------------- |
+    /// | Affected by OS clock changes      | ✅ No                                 |
+    /// | Affected by NTP changes           | ✅ No                                 |
+    /// | Affected by system suspension     | ✅ No                                 |
+    /// | Affected by process de-scheduling | ✅ No                                 |
+    /// | Appears to go backwards           | ✅ No                                 |
+    /// | Reads a cached value              | ✅ No                                 |
+    /// | Possible staleness                | ✅ None                               |
+    /// | Typical read cost                 | Platform dependent; ~ 56-460ns @ 4GHz |
+    /// | Cold read cost                    | Platform dependent; not yet measured  |
+    /// | Step granularity                  | Platform dependent; 42ns-15.6ms       |
+    ///
+    /// | Platform       | Clock                             |
+    /// | -------------- | --------------------------------- |
+    /// | Darwin         | ``DarwinClockID/threadUserTime``  |
+    /// | Linux, Android | ``LinuxClockID/threadUserTime``   |
+    /// | Windows        | ``WindowsClockID/threadUserTime`` |
+    /// | FreeBSD        | ``FreeBSDClockID/threadUserTime`` |
+    /// | OpenBSD        | ``OpenBSDClockID/threadUserTime`` |
+    /// | WASI           | ``WASIClockID/monotonic``         |
+    @inlinable
+    public static var threadUserTime: GenericSystemClock {
+        GenericSystemClock(
+            darwin: .threadUserTime,
+            linux: .threadUserTime,
+            windows: .threadUserTime,
+            freebsd: .threadUserTime,
+            openbsd: .threadUserTime,
+            wasi: .monotonic
+        )
+    }
+
+    /// CPU time the kernel has used on the calling thread's behalf.
+    ///
+    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    ///
+    /// WASI declares no cpu-time clock, and falls back to ``WASIClockID/monotonic``.
+    ///
+    /// Measures CPU time the kernel spent on this thread's behalf
+    ///
+    /// The following values were measured under specific hardware and kernel versions.
+    /// For better accuracy, measure under your own specific hardware and kernel.
+    ///
+    /// | Property                          | Value                                 |
+    /// | --------------------------------- | ------------------------------------- |
+    /// | Affected by OS clock changes      | ✅ No                                 |
+    /// | Affected by NTP changes           | ✅ No                                 |
+    /// | Affected by system suspension     | ✅ No                                 |
+    /// | Affected by process de-scheduling | ✅ No                                 |
+    /// | Appears to go backwards           | ✅ No                                 |
+    /// | Reads a cached value              | ✅ No                                 |
+    /// | Possible staleness                | ✅ None                               |
+    /// | Typical read cost                 | Platform dependent; ~ 56-460ns @ 4GHz |
+    /// | Cold read cost                    | Platform dependent; not yet measured  |
+    /// | Step granularity                  | Platform dependent; 42ns-15.6ms       |
+    ///
+    /// | Platform       | Clock                               |
+    /// | -------------- | ----------------------------------- |
+    /// | Darwin         | ``DarwinClockID/threadSystemTime``  |
+    /// | Linux, Android | ``LinuxClockID/threadSystemTime``   |
+    /// | Windows        | ``WindowsClockID/threadKernelTime`` |
+    /// | FreeBSD        | ``FreeBSDClockID/threadSystemTime`` |
+    /// | OpenBSD        | ``OpenBSDClockID/threadSystemTime`` |
+    /// | WASI           | ``WASIClockID/monotonic``           |
+    @inlinable
+    public static var threadSystemTime: GenericSystemClock {
+        GenericSystemClock(
+            darwin: .threadSystemTime,
+            linux: .threadSystemTime,
+            windows: .threadKernelTime,
+            freebsd: .threadSystemTime,
+            openbsd: .threadSystemTime,
+            wasi: .monotonic
+        )
+    }
 }
 
 #if !$Embedded
@@ -379,6 +555,30 @@ extension Clock where Self == GenericSystemClock<CompactDuration> {
     @inlinable
     public static var systemThreadCPUTime: GenericSystemClock<CompactDuration> {
         GenericSystemClock.threadCPUTime
+    }
+
+    /// See ``GenericSystemClock/processUserTime``.
+    @inlinable
+    public static var systemProcessUserTime: GenericSystemClock<CompactDuration> {
+        GenericSystemClock.processUserTime
+    }
+
+    /// See ``GenericSystemClock/processSystemTime``.
+    @inlinable
+    public static var systemProcessSystemTime: GenericSystemClock<CompactDuration> {
+        GenericSystemClock.processSystemTime
+    }
+
+    /// See ``GenericSystemClock/threadUserTime``.
+    @inlinable
+    public static var systemThreadUserTime: GenericSystemClock<CompactDuration> {
+        GenericSystemClock.threadUserTime
+    }
+
+    /// See ``GenericSystemClock/threadSystemTime``.
+    @inlinable
+    public static var systemThreadSystemTime: GenericSystemClock<CompactDuration> {
+        GenericSystemClock.threadSystemTime
     }
 }
 #endif

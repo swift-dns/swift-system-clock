@@ -8,8 +8,6 @@
 /// ```
 @available(SwiftStdlib 5.7, *)
 @_unavailableInEmbedded
-@_assemblyVision
-@_semantics("optremark")
 public struct SystemInstant<Duration> {
     @usableFromInline
     var _value: Duration

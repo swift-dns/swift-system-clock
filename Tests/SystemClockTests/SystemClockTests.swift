@@ -67,6 +67,30 @@ extension TestClock {
                 isMonotonic: true,
                 followsElapsedTime: false
             ),
+            TestClock(
+                name: "processUserTime",
+                clock: .processUserTime,
+                isMonotonic: true,
+                followsElapsedTime: false
+            ),
+            TestClock(
+                name: "processSystemTime",
+                clock: .processSystemTime,
+                isMonotonic: true,
+                followsElapsedTime: false
+            ),
+            TestClock(
+                name: "threadUserTime",
+                clock: .threadUserTime,
+                isMonotonic: true,
+                followsElapsedTime: false
+            ),
+            TestClock(
+                name: "threadSystemTime",
+                clock: .threadSystemTime,
+                isMonotonic: true,
+                followsElapsedTime: false
+            ),
         ]
     }
 }

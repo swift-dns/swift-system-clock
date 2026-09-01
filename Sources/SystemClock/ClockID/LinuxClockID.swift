@@ -1,8 +1,6 @@
 public import CSystemClock
 
 /// A Linux clock identifier that can be passed to `clock_gettime(2)`.
-@_assemblyVision
-@_semantics("optremark")
 public struct LinuxClockID: Sendable, Hashable, RawRepresentable {
     public let rawValue: Int32
 

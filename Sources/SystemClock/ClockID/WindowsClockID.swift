@@ -3,8 +3,6 @@ public import CSystemClock
 /// One of the Win32 time functions.
 ///
 /// Windows has no `clockid_t`, so `rawValue` is this library's own arbitrary identifier for the clock.
-@_assemblyVision
-@_semantics("optremark")
 public struct WindowsClockID: Sendable, Hashable, RawRepresentable {
     public let rawValue: Int32
 

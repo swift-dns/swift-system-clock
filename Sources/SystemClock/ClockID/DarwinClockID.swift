@@ -1,8 +1,6 @@
 public import CSystemClock
 
 /// A Darwin clock identifier that can be passed to `clock_gettime(3)`.
-@_assemblyVision
-@_semantics("optremark")
 public struct DarwinClockID: Sendable, Hashable, RawRepresentable {
     public let rawValue: Int32
 
