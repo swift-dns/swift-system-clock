@@ -29,8 +29,10 @@
 
 Implements `SystemClock` which reads operating system clocks with no overhead.
 
-Supports `Darwin` (`Apple` platforms), `Linux` (Including `Android`), `Windows`, `FreeBSD`, `OpenBSD` and `WASI`.
+Supports `Darwin` (`Apple` platforms), `Linux` (Including `Android`), `Windows`, `FreeBSD`, `OpenBSD`[^1] and `WASI`.
 Also compiles on embedded platforms in a similar fashion to Swift standard library's `ContinuousClock`.
+
+[^1]: Swift support for `OpenBSD` is a work-in-progress. This library doesn't have CI for `OpenBSD` yet so things can be flaky.
 
 ## Table of Contents
 
@@ -108,21 +110,21 @@ Every Apple platforms takes `darwin`. Android takes `linux`.
 
 For convenience, here is a cheat sheet that should work for most users:
 
-| If you want to                                                     | Use                               |
-| ------------------------------------------------------------------ | --------------------------------- |
-| Know what time it is                                               | `realtime`                        |
-| Stamp a log line, cheaply                                          | `realtimeCoarse`                  |
+| If you want to                | Use                               |
+| ----------------------------- | --------------------------------- |
+| ... know what time it is      | `realtime`                        |
+| ... stamp a log line, cheaply | `realtimeCoarse`                  |
 
 | If you want to measure how long                                     | Use                               |
 | ------------------------------------------------------------------- | --------------------------------- |
 | ... some work took, including system sleeps                         | `continuous` / `continuousCoarse` |
 | ... some work took, excluding system sleeps                         | `suspending` / `suspendingCoarse` |
 | ... the process spent running on all CPUs, combined                 | `processCPUTime`                  |
-| ... the thread spent running on any CPU                             | `threadCPUTime`                   |
+| ... the thread spent running on any CPU core                        | `threadCPUTime`                   |
 | ... the process spent running in user mode on all CPUs, combined    | `processUserTime`                 |
-| ... the thread spent running in user mode on any CPU                | `threadUserTime`                  |
+| ... the thread spent running in user mode on any CPU core           | `threadUserTime`                  |
 | ... the kernel spent running for this process on all CPUs, combined | `processSystemTime`               |
-| ... the kernel spent running for this thread on any CPU             | `threadSystemTime`                |
+| ... the kernel spent running for this thread on any CPU core        | `threadSystemTime`                |
 
 * "coarse" clocks are cheaper but also less precise. Sometimes you'll have to make that trade-off.
 * An example of a system sleep is when you close your laptop's lid.
@@ -147,6 +149,7 @@ Here is a list of all supported clocks on each platform.
 > [!NOTE]
 > The measured values come from specific hardware and kernel versions and are meant as hints.
 > For better accuracy, measure under your own specific hardware and kernel.
+> If you find a value widely incorrect, please file an issue or open a pull request for it.
 
 <details>
   <summary><b>Darwin (Apple platforms)</b></summary>
@@ -1829,8 +1832,10 @@ Measures Elapsed time, from an arbitrary point
 ## Performance
 
 * Below are benchmarks of this library against the 2 clocks that Swift standard library provides, on macOS and Linux.
+  * That is, `SystemClock`'s `.continuous`/`.suspending` vs. stdlib's `ContinuousClock`/`SuspendingClock`.
+  * The instruction tables contain most other clocks supported by `SystemClock` as well for comparison.
 * **In all cases, swift-system-clock wins against the Swift standard library APIs.**
-* The benchmarks are done with `SystemClock`'s `.continuous`/`.suspending` vs stdlib's `ContinuousClock`/`SuspendingClock`.
+* `N/A` means unsupported clock.
 
 ### Against Darwin
 
@@ -1838,13 +1843,19 @@ These were performed on my M1 Pro MacBook, on macOS 27.
 
 | Benchmark        | `SystemClock` (ns/op) | Standard Library (ns/op) | Speedup |
 | ---------------- | --------------------- | ------------------------ | ------- |
-| `continuous.now` | 10.6 ns               | 25.6 ns                  | 2.41x   |
-| `suspending.now` | 10.8 ns               | 25.3 ns                  | 2.33x   |
+| `continuous.now` | 10.6 ns               | 24.9 ns                  | 2.35x   |
+| `suspending.now` | 10.8 ns               | 24.3 ns                  | 2.25x   |
 
-| Benchmark        | `SystemClock` instructions | Standard Library instructions |
-| ---------------- | -------------------------- | ----------------------------- |
-| `continuous.now` | 94                         | 205                           |
-| `suspending.now` | 101                        | 210                           |
+| Benchmark              | `SystemClock` instructions | Standard Library instructions |
+| ---------------------- | -------------------------- | ----------------------------- |
+| `realtime.now`         | 145                        | N/A                           |
+| `realtimeCoarse.now`   | 145                        | N/A                           |
+| `continuous.now`       | 93                         | 205                           |
+| `continuousCoarse.now` | 103                        | N/A                           |
+| `suspending.now`       | 100                        | 210                           |
+| `suspendingCoarse.now` | 90                         | N/A                           |
+| `processCPUTime.now`   | 3182                       | N/A                           |
+| `threadCPUTime.now`    | 1547                       | N/A                           |
 
 ### Against glibc
 
@@ -1855,10 +1866,16 @@ These were performed on a dedicated-cpu-core AMD EPYC-Milan VM from Hetzner, on 
 | `continuous.now` | 26.8 ns               | 29.8 ns                  | 1.11x   |
 | `suspending.now` | 26.8 ns               | 29.5 ns                  | 1.10x   |
 
-| Benchmark        | `SystemClock` instructions | Standard Library instructions |
-| ---------------- | -------------------------- | ----------------------------- |
-| `continuous.now` | 133                        | 200                           |
-| `suspending.now` | 133                        | 198                           |
+| Benchmark              | `SystemClock` instructions | Standard Library instructions |
+| ---------------------- | -------------------------- | ----------------------------- |
+| `realtime.now`         | 133                        | N/A                           |
+| `realtimeCoarse.now`   | 87                         | N/A                           |
+| `continuous.now`       | 133                        | 200                           |
+| `continuousCoarse.now` | 133                        | N/A                           |
+| `suspending.now`       | 133                        | 198                           |
+| `suspendingCoarse.now` | 87                         | N/A                           |
+| `processCPUTime.now`   | 79                         | N/A                           |
+| `threadCPUTime.now`    | 79                         | N/A                           |
 
 #### Additional Notes
 

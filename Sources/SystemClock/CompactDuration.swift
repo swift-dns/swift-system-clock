@@ -88,7 +88,7 @@ extension CompactDuration {
     ///
     /// - Returns: A `CompactDuration` representing a given number of milliseconds.
     public static func milliseconds(_ milliseconds: Double) -> CompactDuration {
-        CompactDuration(milliseconds, scale: 1_000_000_000)
+        CompactDuration(milliseconds, scale: 1_000_000)
     }
 
     /// Construct a `CompactDuration` given a number of microseconds represented as a
@@ -113,7 +113,7 @@ extension CompactDuration {
     ///
     /// - Returns: A `CompactDuration` representing a given number of microseconds.
     public static func microseconds(_ microseconds: Double) -> CompactDuration {
-        CompactDuration(nanoseconds: Int64(microseconds * 1_000_000))
+        CompactDuration(microseconds, scale: 1_000)
     }
 
     /// Construct a `CompactDuration` given a number of nanoseconds represented as a
@@ -139,7 +139,7 @@ extension CompactDuration {
     /// - Returns: A `CompactDuration` representing a given number of nanoseconds.
     @available(SwiftStdlib 6.2, *)
     public static func nanoseconds(_ nanoseconds: Double) -> CompactDuration {
-        CompactDuration(nanoseconds, scale: 1_000_000_000)
+        CompactDuration(nanoseconds, scale: 1)
     }
 }
 

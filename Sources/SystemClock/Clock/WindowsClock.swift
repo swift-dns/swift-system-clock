@@ -121,7 +121,7 @@ struct WindowsClock: Sendable {
             milliseconds = (remaining.nanoseconds + 999_999) / 1_000_000
         }
         milliseconds = min(milliseconds, Int64(INFINITE - 1))
-        SleepEx(DWORD(milliseconds), true)
+        SleepEx(DWORD(milliseconds), false)
     }
 
     @inlinable

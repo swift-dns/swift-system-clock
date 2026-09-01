@@ -64,7 +64,7 @@ struct DarwinClock: Sendable {
         if nanoseconds == 0 {
             return nil
         }
-        return CompactDuration(nanoseconds: Int64(nanoseconds))
+        return CompactDuration(nanoseconds: Int64(bitPattern: nanoseconds))
     }
 
     @inlinable
