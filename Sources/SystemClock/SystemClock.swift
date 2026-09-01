@@ -23,6 +23,27 @@ public struct SystemClock<Duration>: Sendable {
     @usableFromInline
     let clock: _PlatformClockTypealias
 
+    #if !$Embedded
+    @inlinable
+    public var currentClockID: AnySystemClockID {
+        #if canImport(Darwin)
+        .darwin(DarwinClockID(rawValue: self.clock.swiftyID))
+        #elseif os(Linux) || os(Android)
+        .linux(LinuxClockID(rawValue: self.clock.id))
+        #elseif os(Windows)
+        .windows(self.clock.id)
+        #elseif os(FreeBSD)
+        .freebsd(FreeBSDClockID(rawValue: self.clock.id))
+        #elseif os(OpenBSD)
+        .openbsd(OpenBSDClockID(rawValue: self.clock.id))
+        #elseif os(WASI)
+        .wasi(self.clock.id)
+        #else
+        #error("The SystemClock module does not know which clock ids your platform uses.")
+        #endif
+    }
+    #endif
+
     /// Creates a clock from the id belonging to the platform being compiled for.
     ///
     /// Android takes `linux`, and every Apple platform takes `darwin`.
@@ -78,7 +99,11 @@ extension SystemClock where Duration: SystemDurationProtocol {
         }
         return Duration.nanoseconds(reading.nanoseconds)
     }
+}
 
+#if !$Embedded
+@available(SwiftStdlib 5.7, *)
+extension SystemClock where Duration: SystemDurationProtocol {
     /// Suspends until this clock reaches `deadline`, or throws `CancellationError` if the task
     /// is cancelled first.
     ///
@@ -95,7 +120,6 @@ extension SystemClock where Duration: SystemDurationProtocol {
     }
 }
 
-#if !$Embedded
 @available(SwiftStdlib 5.7, *)
 extension SystemClock: Clock where Duration: SystemDurationProtocol {}
 #endif

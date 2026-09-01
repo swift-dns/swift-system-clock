@@ -21,7 +21,7 @@
 
 # swift-system-clock
 
-Implements `SystemClock` which reads the operating system clock with no overhead.
+Implements `SystemClock` which reads operating system clocks with no overhead.
 
 ## Table of Contents
 
@@ -30,6 +30,8 @@ Implements `SystemClock` which reads the operating system clock with no overhead
   - [Custom Clocks](#custom-clocks)
   - [Sleeping](#sleeping)
 - [Performance](#performance)
+  - [Against Darwin](#against-darwin)
+  - [Against glibc](#against-glibc)
 
 ## Usage
 
@@ -64,14 +66,41 @@ let clock = SystemClock(
 
 Every Apple platforms takes `darwin`. Android takes `linux`.
 
+> [!NOTE]
+> `SystemClock` as a library will only compile the required parts of the code for minimum compilation effect.
+
 ### Sleeping
 
-Currently the sleep functions are blocking and are discouraged to use.
-Later they'll either not exist (crash on call) or become non-blocking.
+> [!WARNING]
+> Currently the sleep functions are blocking and are discouraged to use.
+> Later they'll either not exist (crash on call) or become non-blocking.
+
 
 ## Performance
 
-| Benchmark        | swift-system-clock | Standard library |
-| ---------------- | ------------------ | ---------------- |
-| `continuous.now` | 10.9 ns            | 26.8 ns          |
-| `suspending.now` | 11.1 ns            | 26.5 ns          |
+* Below are benchmarks of this library against the 2 clocks that Swift standard library provides, on macOS and Linux.
+* **In all cases, swift-system-clock wins against the Swift standard library APIs.**
+* The benchmarks are done with `SystemClock`'s `.continuous`/`.suspending` vs stdlib's `ContinuousClock`/`SuspendingClock`.
+
+### Against Darwin
+
+These were performed on my M1 Pro MacBook, on macOS 27.
+
+| Benchmark        | `SystemClock` (ns/op) | stdlib (ns/op) | `SystemClock` instructions | stdlib instructions |
+| ---------------- | --------------------- | -------------- | -------------------------- | ------------------- |
+| `continuous.now` | 10.6 ns               | 25.6 ns        | 94                         | 205                 |
+| `suspending.now` | 10.8 ns               | 25.3 ns        | 101                        | 210                 |
+
+### Against glibc
+
+These were performed on a dedicated-cpu-core AMD EPYC-Milan VM from Hetzner, on Ubuntu 24.04.
+
+| Benchmark        | `SystemClock` (ns/op) | stdlib (ns/op) | `SystemClock` instructions | stdlib instructions |
+| ---------------- | --------------------- | -------------- | -------------------------- | ------------------- |
+| `continuous.now` | 26.8 ns               | 29.8 ns        | 133                        | 200                 |
+| `suspending.now` | 26.8 ns               | 29.5 ns        | 133                        | 198                 |
+
+#### Additional Notes
+
+* To see up to date information about performance of this package, please go to this [benchmarks list](https://github.com/swift-dns/swift-system-clock/actions/workflows/benchmarks.yml?query=branch%3Amain), and choose the most recent benchmark. You'll see a summary of the benchmark there.
+* The results above are all reproducible by simply running `scripts/benchmark.sh` on a machine of your own.

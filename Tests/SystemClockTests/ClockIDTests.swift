@@ -101,4 +101,142 @@ struct ClockIDTests {
         #expect(WindowsClockID(rawValue: WindowsClockID.tickCount.rawValue) == .tickCount)
         #expect(WASIClockID(rawValue: WASIClockID.monotonic.rawValue) == .monotonic)
     }
+
+    @Test(arguments: ClockIDExpectation.all)
+    func `every default clock reports the currentClockID it was built from`(
+        expectation: ClockIDExpectation
+    ) {
+        #expect(expectation.clock.currentClockID == expectation.id)
+    }
+
+    @Test func `clocks built from different ids report different currentClockIDs`() {
+        let ids = ClockIDExpectation.all.map(\.clock.currentClockID)
+        let expected = ClockIDExpectation.all.map(\.id)
+        #expect(Set(ids) == Set(expected))
+    }
+
+    @Test func `an explicitly built clock reports the currentClockID it was given`() {
+        let clock = SystemClock<Swift.Duration>(
+            darwin: .monotonic,
+            linux: .monotonicRaw,
+            windows: .tickCount,
+            freebsd: .second,
+            openbsd: .monotonic,
+            wasi: .monotonic
+        )
+        #if canImport(Darwin)
+        #expect(clock.currentClockID == .darwin(.monotonic))
+        #elseif os(Linux) || os(Android)
+        #expect(clock.currentClockID == .linux(.monotonicRaw))
+        #elseif os(Windows)
+        #expect(clock.currentClockID == .windows(.tickCount))
+        #elseif os(FreeBSD)
+        #expect(clock.currentClockID == .freebsd(.second))
+        #elseif os(OpenBSD)
+        #expect(clock.currentClockID == .openbsd(.monotonic))
+        #elseif os(WASI)
+        #expect(clock.currentClockID == .wasi(.monotonic))
+        #endif
+    }
+}
+
+/// A default clock paired with the platform id it is built from, so that ``currentClockID`` can
+/// be checked against the table it is documented by.
+struct ClockIDExpectation: Sendable, CustomStringConvertible {
+    var name: String
+    var clock: SystemClock<Swift.Duration>
+    var id: AnySystemClockID
+
+    var description: String {
+        self.name
+    }
+}
+
+extension ClockIDExpectation {
+    static var all: [ClockIDExpectation] {
+        #if canImport(Darwin)
+        let ids: [AnySystemClockID] = [
+            .darwin(.realtime),
+            .darwin(.realtime),
+            .darwin(.monotonicRaw),
+            .darwin(.monotonicRawApproximate),
+            .darwin(.uptimeRaw),
+            .darwin(.uptimeRawApproximate),
+            .darwin(.processCPUTime),
+            .darwin(.threadCPUTime),
+        ]
+        #elseif os(Linux) || os(Android)
+        let ids: [AnySystemClockID] = [
+            .linux(.realtime),
+            .linux(.realtimeCoarse),
+            .linux(.boottime),
+            .linux(.boottime),
+            .linux(.monotonic),
+            .linux(.monotonicCoarse),
+            .linux(.processCPUTime),
+            .linux(.threadCPUTime),
+        ]
+        #elseif os(Windows)
+        let ids: [AnySystemClockID] = [
+            .windows(.systemTimePrecise),
+            .windows(.systemTime),
+            .windows(.interruptTimePrecise),
+            .windows(.interruptTime),
+            .windows(.unbiasedInterruptTimePrecise),
+            .windows(.unbiasedInterruptTime),
+            .windows(.processTime),
+            .windows(.threadTime),
+        ]
+        #elseif os(FreeBSD)
+        let ids: [AnySystemClockID] = [
+            .freebsd(.realtimePrecise),
+            .freebsd(.realtimeFast),
+            .freebsd(.monotonic),
+            .freebsd(.monotonicFast),
+            .freebsd(.uptime),
+            .freebsd(.uptimeFast),
+            .freebsd(.processCPUTime),
+            .freebsd(.threadCPUTime),
+        ]
+        #elseif os(OpenBSD)
+        let ids: [AnySystemClockID] = [
+            .openbsd(.realtime),
+            .openbsd(.realtime),
+            .openbsd(.boottime),
+            .openbsd(.boottime),
+            .openbsd(.uptime),
+            .openbsd(.uptime),
+            .openbsd(.processCPUTime),
+            .openbsd(.threadCPUTime),
+        ]
+        #elseif os(WASI)
+        let ids: [AnySystemClockID] = [
+            .wasi(.realtime),
+            .wasi(.realtime),
+            .wasi(.monotonic),
+            .wasi(.monotonic),
+            .wasi(.monotonic),
+            .wasi(.monotonic),
+            .wasi(.monotonic),
+            .wasi(.monotonic),
+        ]
+        #else
+        #error("The SystemClock tests do not know which clock ids your platform uses.")
+        #endif
+
+        let clocks: [(String, SystemClock<Swift.Duration>)] = [
+            ("realtime", .realtime),
+            ("realtimeCoarse", .realtimeCoarse),
+            ("continuous", .continuous),
+            ("continuousCoarse", .continuousCoarse),
+            ("suspending", .suspending),
+            ("suspendingCoarse", .suspendingCoarse),
+            ("processCPUTime", .processCPUTime),
+            ("threadCPUTime", .threadCPUTime),
+        ]
+
+        return zip(clocks, ids).map {
+            ClockIDExpectation(name: $0.0.0, clock: $0.0.1, id: $0.1)
+        }
+    }
 }
