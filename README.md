@@ -11,6 +11,12 @@
             alt="Benchmarks CI"
         >
     </a>
+    <a href="https://codecov.io/gh/swift-dns/swift-system-clock">
+        <img
+            src="https://codecov.io/gh/swift-dns/swift-system-clock/graph/badge.svg?token=KW7Y46RYYD"
+            alt="Codecov Tests Code Coverage"
+        >
+    </a>
     <a href="https://swift.org">
         <img
             src="https://design.vapor.codes/images/swift63up.svg"
@@ -22,6 +28,9 @@
 # swift-system-clock
 
 Implements `SystemClock` which reads operating system clocks with no overhead.
+
+Supports `Darwin` (`Apple` platforms), `Linux` (Including `Android`), `Windows`, `FreeBSD`, `OpenBSD` and `WASI`.
+Also compiles on embedded platforms in a similar fashion to Swift standard library's `ContinuousClock`.
 
 ## Table of Contents
 
