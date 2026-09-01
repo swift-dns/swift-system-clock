@@ -15,15 +15,6 @@
 extern "C" {
 #endif
 
-// Swift's `WinSDK` module map names neither <realtimeapiset.h> nor <profileapi.h>, so the
-// counter and the interrupt-time family are unreachable from Swift. These wrappers are the
-// whole of the C this module needs on Windows: they name a function and nothing else, and
-// every reading is turned into a `Duration` in Swift.
-//
-// A negative return marks a refusal, which no reading of a counter that only counts up can
-// produce. `QueryPerformanceFrequency` answers zero instead, since a frequency of zero is
-// already no answer.
-
 static inline int64_t csystem_clock_windows_query_performance_counter(void) {
     LARGE_INTEGER counter;
     if (!QueryPerformanceCounter(&counter)) {

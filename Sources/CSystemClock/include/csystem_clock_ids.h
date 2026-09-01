@@ -11,6 +11,8 @@
 extern "C" {
 #endif
 
+// The ids live here in a header file so they are visible to Swift and can be inlined in callers.
+
 // MARK: - Darwin
 // clock_gettime(3), available since macOS 10.12. From the `clockid_t` enum in the SDK's
 // <time.h>.

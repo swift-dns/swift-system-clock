@@ -11,6 +11,12 @@
             alt="Benchmarks CI"
         >
     </a>
+    <a href="https://codecov.io/gh/swift-dns/swift-system-clock">
+        <img
+            src="https://codecov.io/gh/swift-dns/swift-system-clock/graph/badge.svg?token=KW7Y46RYYD"
+            alt="Codecov Tests Code Coverage"
+        >
+    </a>
     <a href="https://swift.org">
         <img
             src="https://design.vapor.codes/images/swift63up.svg"
@@ -21,4 +27,89 @@
 
 # swift-system-clock
 
-Implements `SystemClock` which reads the operating system clock with no overhead.
+Implements `SystemClock` which reads operating system clocks with no overhead.
+
+Supports `Darwin` (`Apple` platforms), `Linux` (Including `Android`), `Windows`, `FreeBSD`, `OpenBSD` and `WASI`.
+Also compiles on embedded platforms in a similar fashion to Swift standard library's `ContinuousClock`.
+
+## Table of Contents
+
+- [Usage](#usage)
+  - [Default Clocks](#default-clocks)
+  - [Custom Clocks](#custom-clocks)
+  - [Sleeping](#sleeping)
+- [Performance](#performance)
+  - [Against Darwin](#against-darwin)
+  - [Against glibc](#against-glibc)
+
+## Usage
+
+### Default Clocks
+
+`SystemClock` conforms to `Clock`, so it works just like stdlib's `ContinuousClock`/`SuspendingClock`:
+
+```swift
+import SystemClock
+
+let elapsed = SystemClock.suspending.measure {
+    expensiveWork()
+}
+
+let now = SystemClock.realtime.now
+```
+
+### Custom Clocks
+
+You can hand-craft a system clock that uses your desired clocks on each platform:
+
+```swift
+let clock = SystemClock(
+    darwin: .monotonicRaw,
+    linux: .monotonicRaw,
+    windows: .performanceCounter,
+    freebsd: .monotonicPrecise,
+    openbsd: .monotonic,
+    wasi: .monotonic
+)
+```
+
+Every Apple platforms takes `darwin`. Android takes `linux`.
+
+> [!NOTE]
+> `SystemClock` as a library will only compile the required parts of the code for minimum compilation effect.
+
+### Sleeping
+
+> [!WARNING]
+> Currently the sleep functions are blocking and are discouraged to use.
+> Later they'll either not exist (crash on call) or become non-blocking.
+
+
+## Performance
+
+* Below are benchmarks of this library against the 2 clocks that Swift standard library provides, on macOS and Linux.
+* **In all cases, swift-system-clock wins against the Swift standard library APIs.**
+* The benchmarks are done with `SystemClock`'s `.continuous`/`.suspending` vs stdlib's `ContinuousClock`/`SuspendingClock`.
+
+### Against Darwin
+
+These were performed on my M1 Pro MacBook, on macOS 27.
+
+| Benchmark        | `SystemClock` (ns/op) | stdlib (ns/op) | `SystemClock` instructions | stdlib instructions |
+| ---------------- | --------------------- | -------------- | -------------------------- | ------------------- |
+| `continuous.now` | 10.6 ns               | 25.6 ns        | 94                         | 205                 |
+| `suspending.now` | 10.8 ns               | 25.3 ns        | 101                        | 210                 |
+
+### Against glibc
+
+These were performed on a dedicated-cpu-core AMD EPYC-Milan VM from Hetzner, on Ubuntu 24.04.
+
+| Benchmark        | `SystemClock` (ns/op) | stdlib (ns/op) | `SystemClock` instructions | stdlib instructions |
+| ---------------- | --------------------- | -------------- | -------------------------- | ------------------- |
+| `continuous.now` | 26.8 ns               | 29.8 ns        | 133                        | 200                 |
+| `suspending.now` | 26.8 ns               | 29.5 ns        | 133                        | 198                 |
+
+#### Additional Notes
+
+* To see up to date information about performance of this package, please go to this [benchmarks list](https://github.com/swift-dns/swift-system-clock/actions/workflows/benchmarks.yml?query=branch%3Amain), and choose the most recent benchmark. You'll see a summary of the benchmark there.
+* The results above are all reproducible by simply running `scripts/benchmark.sh` on a machine of your own.
