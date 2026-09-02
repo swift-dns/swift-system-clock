@@ -309,4 +309,108 @@ let readingBenchmarks: @Sendable () -> Void = {
             blackHole(GenericSystemClock<CompactDuration>.systemThreadCPUTime.now)
         }
     }
+
+    // MARK: - Reading_Process_User_Time
+
+    Benchmark(
+        "Reading_Process_User_Time_Malloc",
+        configuration: .init(
+            metrics: [.mallocCountTotal],
+            warmupIterations: 1,
+            maxIterations: 10
+        )
+    ) { benchmark in
+        blackHole(GenericSystemClock<CompactDuration>.systemProcessUserTime.now)
+    }
+
+    Benchmark(
+        "Reading_Process_User_Time_Instructions_10K",
+        configuration: .init(
+            metrics: [.instructions],
+            warmupIterations: 1,
+            maxIterations: 10
+        )
+    ) { benchmark in
+        for _ in 0..<10_000 {
+            blackHole(GenericSystemClock<CompactDuration>.systemProcessUserTime.now)
+        }
+    }
+
+    // MARK: - Reading_Process_System_Time
+
+    Benchmark(
+        "Reading_Process_System_Time_Malloc",
+        configuration: .init(
+            metrics: [.mallocCountTotal],
+            warmupIterations: 1,
+            maxIterations: 10
+        )
+    ) { benchmark in
+        blackHole(GenericSystemClock<CompactDuration>.systemProcessSystemTime.now)
+    }
+
+    Benchmark(
+        "Reading_Process_System_Time_Instructions_10K",
+        configuration: .init(
+            metrics: [.instructions],
+            warmupIterations: 1,
+            maxIterations: 10
+        )
+    ) { benchmark in
+        for _ in 0..<10_000 {
+            blackHole(GenericSystemClock<CompactDuration>.systemProcessSystemTime.now)
+        }
+    }
+
+    // MARK: - Reading_Thread_User_Time
+
+    Benchmark(
+        "Reading_Thread_User_Time_Malloc",
+        configuration: .init(
+            metrics: [.mallocCountTotal],
+            warmupIterations: 1,
+            maxIterations: 10
+        )
+    ) { benchmark in
+        blackHole(GenericSystemClock<CompactDuration>.systemThreadUserTime.now)
+    }
+
+    Benchmark(
+        "Reading_Thread_User_Time_Instructions_10K",
+        configuration: .init(
+            metrics: [.instructions],
+            warmupIterations: 1,
+            maxIterations: 10
+        )
+    ) { benchmark in
+        for _ in 0..<10_000 {
+            blackHole(GenericSystemClock<CompactDuration>.systemThreadUserTime.now)
+        }
+    }
+
+    // MARK: - Reading_Thread_System_Time
+
+    Benchmark(
+        "Reading_Thread_System_Time_Malloc",
+        configuration: .init(
+            metrics: [.mallocCountTotal],
+            warmupIterations: 1,
+            maxIterations: 10
+        )
+    ) { benchmark in
+        blackHole(GenericSystemClock<CompactDuration>.systemThreadSystemTime.now)
+    }
+
+    Benchmark(
+        "Reading_Thread_System_Time_Instructions_10K",
+        configuration: .init(
+            metrics: [.instructions],
+            warmupIterations: 1,
+            maxIterations: 10
+        )
+    ) { benchmark in
+        for _ in 0..<10_000 {
+            blackHole(GenericSystemClock<CompactDuration>.systemThreadSystemTime.now)
+        }
+    }
 }
