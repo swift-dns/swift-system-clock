@@ -1,3 +1,4 @@
+import Foundation
 import SystemClock
 import Testing
 
@@ -98,6 +99,36 @@ struct CompactDurationTests {
         #expect((CompactDuration.seconds(3) / 2).nanoseconds == 1_500_000_000)
         #expect(CompactDuration.seconds(3) / CompactDuration.seconds(2) == 1.5)
         #expect(CompactDuration.zero.nanoseconds == 0)
+    }
+
+    @Test func `scaling by a double keeps the nanosecond count`() {
+        #expect((CompactDuration.seconds(3) * 1.5).nanoseconds == 4_500_000_000)
+        #expect((CompactDuration.seconds(3) / 1.5).nanoseconds == 2_000_000_000)
+        #expect((CompactDuration.seconds(3) * -0.5).nanoseconds == -1_500_000_000)
+    }
+
+    @Test func `compound assignment agrees with the operator`() {
+        var duration = CompactDuration.seconds(3)
+        duration *= 4
+        #expect(duration == CompactDuration.seconds(3) * 4)
+        duration /= 2
+        #expect(duration == CompactDuration.seconds(6))
+        duration /= 1.5
+        #expect(duration == CompactDuration.seconds(3) / 0.75)
+        #expect(duration == .seconds(4))
+    }
+
+    @Test func `a duration round-trips through Codable`() throws {
+        let original = CompactDuration.milliseconds(1_234_567)
+        let encoded = try JSONEncoder().encode([original])
+        let decoded = try JSONDecoder().decode([CompactDuration].self, from: encoded)
+        #expect(decoded == [original])
+    }
+
+    @Test func `description reports the reading in seconds`() {
+        #expect(CompactDuration.seconds(3).description == "3.0 seconds")
+        #expect(CompactDuration.milliseconds(1_500).description == "1.5 seconds")
+        #expect(CompactDuration.zero.description == "0.0 seconds")
     }
 
     @Test func `ordering follows the nanosecond count`() {

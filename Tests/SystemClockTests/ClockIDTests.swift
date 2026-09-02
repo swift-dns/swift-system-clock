@@ -13,6 +13,10 @@ struct ClockIDTests {
             .uptimeRawApproximate,
             .processCPUTime,
             .threadCPUTime,
+            .processUserTime,
+            .processSystemTime,
+            .threadUserTime,
+            .threadSystemTime,
         ]
         #expect(Set(ids).count == ids.count)
     }
@@ -30,6 +34,10 @@ struct ClockIDTests {
             .boottimeAlarm,
             .processCPUTime,
             .threadCPUTime,
+            .processUserTime,
+            .processSystemTime,
+            .threadUserTime,
+            .threadSystemTime,
         ]
         #expect(Set(ids).count == ids.count)
     }
@@ -53,6 +61,10 @@ struct ClockIDTests {
             .second,
             .processCPUTime,
             .threadCPUTime,
+            .processUserTime,
+            .processSystemTime,
+            .threadUserTime,
+            .threadSystemTime,
         ]
         #expect(Set(ids).count == ids.count)
         #if os(FreeBSD)
@@ -70,6 +82,10 @@ struct ClockIDTests {
             .uptime,
             .processCPUTime,
             .threadCPUTime,
+            .processUserTime,
+            .processSystemTime,
+            .threadUserTime,
+            .threadSystemTime,
         ]
         #expect(Set(ids).count == ids.count)
     }
@@ -86,6 +102,10 @@ struct ClockIDTests {
             .tickCount,
             .processTime,
             .threadTime,
+            .processUserTime,
+            .processKernelTime,
+            .threadUserTime,
+            .threadKernelTime,
         ]
         #expect(Set(ids).count == ids.count)
     }
