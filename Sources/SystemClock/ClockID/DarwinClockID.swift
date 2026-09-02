@@ -26,7 +26,7 @@ extension DarwinClockID {
     /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ❌ Yes         |
+    /// | Might appear to go backwards      | ❌ Yes         |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 12ns @ 4GHz  |
@@ -52,7 +52,7 @@ extension DarwinClockID {
     /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 17ns @ 4GHz  |
@@ -78,7 +78,7 @@ extension DarwinClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 13ns @ 4GHz  |
@@ -104,9 +104,9 @@ extension DarwinClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ❌ Yes         |
-    /// | Possible staleness                | ❌ ~ 1ms       |
+    /// | Possible staleness                | ❌ ~ 2ms       |
     /// | Typical read cost                 | ~ 5.5ns @ 4GHz |
     /// | Cold read cost                    | ~ 230ns @ 4GHz |
     /// | Step granularity                  | 42ns           |
@@ -130,7 +130,7 @@ extension DarwinClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 13ns @ 4GHz  |
@@ -156,9 +156,9 @@ extension DarwinClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ❌ Yes         |
-    /// | Possible staleness                | ❌ ~ 1ms       |
+    /// | Possible staleness                | ❌ ~ 2ms       |
     /// | Typical read cost                 | ~ 5ns @ 4GHz   |
     /// | Cold read cost                    | ~ 165ns @ 4GHz |
     /// | Step granularity                  | 42ns           |
@@ -182,7 +182,7 @@ extension DarwinClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ✅ No          |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 210ns @ 4GHz |
@@ -208,12 +208,12 @@ extension DarwinClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ✅ No          |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 115ns @ 4GHz |
     /// | Cold read cost                    | ~ 460ns @ 4GHz |
-    /// | Step granularity                  | 125ns          |
+    /// | Step granularity                  | 42ns           |
     @inlinable
     public static var threadCPUTime: DarwinClockID {
         DarwinClockID(rawValue: csystem_clock_darwin_thread_cpu_time)
@@ -230,18 +230,18 @@ extension DarwinClockID {
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
     ///
-    /// | Property                          | Value            |
-    /// | --------------------------------- | ---------------- |
-    /// | Affected by OS clock changes      | ✅ No            |
-    /// | Affected by NTP changes           | ✅ No            |
-    /// | Affected by system suspension     | ✅ No            |
-    /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
-    /// | Reads a cached value              | ✅ No            |
-    /// | Possible staleness                | ✅ None          |
-    /// | Typical read cost                 | ~ 210ns @ 4GHz   |
-    /// | Cold read cost                    | Not yet measured |
-    /// | Step granularity                  | 1µs              |
+    /// | Property                          | Value          |
+    /// | --------------------------------- | -------------- |
+    /// | Affected by OS clock changes      | ✅ No          |
+    /// | Affected by NTP changes           | ✅ No          |
+    /// | Affected by system suspension     | ✅ No          |
+    /// | Affected by process de-scheduling | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
+    /// | Reads a cached value              | ✅ No          |
+    /// | Possible staleness                | ✅ None        |
+    /// | Typical read cost                 | ~ 210ns @ 4GHz |
+    /// | Cold read cost                    | ~ 4.3µs @ 4GHz |
+    /// | Step granularity                  | 1µs            |
     @inlinable
     public static var processUserTime: DarwinClockID {
         DarwinClockID(rawValue: csystem_clock_process_user_cpu_time)
@@ -258,26 +258,26 @@ extension DarwinClockID {
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
     ///
-    /// | Property                          | Value            |
-    /// | --------------------------------- | ---------------- |
-    /// | Affected by OS clock changes      | ✅ No            |
-    /// | Affected by NTP changes           | ✅ No            |
-    /// | Affected by system suspension     | ✅ No            |
-    /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
-    /// | Reads a cached value              | ✅ No            |
-    /// | Possible staleness                | ✅ None          |
-    /// | Typical read cost                 | ~ 210ns @ 4GHz   |
-    /// | Cold read cost                    | Not yet measured |
-    /// | Step granularity                  | 1µs              |
+    /// | Property                          | Value          |
+    /// | --------------------------------- | -------------- |
+    /// | Affected by OS clock changes      | ✅ No          |
+    /// | Affected by NTP changes           | ✅ No          |
+    /// | Affected by system suspension     | ✅ No          |
+    /// | Affected by process de-scheduling | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
+    /// | Reads a cached value              | ✅ No          |
+    /// | Possible staleness                | ✅ None        |
+    /// | Typical read cost                 | ~ 210ns @ 4GHz |
+    /// | Cold read cost                    | ~ 4.5µs @ 4GHz |
+    /// | Step granularity                  | 1µs            |
     @inlinable
     public static var processSystemTime: DarwinClockID {
         DarwinClockID(rawValue: csystem_clock_process_system_cpu_time)
     }
 
-    /// `thread_info(2)`, `THREAD_BASIC_INFO`
+    /// `thread_info`, `THREAD_BASIC_INFO`
     ///
-    /// [thread_info(2)](https://developer.apple.com/documentation/kernel/1418630-thread_info)
+    /// [thread_info](https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/mach/thread_act.defs)
     ///
     /// Not a clock id the platform declares: this library's own, selecting one half of one call.
     ///
@@ -286,26 +286,26 @@ extension DarwinClockID {
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
     ///
-    /// | Property                          | Value            |
-    /// | --------------------------------- | ---------------- |
-    /// | Affected by OS clock changes      | ✅ No            |
-    /// | Affected by NTP changes           | ✅ No            |
-    /// | Affected by system suspension     | ✅ No            |
-    /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
-    /// | Reads a cached value              | ✅ No            |
-    /// | Possible staleness                | ✅ None          |
-    /// | Typical read cost                 | ~ 460ns @ 4GHz   |
-    /// | Cold read cost                    | Not yet measured |
-    /// | Step granularity                  | 1µs              |
+    /// | Property                          | Value          |
+    /// | --------------------------------- | -------------- |
+    /// | Affected by OS clock changes      | ✅ No          |
+    /// | Affected by NTP changes           | ✅ No          |
+    /// | Affected by system suspension     | ✅ No          |
+    /// | Affected by process de-scheduling | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
+    /// | Reads a cached value              | ✅ No          |
+    /// | Possible staleness                | ✅ None        |
+    /// | Typical read cost                 | ~ 460ns @ 4GHz |
+    /// | Cold read cost                    | ~ 5.8µs @ 4GHz |
+    /// | Step granularity                  | 1µs            |
     @inlinable
     public static var threadUserTime: DarwinClockID {
         DarwinClockID(rawValue: csystem_clock_thread_user_cpu_time)
     }
 
-    /// `thread_info(2)`, `THREAD_BASIC_INFO`
+    /// `thread_info`, `THREAD_BASIC_INFO`
     ///
-    /// [thread_info(2)](https://developer.apple.com/documentation/kernel/1418630-thread_info)
+    /// [thread_info](https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/mach/thread_act.defs)
     ///
     /// Not a clock id the platform declares: this library's own, selecting one half of one call.
     ///
@@ -314,18 +314,18 @@ extension DarwinClockID {
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
     ///
-    /// | Property                          | Value            |
-    /// | --------------------------------- | ---------------- |
-    /// | Affected by OS clock changes      | ✅ No            |
-    /// | Affected by NTP changes           | ✅ No            |
-    /// | Affected by system suspension     | ✅ No            |
-    /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
-    /// | Reads a cached value              | ✅ No            |
-    /// | Possible staleness                | ✅ None          |
-    /// | Typical read cost                 | ~ 460ns @ 4GHz   |
-    /// | Cold read cost                    | Not yet measured |
-    /// | Step granularity                  | 1µs              |
+    /// | Property                          | Value          |
+    /// | --------------------------------- | -------------- |
+    /// | Affected by OS clock changes      | ✅ No          |
+    /// | Affected by NTP changes           | ✅ No          |
+    /// | Affected by system suspension     | ✅ No          |
+    /// | Affected by process de-scheduling | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
+    /// | Reads a cached value              | ✅ No          |
+    /// | Possible staleness                | ✅ None        |
+    /// | Typical read cost                 | ~ 460ns @ 4GHz |
+    /// | Cold read cost                    | ~ 5.2µs @ 4GHz |
+    /// | Step granularity                  | 1µs            |
     @inlinable
     public static var threadSystemTime: DarwinClockID {
         DarwinClockID(rawValue: csystem_clock_thread_system_cpu_time)

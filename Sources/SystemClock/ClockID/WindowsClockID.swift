@@ -28,7 +28,7 @@ extension WindowsClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 10ns @ 4GHz  |
@@ -54,12 +54,12 @@ extension WindowsClockID {
     /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ❌ Yes         |
+    /// | Might appear to go backwards      | ❌ Yes         |
     /// | Reads a cached value              | ❌ Yes         |
-    /// | Possible staleness                | ❌ ~ 2ms       |
+    /// | Possible staleness                | ❌ ~ 16ms      |
     /// | Typical read cost                 | ~ 4ns @ 4GHz   |
     /// | Cold read cost                    | ~ 1.5µs @ 4GHz |
-    /// | Step granularity                  | ~ 1ms          |
+    /// | Step granularity                  | ~ 0.5ms        |
     @inlinable
     public static var systemTime: WindowsClockID {
         WindowsClockID(rawValue: csystem_clock_windows_system_time)
@@ -80,7 +80,7 @@ extension WindowsClockID {
     /// | Affected by NTP changes           | ❌ Yes        |
     /// | Affected by system suspension     | ❌ Yes        |
     /// | Affected by process de-scheduling | ❌ Yes        |
-    /// | Appears to go backwards           | ❌ Yes        |
+    /// | Might appear to go backwards      | ❌ Yes        |
     /// | Reads a cached value              | ✅ No         |
     /// | Possible staleness                | ✅ None       |
     /// | Typical read cost                 | ~ 16ns @ 4GHz |
@@ -106,12 +106,12 @@ extension WindowsClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ❌ Yes         |
-    /// | Possible staleness                | ❌ ~ 2ms       |
+    /// | Possible staleness                | ❌ ~ 16ms      |
     /// | Typical read cost                 | ~ 2ns @ 4GHz   |
     /// | Cold read cost                    | ~ 1.9µs @ 4GHz |
-    /// | Step granularity                  | ~ 1ms          |
+    /// | Step granularity                  | ~ 0.5ms        |
     @inlinable
     public static var interruptTime: WindowsClockID {
         WindowsClockID(rawValue: csystem_clock_windows_interrupt_time)
@@ -132,7 +132,7 @@ extension WindowsClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 14ns @ 4GHz  |
@@ -158,12 +158,12 @@ extension WindowsClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ❌ Yes         |
-    /// | Possible staleness                | ❌ ~ 2ms       |
+    /// | Possible staleness                | ❌ ~ 16ms      |
     /// | Typical read cost                 | ~ 3ns @ 4GHz   |
     /// | Cold read cost                    | ~ 1.9µs @ 4GHz |
-    /// | Step granularity                  | ~ 1ms          |
+    /// | Step granularity                  | ~ 0.5ms        |
     @inlinable
     public static var unbiasedInterruptTime: WindowsClockID {
         WindowsClockID(rawValue: csystem_clock_windows_unbiased_interrupt_time)
@@ -184,11 +184,11 @@ extension WindowsClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 14ns @ 4GHz  |
-    /// | Cold read cost                    | ~ 280ns @ 4GHz |
+    /// | Cold read cost                    | ~ 2.3µs @ 4GHz |
     /// | Step granularity                  | 100ns          |
     @inlinable
     public static var unbiasedInterruptTimePrecise: WindowsClockID {
@@ -210,11 +210,11 @@ extension WindowsClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ❌ Yes         |
     /// | Possible staleness                | ❌ ~ 18ms      |
     /// | Typical read cost                 | ~ 1.5ns @ 4GHz |
-    /// | Cold read cost                    | ~ 1.4µs @ 4GHz |
+    /// | Cold read cost                    | ~ 1.8µs @ 4GHz |
     /// | Step granularity                  | 15ms           |
     @inlinable
     public static var tickCount: WindowsClockID {
@@ -236,7 +236,7 @@ extension WindowsClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ✅ No          |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ❌ Yes         |
     /// | Possible staleness                | ❌ ~ 15.6ms    |
     /// | Typical read cost                 | ~ 120ns @ 4GHz |
@@ -262,7 +262,7 @@ extension WindowsClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ✅ No          |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ❌ Yes         |
     /// | Possible staleness                | ❌ ~ 15.6ms    |
     /// | Typical read cost                 | ~ 86ns @ 4GHz  |
@@ -284,18 +284,18 @@ extension WindowsClockID {
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
     ///
-    /// | Property                          | Value            |
-    /// | --------------------------------- | ---------------- |
-    /// | Affected by OS clock changes      | ✅ No            |
-    /// | Affected by NTP changes           | ✅ No            |
-    /// | Affected by system suspension     | ✅ No            |
-    /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
-    /// | Reads a cached value              | ✅ No            |
-    /// | Possible staleness                | ✅ None          |
-    /// | Typical read cost                 | Not yet measured |
-    /// | Cold read cost                    | Not yet measured |
-    /// | Step granularity                  | 15.625ms         |
+    /// | Property                          | Value          |
+    /// | --------------------------------- | -------------- |
+    /// | Affected by OS clock changes      | ✅ No          |
+    /// | Affected by NTP changes           | ✅ No          |
+    /// | Affected by system suspension     | ✅ No          |
+    /// | Affected by process de-scheduling | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
+    /// | Reads a cached value              | ❌ Yes         |
+    /// | Possible staleness                | ❌ ~ 15.6ms    |
+    /// | Typical read cost                 | ~ 113ns @ 4GHz |
+    /// | Cold read cost                    | ~ 2.7µs @ 4GHz |
+    /// | Step granularity                  | 15.625ms       |
     @inlinable
     public static var processUserTime: WindowsClockID {
         WindowsClockID(rawValue: csystem_clock_process_user_cpu_time)
@@ -312,18 +312,18 @@ extension WindowsClockID {
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
     ///
-    /// | Property                          | Value            |
-    /// | --------------------------------- | ---------------- |
-    /// | Affected by OS clock changes      | ✅ No            |
-    /// | Affected by NTP changes           | ✅ No            |
-    /// | Affected by system suspension     | ✅ No            |
-    /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
-    /// | Reads a cached value              | ✅ No            |
-    /// | Possible staleness                | ✅ None          |
-    /// | Typical read cost                 | Not yet measured |
-    /// | Cold read cost                    | Not yet measured |
-    /// | Step granularity                  | 15.625ms         |
+    /// | Property                          | Value          |
+    /// | --------------------------------- | -------------- |
+    /// | Affected by OS clock changes      | ✅ No          |
+    /// | Affected by NTP changes           | ✅ No          |
+    /// | Affected by system suspension     | ✅ No          |
+    /// | Affected by process de-scheduling | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
+    /// | Reads a cached value              | ❌ Yes         |
+    /// | Possible staleness                | ❌ ~ 15.6ms    |
+    /// | Typical read cost                 | ~ 115ns @ 4GHz |
+    /// | Cold read cost                    | ~ 2.8µs @ 4GHz |
+    /// | Step granularity                  | 15.625ms       |
     @inlinable
     public static var processKernelTime: WindowsClockID {
         WindowsClockID(rawValue: csystem_clock_process_system_cpu_time)
@@ -340,18 +340,18 @@ extension WindowsClockID {
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
     ///
-    /// | Property                          | Value            |
-    /// | --------------------------------- | ---------------- |
-    /// | Affected by OS clock changes      | ✅ No            |
-    /// | Affected by NTP changes           | ✅ No            |
-    /// | Affected by system suspension     | ✅ No            |
-    /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
-    /// | Reads a cached value              | ✅ No            |
-    /// | Possible staleness                | ✅ None          |
-    /// | Typical read cost                 | Not yet measured |
-    /// | Cold read cost                    | Not yet measured |
-    /// | Step granularity                  | 15.625ms         |
+    /// | Property                          | Value          |
+    /// | --------------------------------- | -------------- |
+    /// | Affected by OS clock changes      | ✅ No          |
+    /// | Affected by NTP changes           | ✅ No          |
+    /// | Affected by system suspension     | ✅ No          |
+    /// | Affected by process de-scheduling | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
+    /// | Reads a cached value              | ❌ Yes         |
+    /// | Possible staleness                | ❌ ~ 15.6ms    |
+    /// | Typical read cost                 | ~ 87ns @ 4GHz  |
+    /// | Cold read cost                    | ~ 610ns @ 4GHz |
+    /// | Step granularity                  | 15.625ms       |
     @inlinable
     public static var threadUserTime: WindowsClockID {
         WindowsClockID(rawValue: csystem_clock_thread_user_cpu_time)
@@ -368,18 +368,18 @@ extension WindowsClockID {
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
     ///
-    /// | Property                          | Value            |
-    /// | --------------------------------- | ---------------- |
-    /// | Affected by OS clock changes      | ✅ No            |
-    /// | Affected by NTP changes           | ✅ No            |
-    /// | Affected by system suspension     | ✅ No            |
-    /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
-    /// | Reads a cached value              | ✅ No            |
-    /// | Possible staleness                | ✅ None          |
-    /// | Typical read cost                 | Not yet measured |
-    /// | Cold read cost                    | Not yet measured |
-    /// | Step granularity                  | 15.625ms         |
+    /// | Property                          | Value          |
+    /// | --------------------------------- | -------------- |
+    /// | Affected by OS clock changes      | ✅ No          |
+    /// | Affected by NTP changes           | ✅ No          |
+    /// | Affected by system suspension     | ✅ No          |
+    /// | Affected by process de-scheduling | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
+    /// | Reads a cached value              | ❌ Yes         |
+    /// | Possible staleness                | ❌ ~ 15.6ms    |
+    /// | Typical read cost                 | ~ 87ns @ 4GHz  |
+    /// | Cold read cost                    | ~ 630ns @ 4GHz |
+    /// | Step granularity                  | 15.625ms       |
     @inlinable
     public static var threadKernelTime: WindowsClockID {
         WindowsClockID(rawValue: csystem_clock_thread_system_cpu_time)

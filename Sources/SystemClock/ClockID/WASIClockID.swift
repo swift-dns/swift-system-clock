@@ -1,6 +1,9 @@
 public import CSystemClock
 
-/// A WASI clock identifier that can be passed to `clock_time_get`.
+/// A WASI clock identifier.
+///
+/// WASI numbers its own clocks from zero, so `rawValue` is this library's own identifier and is
+/// translated to WASI's identifier before any call.
 public struct WASIClockID: Sendable, Hashable, RawRepresentable {
     public let rawValue: Int32
 
@@ -26,7 +29,7 @@ extension WASIClockID {
     /// | Affected by NTP changes           | N/A           |
     /// | Affected by system suspension     | N/A           |
     /// | Affected by process de-scheduling | ❌ Yes        |
-    /// | Appears to go backwards           | N/A           |
+    /// | Might appear to go backwards      | N/A           |
     /// | Reads a cached value              | N/A           |
     /// | Possible staleness                | ✅ None       |
     /// | Typical read cost                 | ~ 57ns @ 4GHz |
@@ -52,7 +55,7 @@ extension WASIClockID {
     /// | Affected by NTP changes           | ✅ No         |
     /// | Affected by system suspension     | N/A           |
     /// | Affected by process de-scheduling | ❌ Yes        |
-    /// | Appears to go backwards           | ✅ No         |
+    /// | Might appear to go backwards      | ✅ No         |
     /// | Reads a cached value              | N/A           |
     /// | Possible staleness                | ✅ None       |
     /// | Typical read cost                 | ~ 56ns @ 4GHz |

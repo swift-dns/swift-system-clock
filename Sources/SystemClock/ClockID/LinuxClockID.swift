@@ -26,7 +26,7 @@ extension LinuxClockID {
     /// | Affected by NTP changes           | ❌ Yes          |
     /// | Affected by system suspension     | ❌ Yes          |
     /// | Affected by process de-scheduling | ❌ Yes          |
-    /// | Appears to go backwards           | ❌ Yes          |
+    /// | Might appear to go backwards      | ❌ Yes          |
     /// | Reads a cached value              | ✅ No           |
     /// | Possible staleness                | ✅ None         |
     /// | Typical read cost                 | ~ 25ns @ 4GHz   |
@@ -52,7 +52,7 @@ extension LinuxClockID {
     /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ❌ Yes         |
+    /// | Might appear to go backwards      | ❌ Yes         |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 135ns @ 4GHz |
@@ -78,9 +78,9 @@ extension LinuxClockID {
     /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ❌ Yes         |
+    /// | Might appear to go backwards      | ❌ Yes         |
     /// | Reads a cached value              | ❌ Yes         |
-    /// | Possible staleness                | ❌ ~ 2ms       |
+    /// | Possible staleness                | ❌ ~ 1ms       |
     /// | Typical read cost                 | ~ 4.5ns @ 4GHz |
     /// | Cold read cost                    | ~ 9µs @ 4GHz   |
     /// | Step granularity                  | 1ms            |
@@ -104,7 +104,7 @@ extension LinuxClockID {
     /// | Affected by NTP changes           | ❌ Yes          |
     /// | Affected by system suspension     | ❌ Yes          |
     /// | Affected by process de-scheduling | ❌ Yes          |
-    /// | Appears to go backwards           | ❌ Yes          |
+    /// | Might appear to go backwards      | ❌ Yes          |
     /// | Reads a cached value              | ✅ No           |
     /// | Possible staleness                | ✅ None         |
     /// | Typical read cost                 | ~ 25ns @ 4GHz   |
@@ -130,7 +130,7 @@ extension LinuxClockID {
     /// | Affected by NTP changes           | ❌ Yes          |
     /// | Affected by system suspension     | ✅ No           |
     /// | Affected by process de-scheduling | ❌ Yes          |
-    /// | Appears to go backwards           | ✅ No           |
+    /// | Might appear to go backwards      | ✅ No           |
     /// | Reads a cached value              | ✅ No           |
     /// | Possible staleness                | ✅ None         |
     /// | Typical read cost                 | ~ 25ns @ 4GHz   |
@@ -156,9 +156,9 @@ extension LinuxClockID {
     /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ❌ Yes         |
-    /// | Possible staleness                | ❌ ~ 2ms       |
+    /// | Possible staleness                | ❌ ~ 1ms       |
     /// | Typical read cost                 | ~ 4.5ns @ 4GHz |
     /// | Cold read cost                    | ~ 9µs @ 4GHz   |
     /// | Step granularity                  | 1ms            |
@@ -182,7 +182,7 @@ extension LinuxClockID {
     /// | Affected by NTP changes           | ✅ No           |
     /// | Affected by system suspension     | ✅ No           |
     /// | Affected by process de-scheduling | ❌ Yes          |
-    /// | Appears to go backwards           | ✅ No           |
+    /// | Might appear to go backwards      | ✅ No           |
     /// | Reads a cached value              | ✅ No           |
     /// | Possible staleness                | ✅ None         |
     /// | Typical read cost                 | ~ 25ns @ 4GHz   |
@@ -208,7 +208,7 @@ extension LinuxClockID {
     /// | Affected by NTP changes           | ❌ Yes          |
     /// | Affected by system suspension     | ❌ Yes          |
     /// | Affected by process de-scheduling | ❌ Yes          |
-    /// | Appears to go backwards           | ✅ No           |
+    /// | Might appear to go backwards      | ✅ No           |
     /// | Reads a cached value              | ✅ No           |
     /// | Possible staleness                | ✅ None         |
     /// | Typical read cost                 | ~ 25ns @ 4GHz   |
@@ -234,7 +234,7 @@ extension LinuxClockID {
     /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 140ns @ 4GHz |
@@ -260,7 +260,7 @@ extension LinuxClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ✅ No          |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 165ns @ 4GHz |
@@ -286,7 +286,7 @@ extension LinuxClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ✅ No          |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 160ns @ 4GHz |
@@ -308,18 +308,18 @@ extension LinuxClockID {
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
     ///
-    /// | Property                          | Value            |
-    /// | --------------------------------- | ---------------- |
-    /// | Affected by OS clock changes      | ✅ No            |
-    /// | Affected by NTP changes           | ✅ No            |
-    /// | Affected by system suspension     | ✅ No            |
-    /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
-    /// | Reads a cached value              | ✅ No            |
-    /// | Possible staleness                | ✅ None          |
-    /// | Typical read cost                 | Not yet measured |
-    /// | Cold read cost                    | Not yet measured |
-    /// | Step granularity                  | 1µs              |
+    /// | Property                          | Value          |
+    /// | --------------------------------- | -------------- |
+    /// | Affected by OS clock changes      | ✅ No          |
+    /// | Affected by NTP changes           | ✅ No          |
+    /// | Affected by system suspension     | ✅ No          |
+    /// | Affected by process de-scheduling | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
+    /// | Reads a cached value              | ✅ No          |
+    /// | Possible staleness                | ✅ None        |
+    /// | Typical read cost                 | ~ 220ns @ 4GHz |
+    /// | Cold read cost                    | ~ 4µs @ 4GHz   |
+    /// | Step granularity                  | 1µs            |
     @inlinable
     public static var processUserTime: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_process_user_cpu_time)
@@ -336,18 +336,18 @@ extension LinuxClockID {
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
     ///
-    /// | Property                          | Value            |
-    /// | --------------------------------- | ---------------- |
-    /// | Affected by OS clock changes      | ✅ No            |
-    /// | Affected by NTP changes           | ✅ No            |
-    /// | Affected by system suspension     | ✅ No            |
-    /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
-    /// | Reads a cached value              | ✅ No            |
-    /// | Possible staleness                | ✅ None          |
-    /// | Typical read cost                 | Not yet measured |
-    /// | Cold read cost                    | Not yet measured |
-    /// | Step granularity                  | 1µs              |
+    /// | Property                          | Value          |
+    /// | --------------------------------- | -------------- |
+    /// | Affected by OS clock changes      | ✅ No          |
+    /// | Affected by NTP changes           | ✅ No          |
+    /// | Affected by system suspension     | ✅ No          |
+    /// | Affected by process de-scheduling | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
+    /// | Reads a cached value              | ✅ No          |
+    /// | Possible staleness                | ✅ None        |
+    /// | Typical read cost                 | ~ 220ns @ 4GHz |
+    /// | Cold read cost                    | ~ 3.5µs @ 4GHz |
+    /// | Step granularity                  | 1µs            |
     @inlinable
     public static var processSystemTime: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_process_system_cpu_time)
@@ -364,18 +364,18 @@ extension LinuxClockID {
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
     ///
-    /// | Property                          | Value            |
-    /// | --------------------------------- | ---------------- |
-    /// | Affected by OS clock changes      | ✅ No            |
-    /// | Affected by NTP changes           | ✅ No            |
-    /// | Affected by system suspension     | ✅ No            |
-    /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
-    /// | Reads a cached value              | ✅ No            |
-    /// | Possible staleness                | ✅ None          |
-    /// | Typical read cost                 | Not yet measured |
-    /// | Cold read cost                    | Not yet measured |
-    /// | Step granularity                  | 1µs              |
+    /// | Property                          | Value          |
+    /// | --------------------------------- | -------------- |
+    /// | Affected by OS clock changes      | ✅ No          |
+    /// | Affected by NTP changes           | ✅ No          |
+    /// | Affected by system suspension     | ✅ No          |
+    /// | Affected by process de-scheduling | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
+    /// | Reads a cached value              | ✅ No          |
+    /// | Possible staleness                | ✅ None        |
+    /// | Typical read cost                 | ~ 150ns @ 4GHz |
+    /// | Cold read cost                    | ~ 3.1µs @ 4GHz |
+    /// | Step granularity                  | 1µs            |
     @inlinable
     public static var threadUserTime: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_thread_user_cpu_time)
@@ -392,18 +392,18 @@ extension LinuxClockID {
     /// The following values were measured under specific hardware and kernel versions.
     /// For better accuracy, measure under your own specific hardware and kernel.
     ///
-    /// | Property                          | Value            |
-    /// | --------------------------------- | ---------------- |
-    /// | Affected by OS clock changes      | ✅ No            |
-    /// | Affected by NTP changes           | ✅ No            |
-    /// | Affected by system suspension     | ✅ No            |
-    /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
-    /// | Reads a cached value              | ✅ No            |
-    /// | Possible staleness                | ✅ None          |
-    /// | Typical read cost                 | Not yet measured |
-    /// | Cold read cost                    | Not yet measured |
-    /// | Step granularity                  | 1µs              |
+    /// | Property                          | Value          |
+    /// | --------------------------------- | -------------- |
+    /// | Affected by OS clock changes      | ✅ No          |
+    /// | Affected by NTP changes           | ✅ No          |
+    /// | Affected by system suspension     | ✅ No          |
+    /// | Affected by process de-scheduling | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
+    /// | Reads a cached value              | ✅ No          |
+    /// | Possible staleness                | ✅ None        |
+    /// | Typical read cost                 | ~ 150ns @ 4GHz |
+    /// | Cold read cost                    | ~ 2.7µs @ 4GHz |
+    /// | Step granularity                  | 1µs            |
     @inlinable
     public static var threadSystemTime: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_thread_system_cpu_time)

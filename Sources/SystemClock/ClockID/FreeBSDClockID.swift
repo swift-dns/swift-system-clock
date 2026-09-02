@@ -23,10 +23,10 @@ extension FreeBSDClockID {
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
     /// | Affected by OS clock changes      | ❌ Yes         |
-    /// | Affected by NTP changes           | N/A            |
+    /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ❌ Yes         |
+    /// | Might appear to go backwards      | ❌ Yes         |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 18ns @ 4GHz  |
@@ -49,10 +49,10 @@ extension FreeBSDClockID {
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
     /// | Affected by OS clock changes      | ❌ Yes         |
-    /// | Affected by NTP changes           | N/A            |
+    /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ❌ Yes         |
+    /// | Might appear to go backwards      | ❌ Yes         |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 18ns @ 4GHz  |
@@ -75,11 +75,11 @@ extension FreeBSDClockID {
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
     /// | Affected by OS clock changes      | ❌ Yes         |
-    /// | Affected by NTP changes           | N/A            |
+    /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ❌ Yes         |
-    /// | Reads a cached value              | ❌ Yes         |
+    /// | Might appear to go backwards      | ❌ Yes         |
+    /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 18ns @ 4GHz  |
     /// | Cold read cost                    | ~ 265ns @ 4GHz |
@@ -101,10 +101,10 @@ extension FreeBSDClockID {
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
     /// | Affected by OS clock changes      | ✅ No          |
-    /// | Affected by NTP changes           | N/A            |
+    /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 18ns @ 4GHz  |
@@ -127,10 +127,10 @@ extension FreeBSDClockID {
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
     /// | Affected by OS clock changes      | ✅ No          |
-    /// | Affected by NTP changes           | N/A            |
+    /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 18ns @ 4GHz  |
@@ -153,12 +153,12 @@ extension FreeBSDClockID {
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
     /// | Affected by OS clock changes      | ✅ No          |
-    /// | Affected by NTP changes           | N/A            |
+    /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ❌ Yes         |
-    /// | Possible staleness                | ❌ ~ 10ms      |
+    /// | Possible staleness                | ❌ ~ 1ms       |
     /// | Typical read cost                 | ~ 3.5ns @ 4GHz |
     /// | Cold read cost                    | ~ 235ns @ 4GHz |
     /// | Step granularity                  | 10ms           |
@@ -179,10 +179,10 @@ extension FreeBSDClockID {
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
     /// | Affected by OS clock changes      | ✅ No          |
-    /// | Affected by NTP changes           | N/A            |
+    /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 18ns @ 4GHz  |
@@ -205,10 +205,10 @@ extension FreeBSDClockID {
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
     /// | Affected by OS clock changes      | ✅ No          |
-    /// | Affected by NTP changes           | N/A            |
+    /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 18ns @ 4GHz  |
@@ -231,12 +231,12 @@ extension FreeBSDClockID {
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
     /// | Affected by OS clock changes      | ✅ No          |
-    /// | Affected by NTP changes           | N/A            |
+    /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ❌ Yes         |
-    /// | Possible staleness                | ❌ ~ 10ms      |
+    /// | Possible staleness                | ❌ ~ 1ms       |
     /// | Typical read cost                 | ~ 3.5ns @ 4GHz |
     /// | Cold read cost                    | ~ 265ns @ 4GHz |
     /// | Step granularity                  | 10ms           |
@@ -257,10 +257,10 @@ extension FreeBSDClockID {
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
     /// | Affected by OS clock changes      | ✅ No          |
-    /// | Affected by NTP changes           | N/A            |
+    /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 18ns @ 4GHz  |
@@ -285,10 +285,10 @@ extension FreeBSDClockID {
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
     /// | Affected by OS clock changes      | ❌ Yes         |
-    /// | Affected by NTP changes           | N/A            |
+    /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ❌ Yes         |
+    /// | Might appear to go backwards      | ❌ Yes         |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 120ns @ 4GHz |
@@ -314,7 +314,7 @@ extension FreeBSDClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ✅ No          |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 145ns @ 4GHz |
@@ -340,7 +340,7 @@ extension FreeBSDClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ✅ No          |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 145ns @ 4GHz |
@@ -363,10 +363,10 @@ extension FreeBSDClockID {
     /// | Property                          | Value          |
     /// | --------------------------------- | -------------- |
     /// | Affected by OS clock changes      | ❌ Yes         |
-    /// | Affected by NTP changes           | N/A            |
+    /// | Affected by NTP changes           | ❌ Yes         |
     /// | Affected by system suspension     | ❌ Yes         |
     /// | Affected by process de-scheduling | ❌ Yes         |
-    /// | Appears to go backwards           | ❌ Yes         |
+    /// | Might appear to go backwards      | ❌ Yes         |
     /// | Reads a cached value              | ❌ Yes         |
     /// | Possible staleness                | ❌ ~ 1s        |
     /// | Typical read cost                 | ~ 18ns @ 4GHz  |
@@ -392,7 +392,7 @@ extension FreeBSDClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ✅ No          |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 145ns @ 4GHz |
@@ -418,7 +418,7 @@ extension FreeBSDClockID {
     /// | Affected by NTP changes           | ✅ No          |
     /// | Affected by system suspension     | ✅ No          |
     /// | Affected by process de-scheduling | ✅ No          |
-    /// | Appears to go backwards           | ✅ No          |
+    /// | Might appear to go backwards      | ✅ No          |
     /// | Reads a cached value              | ✅ No          |
     /// | Possible staleness                | ✅ None        |
     /// | Typical read cost                 | ~ 120ns @ 4GHz |
@@ -446,7 +446,7 @@ extension FreeBSDClockID {
     /// | Affected by NTP changes           | ✅ No            |
     /// | Affected by system suspension     | ✅ No            |
     /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
+    /// | Might appear to go backwards      | ✅ No            |
     /// | Reads a cached value              | ✅ No            |
     /// | Possible staleness                | ✅ None          |
     /// | Typical read cost                 | Not yet measured |
@@ -474,7 +474,7 @@ extension FreeBSDClockID {
     /// | Affected by NTP changes           | ✅ No            |
     /// | Affected by system suspension     | ✅ No            |
     /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
+    /// | Might appear to go backwards      | ✅ No            |
     /// | Reads a cached value              | ✅ No            |
     /// | Possible staleness                | ✅ None          |
     /// | Typical read cost                 | Not yet measured |
@@ -502,7 +502,7 @@ extension FreeBSDClockID {
     /// | Affected by NTP changes           | ✅ No            |
     /// | Affected by system suspension     | ✅ No            |
     /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
+    /// | Might appear to go backwards      | ✅ No            |
     /// | Reads a cached value              | ✅ No            |
     /// | Possible staleness                | ✅ None          |
     /// | Typical read cost                 | Not yet measured |
@@ -530,7 +530,7 @@ extension FreeBSDClockID {
     /// | Affected by NTP changes           | ✅ No            |
     /// | Affected by system suspension     | ✅ No            |
     /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
+    /// | Might appear to go backwards      | ✅ No            |
     /// | Reads a cached value              | ✅ No            |
     /// | Possible staleness                | ✅ None          |
     /// | Typical read cost                 | Not yet measured |

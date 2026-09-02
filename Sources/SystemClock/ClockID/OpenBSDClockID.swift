@@ -23,11 +23,11 @@ extension OpenBSDClockID {
     /// | Property                          | Value           |
     /// | --------------------------------- | --------------- |
     /// | Affected by OS clock changes      | ❌ Yes          |
-    /// | Affected by NTP changes           | N/A             |
+    /// | Affected by NTP changes           | ❌ Yes          |
     /// | Affected by system suspension     | ❌ Yes          |
     /// | Affected by process de-scheduling | ❌ Yes          |
-    /// | Appears to go backwards           | ❌ Yes          |
-    /// | Reads a cached value              | N/A             |
+    /// | Might appear to go backwards      | ❌ Yes          |
+    /// | Reads a cached value              | ✅ No           |
     /// | Possible staleness                | ✅ None         |
     /// | Typical read cost                 | ~ 21ns @ 4GHz   |
     /// | Cold read cost                    | ~ 19.7µs @ 4GHz |
@@ -49,11 +49,11 @@ extension OpenBSDClockID {
     /// | Property                          | Value           |
     /// | --------------------------------- | --------------- |
     /// | Affected by OS clock changes      | ✅ No           |
-    /// | Affected by NTP changes           | N/A             |
-    /// | Affected by system suspension     | N/A             |
+    /// | Affected by NTP changes           | ❌ Yes          |
+    /// | Affected by system suspension     | ❌ Yes          |
     /// | Affected by process de-scheduling | ❌ Yes          |
-    /// | Appears to go backwards           | ✅ No           |
-    /// | Reads a cached value              | N/A             |
+    /// | Might appear to go backwards      | ✅ No           |
+    /// | Reads a cached value              | ✅ No           |
     /// | Possible staleness                | ✅ None         |
     /// | Typical read cost                 | ~ 20ns @ 4GHz   |
     /// | Cold read cost                    | ~ 21.9µs @ 4GHz |
@@ -75,11 +75,11 @@ extension OpenBSDClockID {
     /// | Property                          | Value           |
     /// | --------------------------------- | --------------- |
     /// | Affected by OS clock changes      | ✅ No           |
-    /// | Affected by NTP changes           | N/A             |
+    /// | Affected by NTP changes           | ❌ Yes          |
     /// | Affected by system suspension     | ❌ Yes          |
     /// | Affected by process de-scheduling | ❌ Yes          |
-    /// | Appears to go backwards           | ✅ No           |
-    /// | Reads a cached value              | N/A             |
+    /// | Might appear to go backwards      | ✅ No           |
+    /// | Reads a cached value              | ✅ No           |
     /// | Possible staleness                | ✅ None         |
     /// | Typical read cost                 | ~ 20ns @ 4GHz   |
     /// | Cold read cost                    | ~ 18.2µs @ 4GHz |
@@ -101,11 +101,11 @@ extension OpenBSDClockID {
     /// | Property                          | Value           |
     /// | --------------------------------- | --------------- |
     /// | Affected by OS clock changes      | ✅ No           |
-    /// | Affected by NTP changes           | N/A             |
+    /// | Affected by NTP changes           | ❌ Yes          |
     /// | Affected by system suspension     | ✅ No           |
     /// | Affected by process de-scheduling | ❌ Yes          |
-    /// | Appears to go backwards           | ✅ No           |
-    /// | Reads a cached value              | N/A             |
+    /// | Might appear to go backwards      | ✅ No           |
+    /// | Reads a cached value              | ✅ No           |
     /// | Possible staleness                | ✅ None         |
     /// | Typical read cost                 | ~ 20ns @ 4GHz   |
     /// | Cold read cost                    | ~ 15.9µs @ 4GHz |
@@ -130,8 +130,8 @@ extension OpenBSDClockID {
     /// | Affected by NTP changes           | ✅ No           |
     /// | Affected by system suspension     | ✅ No           |
     /// | Affected by process de-scheduling | ✅ No           |
-    /// | Appears to go backwards           | ✅ No           |
-    /// | Reads a cached value              | N/A             |
+    /// | Might appear to go backwards      | ✅ No           |
+    /// | Reads a cached value              | ✅ No           |
     /// | Possible staleness                | ✅ None         |
     /// | Typical read cost                 | ~ 235ns @ 4GHz  |
     /// | Cold read cost                    | ~ 15.4µs @ 4GHz |
@@ -156,8 +156,8 @@ extension OpenBSDClockID {
     /// | Affected by NTP changes           | ✅ No           |
     /// | Affected by system suspension     | ✅ No           |
     /// | Affected by process de-scheduling | ✅ No           |
-    /// | Appears to go backwards           | ✅ No           |
-    /// | Reads a cached value              | N/A             |
+    /// | Might appear to go backwards      | ✅ No           |
+    /// | Reads a cached value              | ✅ No           |
     /// | Possible staleness                | ✅ None         |
     /// | Typical read cost                 | ~ 195ns @ 4GHz  |
     /// | Cold read cost                    | ~ 15.5µs @ 4GHz |
@@ -184,7 +184,7 @@ extension OpenBSDClockID {
     /// | Affected by NTP changes           | ✅ No            |
     /// | Affected by system suspension     | ✅ No            |
     /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
+    /// | Might appear to go backwards      | ✅ No            |
     /// | Reads a cached value              | ✅ No            |
     /// | Possible staleness                | ✅ None          |
     /// | Typical read cost                 | Not yet measured |
@@ -212,7 +212,7 @@ extension OpenBSDClockID {
     /// | Affected by NTP changes           | ✅ No            |
     /// | Affected by system suspension     | ✅ No            |
     /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
+    /// | Might appear to go backwards      | ✅ No            |
     /// | Reads a cached value              | ✅ No            |
     /// | Possible staleness                | ✅ None          |
     /// | Typical read cost                 | Not yet measured |
@@ -240,7 +240,7 @@ extension OpenBSDClockID {
     /// | Affected by NTP changes           | ✅ No            |
     /// | Affected by system suspension     | ✅ No            |
     /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
+    /// | Might appear to go backwards      | ✅ No            |
     /// | Reads a cached value              | ✅ No            |
     /// | Possible staleness                | ✅ None          |
     /// | Typical read cost                 | Not yet measured |
@@ -268,7 +268,7 @@ extension OpenBSDClockID {
     /// | Affected by NTP changes           | ✅ No            |
     /// | Affected by system suspension     | ✅ No            |
     /// | Affected by process de-scheduling | ✅ No            |
-    /// | Appears to go backwards           | ✅ No            |
+    /// | Might appear to go backwards      | ✅ No            |
     /// | Reads a cached value              | ✅ No            |
     /// | Possible staleness                | ✅ None          |
     /// | Typical read cost                 | Not yet measured |

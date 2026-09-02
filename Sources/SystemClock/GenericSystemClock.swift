@@ -31,6 +31,8 @@
 /// ```
 @available(SwiftStdlib 5.7, *)
 @_unavailableInEmbedded
+@_assemblyVision
+@_semantics("optremark")
 public struct GenericSystemClock<Duration>: Sendable {
     public typealias Instant = SystemInstant<Duration>
 
@@ -123,8 +125,10 @@ extension GenericSystemClock where Duration: SystemDurationProtocol {
 #if !$Embedded
 @available(SwiftStdlib 5.7, *)
 extension GenericSystemClock where Duration: SystemDurationProtocol {
-    /// Suspends until this clock reaches `deadline`, or throws `CancellationError` if the task
-    /// is cancelled first.
+    /// Suspends until this clock reaches `deadline`.
+    ///
+    /// Currently blocks the calling thread and ignores both `tolerance` and cancellation.
+    /// This will change in the future.
     ///
     /// TODO: Don't block the thread.
     /// TODO: Cancellation support.

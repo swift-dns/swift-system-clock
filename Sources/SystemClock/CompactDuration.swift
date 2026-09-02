@@ -57,7 +57,7 @@ extension CompactDuration {
     }
 
     /// Construct a `CompactDuration` given a number of seconds represented as a
-    /// `Double` by converting the value into the closest attosecond scale value.
+    /// `Double` by converting the value into the closest nanosecond scale value.
     ///
     /// ```swift
     /// let d: CompactDuration = .seconds(22.93)
@@ -80,7 +80,7 @@ extension CompactDuration {
     }
 
     /// Construct a `CompactDuration` given a number of seconds milliseconds as a
-    /// `Double` by converting the value into the closest attosecond scale value.
+    /// `Double` by converting the value into the closest nanosecond scale value.
     ///
     /// ```swift
     /// let d: CompactDuration = .milliseconds(88.3)
@@ -105,7 +105,7 @@ extension CompactDuration {
     }
 
     /// Construct a `CompactDuration` given a number of seconds microseconds as a
-    /// `Double` by converting the value into the closest attosecond scale value.
+    /// `Double` by converting the value into the closest nanosecond scale value.
     ///
     /// ```swift
     /// let d: CompactDuration = .microseconds(382.9)
@@ -130,7 +130,7 @@ extension CompactDuration {
     }
 
     /// Construct a `CompactDuration` given a number of nanoseconds as a
-    /// `Double` by converting the value into the closest attosecond scale value.
+    /// `Double` by converting the value into the closest nanosecond scale value.
     ///
     /// ```swift
     /// let d: CompactDuration = .nanoseconds(382.9)

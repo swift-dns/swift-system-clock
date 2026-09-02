@@ -14,7 +14,7 @@ extension GenericSystemClock {
     /// | Affected by NTP changes           | ❌ Yes                                  |
     /// | Affected by system suspension     | ❌ Yes                                  |
     /// | Affected by process de-scheduling | ❌ Yes                                  |
-    /// | Appears to go backwards           | ❌ Yes                                  |
+    /// | Might appear to go backwards      | ❌ Yes                                  |
     /// | Reads a cached value              | ✅ No                                   |
     /// | Possible staleness                | Varies by platform                      |
     /// | Typical read cost                 | Platform dependent; ~ 1.5-235ns @ 4GHz  |
@@ -54,7 +54,7 @@ extension GenericSystemClock {
     /// | Affected by NTP changes           | ❌ Yes                                  |
     /// | Affected by system suspension     | ❌ Yes                                  |
     /// | Affected by process de-scheduling | ❌ Yes                                  |
-    /// | Appears to go backwards           | ❌ Yes                                  |
+    /// | Might appear to go backwards      | ❌ Yes                                  |
     /// | Reads a cached value              | Varies by platform                      |
     /// | Possible staleness                | Varies by platform                      |
     /// | Typical read cost                 | Platform dependent; ~ 1.5-235ns @ 4GHz  |
@@ -94,7 +94,7 @@ extension GenericSystemClock {
     /// | Affected by NTP changes           | Varies by platform                      |
     /// | Affected by system suspension     | ❌ Yes                                  |
     /// | Affected by process de-scheduling | ❌ Yes                                  |
-    /// | Appears to go backwards           | ✅ No                                   |
+    /// | Might appear to go backwards      | ✅ No                                   |
     /// | Reads a cached value              | ✅ No                                   |
     /// | Possible staleness                | Varies by platform                      |
     /// | Typical read cost                 | Platform dependent; ~ 1.5-235ns @ 4GHz  |
@@ -106,8 +106,8 @@ extension GenericSystemClock {
     /// | Darwin         | ``DarwinClockID/monotonicRaw``          | ✅                  |
     /// | Linux, Android | ``LinuxClockID/boottime``               | ❌                  |
     /// | Windows        | ``WindowsClockID/interruptTimePrecise`` | ✅                  |
-    /// | FreeBSD        | ``FreeBSDClockID/monotonic``            | N/A                 |
-    /// | OpenBSD        | ``OpenBSDClockID/boottime``             | N/A                 |
+    /// | FreeBSD        | ``FreeBSDClockID/monotonic``            | ❌                  |
+    /// | OpenBSD        | ``OpenBSDClockID/boottime``             | ❌                  |
     /// | WASI           | ``WASIClockID/monotonic``               | ✅                  |
     @inlinable
     public static var continuous: GenericSystemClock {
@@ -134,7 +134,7 @@ extension GenericSystemClock {
     /// | Affected by NTP changes           | Varies by platform                      |
     /// | Affected by system suspension     | ❌ Yes                                  |
     /// | Affected by process de-scheduling | ❌ Yes                                  |
-    /// | Appears to go backwards           | ✅ No                                   |
+    /// | Might appear to go backwards      | ✅ No                                   |
     /// | Reads a cached value              | Varies by platform                      |
     /// | Possible staleness                | Varies by platform                      |
     /// | Typical read cost                 | Platform dependent; ~ 1.5-235ns @ 4GHz  |
@@ -174,7 +174,7 @@ extension GenericSystemClock {
     /// | Affected by NTP changes           | Varies by platform                      |
     /// | Affected by system suspension     | ✅ No                                   |
     /// | Affected by process de-scheduling | ❌ Yes                                  |
-    /// | Appears to go backwards           | ✅ No                                   |
+    /// | Might appear to go backwards      | ✅ No                                   |
     /// | Reads a cached value              | ✅ No                                   |
     /// | Possible staleness                | Varies by platform                      |
     /// | Typical read cost                 | Platform dependent; ~ 1.5-235ns @ 4GHz  |
@@ -214,7 +214,7 @@ extension GenericSystemClock {
     /// | Affected by NTP changes           | Varies by platform                      |
     /// | Affected by system suspension     | ✅ No                                   |
     /// | Affected by process de-scheduling | ❌ Yes                                  |
-    /// | Appears to go backwards           | ✅ No                                   |
+    /// | Might appear to go backwards      | ✅ No                                   |
     /// | Reads a cached value              | Varies by platform                      |
     /// | Possible staleness                | Varies by platform                      |
     /// | Typical read cost                 | Platform dependent; ~ 1.5-235ns @ 4GHz  |
@@ -260,7 +260,7 @@ extension GenericSystemClock {
     /// | Affected by NTP changes           | ✅ No                                   |
     /// | Affected by system suspension     | ✅ No                                   |
     /// | Affected by process de-scheduling | ✅ No                                   |
-    /// | Appears to go backwards           | ✅ No                                   |
+    /// | Might appear to go backwards      | ✅ No                                   |
     /// | Reads a cached value              | ✅ No                                   |
     /// | Possible staleness                | Varies by platform                      |
     /// | Typical read cost                 | Platform dependent; ~ 1.5-235ns @ 4GHz  |
@@ -302,7 +302,7 @@ extension GenericSystemClock {
     /// | Affected by NTP changes           | ✅ No                                   |
     /// | Affected by system suspension     | ✅ No                                   |
     /// | Affected by process de-scheduling | ✅ No                                   |
-    /// | Appears to go backwards           | ✅ No                                   |
+    /// | Might appear to go backwards      | ✅ No                                   |
     /// | Reads a cached value              | ✅ No                                   |
     /// | Possible staleness                | Varies by platform                      |
     /// | Typical read cost                 | Platform dependent; ~ 1.5-235ns @ 4GHz  |
@@ -346,7 +346,7 @@ extension GenericSystemClock {
     /// | Affected by NTP changes           | ✅ No                                 |
     /// | Affected by system suspension     | ✅ No                                 |
     /// | Affected by process de-scheduling | ✅ No                                 |
-    /// | Appears to go backwards           | ✅ No                                 |
+    /// | Might appear to go backwards      | ✅ No                                 |
     /// | Reads a cached value              | ✅ No                                 |
     /// | Possible staleness                | ✅ None                               |
     /// | Typical read cost                 | Platform dependent; ~ 56-460ns @ 4GHz |
@@ -390,7 +390,7 @@ extension GenericSystemClock {
     /// | Affected by NTP changes           | ✅ No                                 |
     /// | Affected by system suspension     | ✅ No                                 |
     /// | Affected by process de-scheduling | ✅ No                                 |
-    /// | Appears to go backwards           | ✅ No                                 |
+    /// | Might appear to go backwards      | ✅ No                                 |
     /// | Reads a cached value              | ✅ No                                 |
     /// | Possible staleness                | ✅ None                               |
     /// | Typical read cost                 | Platform dependent; ~ 56-460ns @ 4GHz |
@@ -434,7 +434,7 @@ extension GenericSystemClock {
     /// | Affected by NTP changes           | ✅ No                                 |
     /// | Affected by system suspension     | ✅ No                                 |
     /// | Affected by process de-scheduling | ✅ No                                 |
-    /// | Appears to go backwards           | ✅ No                                 |
+    /// | Might appear to go backwards      | ✅ No                                 |
     /// | Reads a cached value              | ✅ No                                 |
     /// | Possible staleness                | ✅ None                               |
     /// | Typical read cost                 | Platform dependent; ~ 56-460ns @ 4GHz |
@@ -478,7 +478,7 @@ extension GenericSystemClock {
     /// | Affected by NTP changes           | ✅ No                                 |
     /// | Affected by system suspension     | ✅ No                                 |
     /// | Affected by process de-scheduling | ✅ No                                 |
-    /// | Appears to go backwards           | ✅ No                                 |
+    /// | Might appear to go backwards      | ✅ No                                 |
     /// | Reads a cached value              | ✅ No                                 |
     /// | Possible staleness                | ✅ None                               |
     /// | Typical read cost                 | Platform dependent; ~ 56-460ns @ 4GHz |
