@@ -125,18 +125,17 @@ extension GenericSystemClock where Duration: SystemDurationProtocol {
 #if !$Embedded
 @available(SwiftStdlib 5.7, *)
 extension GenericSystemClock where Duration: SystemDurationProtocol {
-    /// Suspends until this clock reaches `deadline`.
+    /// Not supported. Always fatal-errors.
     ///
-    /// This only exists because `Clock` requires it. Sleep on the standard library's
-    /// `ContinuousClock` or `SuspendingClock` instead.
+    /// This only exists because `Clock` requires it.
+    /// Sleep on the standard library's `ContinuousClock` or `SuspendingClock` instead.
     @available(
         *,
         deprecated,
         message: """
-        SystemClock does not support sleeping.
-        This call always fatal-errors.
-        Use standard library's `ContinuousClock` or `SuspendingClock` instead for sleeping.
-        """
+            SystemClock does not support sleeping so this call always traps.
+            Use standard library's `ContinuousClock` or `SuspendingClock` instead for sleeping.
+            """
     )
     @inlinable
     public func sleep(until deadline: Instant, tolerance: Duration? = nil) async throws {
