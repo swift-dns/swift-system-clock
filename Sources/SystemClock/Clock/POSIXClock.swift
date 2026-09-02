@@ -55,29 +55,6 @@ struct POSIXClock: Sendable {
         }
     }
 
-    /// OpenBSD declares no `clock_nanosleep(2)`, so it waits out the remainder instead.
-    @inlinable
-    @inline(always)
-    func sleep(until deadline: CompactDuration, orFor remaining: CompactDuration) {
-        #if os(OpenBSD)
-        POSIX.sleep(for: remaining)
-        #else
-        var target = POSIX.clampedTimespec(from: deadline)
-        while true {
-            let status = unsafe clock_nanosleep(self.id, TIMER_ABSTIME, &target, nil)
-            switch status {
-            case EINTR:
-                continue
-            case EINVAL, ENOTSUP, EOPNOTSUPP:
-                POSIX.sleep(for: remaining)
-                return
-            default:
-                return
-            }
-        }
-        #endif
-    }
-
     @inlinable
     func readClockGettime() -> CompactDuration? {
         var value = timespec()

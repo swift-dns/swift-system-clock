@@ -4,11 +4,8 @@
 //     init(id: <the platform's clock id type>)
 //     func read() -> Duration?
 //     func resolution() -> Duration?
-//     func sleep(until deadline: Duration, orFor remaining: Duration)
 //
-// `read` and `resolution` answer `nil` when the operating system refuses the id. `sleep` takes
-// both the deadline and the wait left over from it, because a platform that can wait on the
-// clock itself wants the first and one that cannot wants the second.
+// `read` and `resolution` answer `nil` when the operating system refuses the id.
 
 #if $Embedded
 @usableFromInline

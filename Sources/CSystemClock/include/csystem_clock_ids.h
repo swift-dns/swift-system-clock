@@ -118,7 +118,7 @@ static const int32_t csystem_clock_freebsd_tai = CSYSTEM_CLOCK_FREEBSD_TAI;
 // https://github.com/freebsd/freebsd-src/commit/108de784513d
 #define CSYSTEM_CLOCK_FREEBSD_BOOTTIME CSYSTEM_CLOCK_FREEBSD_MONOTONIC
 
-#if defined(__FreeBSD__)
+#if defined(__FreeBSD__) && defined(CLOCK_BOOTTIME)
 static const int32_t csystem_clock_freebsd_boottime = (int32_t)CLOCK_BOOTTIME;
 #else
 static const int32_t csystem_clock_freebsd_boottime = CSYSTEM_CLOCK_FREEBSD_BOOTTIME;
@@ -161,6 +161,8 @@ static const int32_t csystem_clock_thread_system_cpu_time =
     CSYSTEM_CLOCK_THREAD_SYSTEM_CPU_TIME;
 
 // MARK: - WASI
+// wasi-libc's `clockid_t` is a pointer rather than a number, so these ids are this library's own
+// identifiers, translated to wasi-libc's `CLOCK_*` below. wasi-libc declares only these two.
 
 #define CSYSTEM_CLOCK_WASI_REALTIME 1
 #define CSYSTEM_CLOCK_WASI_MONOTONIC 2

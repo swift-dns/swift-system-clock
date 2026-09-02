@@ -3,52 +3,6 @@
 import SystemClock
 import Testing
 
-extension GenericSystemClock where Duration: SystemDurationProtocol {
-    static var processUserTime: GenericSystemClock {
-        GenericSystemClock(
-            darwin: .processUserTime,
-            linux: .processUserTime,
-            windows: .processUserTime,
-            freebsd: .processUserTime,
-            openbsd: .processUserTime,
-            wasi: .monotonic
-        )
-    }
-
-    static var processSystemTime: GenericSystemClock {
-        GenericSystemClock(
-            darwin: .processSystemTime,
-            linux: .processSystemTime,
-            windows: .processKernelTime,
-            freebsd: .processSystemTime,
-            openbsd: .processSystemTime,
-            wasi: .monotonic
-        )
-    }
-
-    static var threadUserTime: GenericSystemClock {
-        GenericSystemClock(
-            darwin: .threadUserTime,
-            linux: .threadUserTime,
-            windows: .threadUserTime,
-            freebsd: .threadUserTime,
-            openbsd: .threadUserTime,
-            wasi: .monotonic
-        )
-    }
-
-    static var threadSystemTime: GenericSystemClock {
-        GenericSystemClock(
-            darwin: .threadSystemTime,
-            linux: .threadSystemTime,
-            windows: .threadKernelTime,
-            freebsd: .threadSystemTime,
-            openbsd: .threadSystemTime,
-            wasi: .monotonic
-        )
-    }
-}
-
 @Suite
 struct ResourceUsageTests {
     static var all: [TestClock<Swift.Duration>] {

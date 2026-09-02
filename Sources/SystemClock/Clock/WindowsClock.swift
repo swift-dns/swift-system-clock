@@ -111,19 +111,6 @@ struct WindowsClock: Sendable {
         }
     }
 
-    /// Windows has no clock-bound wait, so the deadline is unused and the remainder is rounded
-    /// up to the millisecond `SleepEx` takes.
-    @inlinable
-    @inline(always)
-    func sleep(until deadline: CompactDuration, orFor remaining: CompactDuration) {
-        var milliseconds: Int64 = 0
-        if remaining.nanoseconds > 0 {
-            milliseconds = (remaining.nanoseconds + 999_999) / 1_000_000
-        }
-        milliseconds = min(milliseconds, Int64(INFINITE - 1))
-        SleepEx(DWORD(milliseconds), false)
-    }
-
     @inlinable
     static func readProcessTimes() -> (user: CompactDuration, system: CompactDuration)? {
         var creation = FILETIME()

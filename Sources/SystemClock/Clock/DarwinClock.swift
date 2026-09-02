@@ -4,6 +4,7 @@ public import Darwin
 public import CSystemClock
 
 @usableFromInline
+@_assemblyVision
 struct DarwinClock: Sendable {
     @usableFromInline
     let id: clockid_t
@@ -50,12 +51,6 @@ struct DarwinClock: Sendable {
             }
             return POSIX.duration(from: value)
         }
-    }
-
-    @inlinable
-    @inline(always)
-    func sleep(until deadline: CompactDuration, orFor remaining: CompactDuration) {
-        POSIX.sleep(for: remaining)
     }
 
     @inlinable

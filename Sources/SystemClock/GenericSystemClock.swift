@@ -111,8 +111,11 @@ extension GenericSystemClock where Duration: SystemDurationProtocol {
 
     /// The smallest non-zero difference the clock reports between two instants.
     ///
-    /// This is a lower bound on resolution rather than a measurement of how precise the
-    /// underlying hardware is.
+    /// This is `clock_getres` where the platform has a clock id for the clock, and a fixed
+    /// estimate for the clocks that use `getrusage`/`thread_info` or Windows tick clocks.
+    ///
+    /// This is a lower bound rather than a measurement.
+    /// For measurements, see the "Step granularity" row of each clock's table.
     @inlinable
     public var minimumResolution: Duration {
         guard let reading = self.clock.resolution() else {

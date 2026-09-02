@@ -46,12 +46,6 @@ struct WASIClock: Sendable {
         }
         return POSIX.duration(from: value)
     }
-
-    @inlinable
-    @inline(always)
-    func sleep(until deadline: CompactDuration, orFor remaining: CompactDuration) {
-        POSIX.sleep(for: remaining)
-    }
 }
 
 #endif

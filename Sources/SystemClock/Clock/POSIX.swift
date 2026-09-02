@@ -33,23 +33,6 @@ enum POSIX {
         return CompactDuration(nanoseconds: seconds &+ nanoseconds)
     }
 
-    @inlinable
-    static func clampedTimespec(from duration: CompactDuration) -> timespec {
-        let isNegative = duration.nanoseconds <= 0
-        let tv_sec = isNegative ? 0 : duration.nanoseconds / 1_000_000_000
-        let tv_nsec = isNegative ? 0 : duration.nanoseconds % 1_000_000_000
-        return timespec(tv_sec: .init(tv_sec), tv_nsec: .init(tv_nsec))
-    }
-
-    @inlinable
-    static func sleep(for duration: CompactDuration) {
-        var request = Self.clampedTimespec(from: duration)
-        var leftover = timespec()
-        while unsafe nanosleep(&request, &leftover) == -1 && errno == EINTR {
-            request = leftover
-        }
-    }
-
     #if !os(WASI)
     @inlinable
     static func duration(from value: timeval) -> CompactDuration {

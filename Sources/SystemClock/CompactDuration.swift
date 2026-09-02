@@ -9,10 +9,17 @@
 /// print(d) // 3.033 seconds
 /// ```
 ///
-/// `CompactDuration` itself does not ferry any additional information other than the
-/// temporal measurement component; specifically leap seconds should be
-/// represented as an additional accessor since that is specific only to certain
-/// clock implementations.
+/// The value is a signed 64-bit count of nanoseconds, so the representable range is about ±292 years.
+/// That is, until the year 2262 if counted from the Unix epoch 1970.
+///
+/// Conversions to and from `Swift.Duration`:
+/// ```swift
+/// let compactD: CompactDuration = .seconds(3)
+/// let swiftD: Swift.Duration = .seconds(3)
+///
+/// let compactDFromSwiftD = CompactDuration(swiftD)
+/// let swiftDFromCompactD = Swift.Duration(compactD)
+/// ```
 public struct CompactDuration: Sendable {
     /// The number of nanoseconds represented by this `CompactDuration`.
     public var nanoseconds: Int64
@@ -253,3 +260,19 @@ extension CompactDuration: DurationProtocol {}
 
 @available(SwiftStdlib 5.7, *)
 extension CompactDuration: SystemDurationProtocol {}
+
+// MARK: - +Swift.Duration
+
+@available(SwiftStdlib 5.7, *)
+extension CompactDuration {
+    public init(_ duration: Swift.Duration) {
+        self.init(nanoseconds: duration.nanoseconds)
+    }
+}
+
+@available(SwiftStdlib 5.7, *)
+extension Swift.Duration {
+    public init(_ duration: CompactDuration) {
+        self = .nanoseconds(duration.nanoseconds)
+    }
+}

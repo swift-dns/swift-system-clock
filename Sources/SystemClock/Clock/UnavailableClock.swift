@@ -17,9 +17,6 @@ struct UnavailableClock: Sendable {
     func resolution() -> CompactDuration? {
         nil
     }
-
-    @inlinable
-    func sleep(until deadline: CompactDuration, orFor remaining: CompactDuration) {}
 }
 
 #endif
