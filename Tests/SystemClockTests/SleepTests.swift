@@ -1,39 +1,24 @@
+#if os(macOS) || os(Linux) || os(FreeBSD) || os(OpenBSD) || os(Windows)
+
 import SystemClock
 import Testing
 
 @Suite
 struct SleepTests {
-    @Test(
-        arguments: [
-            GenericSystemClock<Swift.Duration>.continuous,
-            GenericSystemClock<Swift.Duration>.suspending,
-            GenericSystemClock<Swift.Duration>.realtime,
-        ]
-    )
-    func `sleeping wakes at or after the deadline`(
-        clock: GenericSystemClock<Swift.Duration>
-    ) async throws {
-        let deadline = clock.now.advanced(by: .milliseconds(50))
-        try await clock.sleep(until: deadline)
-        #expect(clock.now >= deadline)
-    }
-
-    @Test func `sleeping returns at once for a deadline already passed`() async throws {
-        let clock = GenericSystemClock<Swift.Duration>.continuous
-        try await clock.sleep(until: clock.now.advanced(by: .seconds(-10)))
-    }
-
-    /// `SystemClock.sleep(until:tolerance:)` blocks and never looks at cancellation. Enable
-    /// this once the `TODO: Cancellation support.` in `SystemClock+Sleep.swift` is done.
-    @Test(.disabled("SystemClock.sleep does not support cancellation yet"))
-    func `sleeping is cancellable`() async throws {
-        let clock = GenericSystemClock<Swift.Duration>.continuous
-        let task = Task {
-            try await clock.sleep(until: clock.now.advanced(by: .seconds(30)))
+    @Test func `sleeping through the standard library clock protocol traps`() async {
+        await #expect(processExitsWith: .failure) {
+            let clock = GenericSystemClock<Swift.Duration>.continuous
+            try await Task.sleep(for: .milliseconds(1), clock: clock)
         }
-        task.cancel()
-        await #expect(throws: CancellationError.self) {
-            try await task.value
+    }
+
+    @available(*, deprecated)
+    @Test func `sleeping on a system clock traps`() async {
+        await #expect(processExitsWith: .failure) {
+            let clock = GenericSystemClock<Swift.Duration>.continuous
+            try await clock.sleep(until: clock.now)
         }
     }
 }
+
+#endif

@@ -103,8 +103,10 @@ Every Apple platform takes `darwin`. Android takes `linux`.
 ### Sleeping
 
 > [!WARNING]
-> Currently the sleep functions are blocking and are discouraged to use.   
-> Later they'll either not exist (crash on call) or become non-blocking.
+> `SystemClock` does not support sleeping.   
+> `sleep(until:tolerance:)` only exists as a requirement of the `Clock` protocol, and fatal-errors when called.   
+> `Task.sleep(for:clock:)` and `Task.sleep(until:clock:)` route through it, so they'll crash too.   
+> Use standard library's `ContinuousClock` or `SuspendingClock` instead for sleeping.
 
 ## Cheat Sheet
 
