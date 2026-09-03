@@ -1,15 +1,5 @@
 #if (os(Linux) || os(Android) || os(FreeBSD) || os(OpenBSD)) && !$Embedded
 
-#if canImport(Glibc)
-public import Glibc
-#elseif canImport(Musl)
-public import Musl
-#elseif canImport(Android)
-public import Android
-#else
-#error("The SystemClock module was unable to identify your C library.")
-#endif
-
 public import CSystemClock
 
 @usableFromInline

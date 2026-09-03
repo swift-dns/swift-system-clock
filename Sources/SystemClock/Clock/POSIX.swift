@@ -1,20 +1,8 @@
 #if !os(Windows) && !$Embedded
 
-#if canImport(Darwin)
-public import Darwin
-#elseif canImport(Glibc)
-public import Glibc
-#elseif canImport(Musl)
-public import Musl
-#elseif canImport(Android)
-public import Android
-#elseif canImport(WASILibc)
+#if os(WASI)
 public import WASILibc
 #else
-#error("The SystemClock module was unable to identify your C library.")
-#endif
-
-#if !os(WASI)
 public import CSystemClock
 #endif
 
@@ -29,7 +17,7 @@ enum POSIX {
         /// Therefore we won't do unchecked arithmetic here just to be safe.
         let seconds = Int64(value.tv_sec) * 1_000_000_000
         let nanoseconds = Int64(value.tv_nsec)
-        /// Checked math here is unnecessary because `seconds` calc would overflow first anyway.
+        /// Checked math here is unnecessary because `seconds` calc would likely overflow first anyway.
         return CompactDuration(nanoseconds: seconds &+ nanoseconds)
     }
 
@@ -41,7 +29,7 @@ enum POSIX {
         /// Therefore we won't do unchecked arithmetic here just to be safe.
         let seconds = Int64(value.tv_sec) * 1_000_000_000
         let microseconds = Int64(value.tv_usec) * 1_000
-        /// Checked math here is unnecessary because `seconds` calc would overflow first anyway.
+        /// Checked math here is unnecessary because `seconds` calc would likely overflow first anyway.
         return CompactDuration(nanoseconds: seconds &+ microseconds)
     }
 

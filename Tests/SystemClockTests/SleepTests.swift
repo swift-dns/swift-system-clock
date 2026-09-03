@@ -15,7 +15,7 @@ struct SleepTests {
     @available(*, deprecated)
     @Test func `sleeping on a system clock traps`() async {
         await #expect(processExitsWith: .failure) {
-            let clock = GenericSystemClock<Swift.Duration>.continuous
+            let clock = GenericSystemClock<CompactDuration>.continuous
             try await clock.sleep(until: clock.now)
         }
     }
