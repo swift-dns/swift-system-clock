@@ -1,82 +1,20 @@
 import SystemClock
 import Testing
 
-struct ShortcutClock: Sendable, CustomStringConvertible {
-    var name: String
-    var shortcut: SystemClock
-    var twin: SystemClock
-
-    var description: String {
-        self.name
-    }
-}
-
-extension ShortcutClock {
-    static var all: [ShortcutClock] {
-        [
-            ShortcutClock(name: "realtime", shortcut: .systemRealtime, twin: .realtime),
-            ShortcutClock(
-                name: "realtimeCoarse",
-                shortcut: .systemRealtimeCoarse,
-                twin: .realtimeCoarse
-            ),
-            ShortcutClock(name: "continuous", shortcut: .systemContinuous, twin: .continuous),
-            ShortcutClock(
-                name: "continuousCoarse",
-                shortcut: .systemContinuousCoarse,
-                twin: .continuousCoarse
-            ),
-            ShortcutClock(name: "suspending", shortcut: .systemSuspending, twin: .suspending),
-            ShortcutClock(
-                name: "suspendingCoarse",
-                shortcut: .systemSuspendingCoarse,
-                twin: .suspendingCoarse
-            ),
-            ShortcutClock(
-                name: "processCPUTime",
-                shortcut: .systemProcessCPUTime,
-                twin: .processCPUTime
-            ),
-            ShortcutClock(
-                name: "threadCPUTime",
-                shortcut: .systemThreadCPUTime,
-                twin: .threadCPUTime
-            ),
-            ShortcutClock(
-                name: "processUserTime",
-                shortcut: .systemProcessUserTime,
-                twin: .processUserTime
-            ),
-            ShortcutClock(
-                name: "processSystemTime",
-                shortcut: .systemProcessSystemTime,
-                twin: .processSystemTime
-            ),
-            ShortcutClock(
-                name: "threadUserTime",
-                shortcut: .systemThreadUserTime,
-                twin: .threadUserTime
-            ),
-            ShortcutClock(
-                name: "threadSystemTime",
-                shortcut: .systemThreadSystemTime,
-                twin: .threadSystemTime
-            ),
-        ]
-    }
-}
-
 @Suite
 struct DefaultClocksTests {
     @Test(arguments: ShortcutClock.all)
     func `every shortcut names the clock it stands for`(shortcutClock: ShortcutClock) {
-        #expect(shortcutClock.shortcut.currentClockID == shortcutClock.twin.currentClockID)
+        #expect(
+            shortcutClock.clockFromShortcutExtension.currentClockID
+                == shortcutClock.clockFromDirectExtension.currentClockID
+        )
     }
 
     @Test(arguments: ShortcutClock.all)
     func `every shortcut reads and reports a resolution`(shortcutClock: ShortcutClock) {
-        _ = shortcutClock.shortcut.now
-        #expect(shortcutClock.shortcut.minimumResolution > .zero)
+        _ = shortcutClock.clockFromShortcutExtension.now
+        #expect(shortcutClock.clockFromShortcutExtension.minimumResolution > .zero)
     }
 
     @Test func `a system clock drives the standard library clock protocol`() async throws {
@@ -104,5 +42,76 @@ struct DefaultClocksTests {
         let compactReading = SystemClock.Instant.epoch.duration(to: compact.now)
         let wideReading = GenericSystemClock<Swift.Duration>.Instant.epoch.duration(to: wide.now)
         #expect(isClose(.nanoseconds(compactReading.nanoseconds), wideReading))
+    }
+}
+
+struct ShortcutClock: Sendable, CustomStringConvertible {
+    var name: String
+    var clockFromShortcutExtension: SystemClock
+    var clockFromDirectExtension: SystemClock
+
+    init(name: String, shortcut: some Clock, direct: SystemClock) {
+        self.name = name
+        self.clockFromShortcutExtension = shortcut as! SystemClock
+        self.clockFromDirectExtension = direct
+    }
+
+    var description: String {
+        self.name
+    }
+}
+
+extension ShortcutClock {
+    static var all: [ShortcutClock] {
+        [
+            ShortcutClock(name: "realtime", shortcut: .systemRealtime, direct: .realtime),
+            ShortcutClock(
+                name: "realtimeCoarse",
+                shortcut: .systemRealtimeCoarse,
+                direct: .realtimeCoarse
+            ),
+            ShortcutClock(name: "continuous", shortcut: .systemContinuous, direct: .continuous),
+            ShortcutClock(
+                name: "continuousCoarse",
+                shortcut: .systemContinuousCoarse,
+                direct: .continuousCoarse
+            ),
+            ShortcutClock(name: "suspending", shortcut: .systemSuspending, direct: .suspending),
+            ShortcutClock(
+                name: "suspendingCoarse",
+                shortcut: .systemSuspendingCoarse,
+                direct: .suspendingCoarse
+            ),
+            ShortcutClock(
+                name: "processCPUTime",
+                shortcut: .systemProcessCPUTime,
+                direct: .processCPUTime
+            ),
+            ShortcutClock(
+                name: "threadCPUTime",
+                shortcut: .systemThreadCPUTime,
+                direct: .threadCPUTime
+            ),
+            ShortcutClock(
+                name: "processUserTime",
+                shortcut: .systemProcessUserTime,
+                direct: .processUserTime
+            ),
+            ShortcutClock(
+                name: "processSystemTime",
+                shortcut: .systemProcessSystemTime,
+                direct: .processSystemTime
+            ),
+            ShortcutClock(
+                name: "threadUserTime",
+                shortcut: .systemThreadUserTime,
+                direct: .threadUserTime
+            ),
+            ShortcutClock(
+                name: "threadSystemTime",
+                shortcut: .systemThreadSystemTime,
+                direct: .threadSystemTime
+            ),
+        ]
     }
 }

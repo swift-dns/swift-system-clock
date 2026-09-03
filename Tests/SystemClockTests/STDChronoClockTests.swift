@@ -51,7 +51,7 @@ struct STDChronoClockTests {
         #expect(Self.read(.monotonic).nanoseconds < 1_577_836_800_000_000_000)
     }
 
-    @Test(arguments: [STDChronoClockID.unavailable, STDChronoClockID(rawValue: 9_999)])
+    @Test(arguments: [STDChronoClockID(rawValue: 0), STDChronoClockID(rawValue: 9_999)])
     func `an id std::chrono has no clock for is rejected`(id: STDChronoClockID) {
         #expect(Self.read(id).result == -1)
         #expect(Self.resolution(id).result == -1)
@@ -61,7 +61,7 @@ struct STDChronoClockTests {
         var nanoseconds: Int64 = 77
         #expect(
             unsafe csystem_clock_std_chrono_gettime(
-                STDChronoClockID.unavailable.rawValue,
+                STDChronoClockID(rawValue: 9_999).rawValue,
                 &nanoseconds
             ) == -1
         )

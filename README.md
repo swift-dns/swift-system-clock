@@ -154,7 +154,7 @@ Here is a list of all supported clocks on each platform.
 * `Windows` on an Intel Core i7-10750H (x86_64) under Windows 11, bare metal.
 * `Linux` on Ubuntu 24.04 (kernel 6.8, `HZ=1000`) in a dedicated-core AMD EPYC Milan x86_64 VM from Hetzner.
 * `FreeBSD` 15.1 and `OpenBSD` 7.9 in arm64 QEMU virtual machines on the same Mac, where `kern.hz` is 100.
-* `WASI` under a WebAssembly runtime on macOS.
+* `WASI` on the same Mac under wasmtime 48 (primary source), Node 26 (uvwasi), Bun 1.3 and WasmKit 0.1.6.
 
 > [!NOTE]
 > The measured values are meant as general hints.     
@@ -389,7 +389,7 @@ Measures CPU time used by this thread
 
 [getrusage(2)](https://keith.github.io/xcode-man-pages/getrusage.2.html)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time this process spent running its own code
 
@@ -413,7 +413,7 @@ Measures CPU time this process spent running its own code
 
 [getrusage(2)](https://keith.github.io/xcode-man-pages/getrusage.2.html)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time the kernel spent on this process's behalf
 
@@ -437,7 +437,7 @@ Measures CPU time the kernel spent on this process's behalf
 
 [thread_info](https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/mach/thread_act.defs)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time this thread spent running its own code
 
@@ -461,7 +461,7 @@ Measures CPU time this thread spent running its own code
 
 [thread_info](https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/mach/thread_act.defs)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time the kernel spent on this thread's behalf
 
@@ -732,7 +732,7 @@ Measures CPU time used by this thread
 
 [getrusage(2)](https://man7.org/linux/man-pages/man2/getrusage.2.html)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time this process spent running its own code
 
@@ -756,7 +756,7 @@ Measures CPU time this process spent running its own code
 
 [getrusage(2)](https://man7.org/linux/man-pages/man2/getrusage.2.html)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time the kernel spent on this process's behalf
 
@@ -780,7 +780,7 @@ Measures CPU time the kernel spent on this process's behalf
 
 [getrusage(2)](https://man7.org/linux/man-pages/man2/getrusage.2.html)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time this thread spent running its own code
 
@@ -804,7 +804,7 @@ Measures CPU time this thread spent running its own code
 
 [getrusage(2)](https://man7.org/linux/man-pages/man2/getrusage.2.html)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time the kernel spent on this thread's behalf
 
@@ -1508,7 +1508,7 @@ Measures CPU time used by this thread
 
 [getrusage(2)](https://man.freebsd.org/cgi/man.cgi?query=getrusage&sektion=2)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time this process spent running its own code
 
@@ -1532,7 +1532,7 @@ Measures CPU time this process spent running its own code
 
 [getrusage(2)](https://man.freebsd.org/cgi/man.cgi?query=getrusage&sektion=2)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time the kernel spent on this process's behalf
 
@@ -1556,7 +1556,7 @@ Measures CPU time the kernel spent on this process's behalf
 
 [getrusage(2)](https://man.freebsd.org/cgi/man.cgi?query=getrusage&sektion=2)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time this thread spent running its own code
 
@@ -1580,7 +1580,7 @@ Measures CPU time this thread spent running its own code
 
 [getrusage(2)](https://man.freebsd.org/cgi/man.cgi?query=getrusage&sektion=2)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time the kernel spent on this thread's behalf
 
@@ -1741,7 +1741,7 @@ Measures CPU time used by this thread
 
 [getrusage(2)](https://man.openbsd.org/getrusage.2)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time this process spent running its own code
 
@@ -1765,7 +1765,7 @@ Measures CPU time this process spent running its own code
 
 [getrusage(2)](https://man.openbsd.org/getrusage.2)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time the kernel spent on this process's behalf
 
@@ -1789,7 +1789,7 @@ Measures CPU time the kernel spent on this process's behalf
 
 [getrusage(2)](https://man.openbsd.org/getrusage.2)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time this thread spent running its own code
 
@@ -1813,7 +1813,7 @@ Measures CPU time this thread spent running its own code
 
 [getrusage(2)](https://man.openbsd.org/getrusage.2)
 
-Not a clock id the platform declares: this library's own, selecting one half of one call.
+This is this library's own clock identifier and not one of the clock ids the platform declares.
 
 Measures CPU time the kernel spent on this thread's behalf
 
@@ -1844,18 +1844,20 @@ Measures CPU time the kernel spent on this thread's behalf
 
 Measures Wall time, counted from 1970-01-01 UTC
 
-| Property                              | Value             |
-| ------------------------------------- | ----------------- |
-| Reacts to OS time changes             | Runtime-dependent |
-| Reacts to NTP changes                 | Runtime-dependent |
-| Counts system suspension times        | Runtime-dependent |
-| Advances while thread is de-scheduled | ❌ Yes             |
-| Might appear to go backwards          | Runtime-dependent |
-| Reads a cached value                  | Runtime-dependent |
-| Max staleness                         | ✅ None            |
-| Warm read cost                        | ~ 57ns @ 4GHz     |
-| Cold read cost                        | N/A               |
-| Step granularity                      | 1µs               |
+Whether it actually counts from 1970 (not e.g. boot time) is runtime-dependent.
+
+| Property                              | Value                                 |
+| ------------------------------------- | ------------------------------------- |
+| Reacts to OS time changes             | Runtime-dependent                     |
+| Reacts to NTP changes                 | Runtime-dependent                     |
+| Counts system suspension times        | Runtime-dependent                     |
+| Advances while thread is de-scheduled | ❌ Yes                                |
+| Might appear to go backwards          | Runtime-dependent                     |
+| Reads a cached value                  | Runtime-dependent                     |
+| Max staleness                         | ✅ None                               |
+| Warm read cost                        | ~ 29-282ns; ~ 57ns on wasmtime @ 4GHz |
+| Cold read cost                        | N/A                                   |
+| Step granularity                      | 1µs on wasmtime                       |
 
 </details>
 
@@ -1866,18 +1868,18 @@ Measures Wall time, counted from 1970-01-01 UTC
 
 Measures Elapsed time, from an arbitrary point
 
-| Property                              | Value             |
-| ------------------------------------- | ----------------- |
-| Reacts to OS time changes             | ✅ No              |
-| Reacts to NTP changes                 | Runtime-dependent |
-| Counts system suspension times        | Runtime-dependent |
-| Advances while thread is de-scheduled | ❌ Yes             |
-| Might appear to go backwards          | ✅ No              |
-| Reads a cached value                  | Runtime-dependent |
-| Max staleness                         | ✅ None            |
-| Warm read cost                        | ~ 56ns @ 4GHz     |
-| Cold read cost                        | N/A               |
-| Step granularity                      | 42ns              |
+| Property                              | Value                                 |
+| ------------------------------------- | ------------------------------------- |
+| Reacts to OS time changes             | ✅ No                                 |
+| Reacts to NTP changes                 | Runtime-dependent                     |
+| Counts system suspension times        | Runtime-dependent                     |
+| Advances while thread is de-scheduled | ❌ Yes                                |
+| Might appear to go backwards          | ✅ No                                 |
+| Reads a cached value                  | Runtime-dependent                     |
+| Max staleness                         | ✅ None                               |
+| Warm read cost                        | ~ 25-284ns; ~ 56ns on wasmtime @ 4GHz |
+| Cold read cost                        | N/A                                   |
+| Step granularity                      | 42ns on wasmtime                      |
 
 </details>
 

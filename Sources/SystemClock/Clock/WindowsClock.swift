@@ -31,27 +31,36 @@ struct WindowsClock: Sendable {
             /// 9.22 GHz, so it is divided at full width. The quotient cannot overrun, since
             /// the remainder is below the frequency and so the answer is below a billion.
             let scaled = (ticks % frequency).multipliedFullWidth(by: 1_000_000_000)
-            let seconds = (ticks / frequency) * 1_000_000_000
+            let (seconds, overflow) = (ticks / frequency)
+                .multipliedReportingOverflow(by: 1_000_000_000)
+            if overflow { return nil }
             let subSeconds = frequency.dividingFullWidth(scaled).quotient
-            return CompactDuration(nanoseconds: seconds + subSeconds)
+            return CompactDuration(nanoseconds: seconds &+ subSeconds)
         case .systemTime:
             var time = FILETIME()
             unsafe GetSystemTimeAsFileTime(&time)
             return Self.duration(
-                hundredNanosecondIntervals: Self.intervals(of: time) - Self.fileTimeToUnixEpoch
+                hundredNanosecondIntervals: Self.intervals(of: time) &- Self.fileTimeToUnixEpoch
             )
         case .systemTimePrecise:
             var time = FILETIME()
             unsafe GetSystemTimePreciseAsFileTime(&time)
             return Self.duration(
-                hundredNanosecondIntervals: Self.intervals(of: time) - Self.fileTimeToUnixEpoch
+                hundredNanosecondIntervals: Self.intervals(of: time) &- Self.fileTimeToUnixEpoch
             )
         case .interruptTime:
-            let intervals = csystem_clock_windows_query_interrupt_time()
-            return Self.duration(hundredNanosecondIntervals: Int64(intervals))
+            guard let intervals = Int64(exactly: csystem_clock_windows_query_interrupt_time())
+            else {
+                return nil
+            }
+            return Self.duration(hundredNanosecondIntervals: intervals)
         case .interruptTimePrecise:
-            let intervals = csystem_clock_windows_query_interrupt_time_precise()
-            return Self.duration(hundredNanosecondIntervals: Int64(intervals))
+            guard
+                let intervals = Int64(exactly: csystem_clock_windows_query_interrupt_time_precise())
+            else {
+                return nil
+            }
+            return Self.duration(hundredNanosecondIntervals: intervals)
         case .unbiasedInterruptTime:
             let intervals = csystem_clock_windows_query_unbiased_interrupt_time()
             guard intervals >= 0 else {
@@ -59,20 +68,28 @@ struct WindowsClock: Sendable {
             }
             return Self.duration(hundredNanosecondIntervals: intervals)
         case .unbiasedInterruptTimePrecise:
-            let intervals = csystem_clock_windows_query_unbiased_interrupt_time_precise()
-            return Self.duration(hundredNanosecondIntervals: Int64(intervals))
+            let rawIntervals = csystem_clock_windows_query_unbiased_interrupt_time_precise()
+            guard let intervals = Int64(exactly: rawIntervals) else {
+                return nil
+            }
+            return Self.duration(hundredNanosecondIntervals: intervals)
         case .tickCount:
-            return CompactDuration(nanoseconds: Int64(GetTickCount64()) * 1_000_000)
+            guard let milliseconds = Int64(exactly: GetTickCount64()) else {
+                return nil
+            }
+            let (nanoseconds, overflow) = milliseconds.multipliedReportingOverflow(by: 1_000_000)
+            if overflow { return nil }
+            return CompactDuration(nanoseconds: nanoseconds)
         case .processTime:
             guard let times = Self.readProcessTimes() else {
                 return nil
             }
-            return times.user + times.system
+            return Self.sum(times.user, times.system)
         case .threadTime:
             guard let times = Self.readThreadTimes() else {
                 return nil
             }
-            return times.user + times.system
+            return Self.sum(times.user, times.system)
         case .processUserTime:
             return Self.readProcessTimes()?.user
         case .processKernelTime:
@@ -115,30 +132,39 @@ struct WindowsClock: Sendable {
     static func readProcessTimes() -> (user: CompactDuration, system: CompactDuration)? {
         var creation = FILETIME()
         var exit = FILETIME()
-        var kernel = FILETIME()
-        var user = FILETIME()
-        guard unsafe GetProcessTimes(GetCurrentProcess(), &creation, &exit, &kernel, &user) else {
+        var kernelTime = FILETIME()
+        var userTime = FILETIME()
+        guard
+            unsafe GetProcessTimes(GetCurrentProcess(), &creation, &exit, &kernelTime, &userTime),
+            let user = Self.duration(hundredNanosecondIntervals: Self.intervals(of: userTime)),
+            let system = Self.duration(hundredNanosecondIntervals: Self.intervals(of: kernelTime))
+        else {
             return nil
         }
-        return (
-            Self.duration(hundredNanosecondIntervals: Self.intervals(of: user)),
-            Self.duration(hundredNanosecondIntervals: Self.intervals(of: kernel))
-        )
+        return (user, system)
     }
 
     @inlinable
     static func readThreadTimes() -> (user: CompactDuration, system: CompactDuration)? {
         var creation = FILETIME()
         var exit = FILETIME()
-        var kernel = FILETIME()
-        var user = FILETIME()
-        guard unsafe GetThreadTimes(GetCurrentThread(), &creation, &exit, &kernel, &user) else {
+        var kernelTime = FILETIME()
+        var userTime = FILETIME()
+        guard
+            unsafe GetThreadTimes(GetCurrentThread(), &creation, &exit, &kernelTime, &userTime),
+            let user = Self.duration(hundredNanosecondIntervals: Self.intervals(of: userTime)),
+            let system = Self.duration(hundredNanosecondIntervals: Self.intervals(of: kernelTime))
+        else {
             return nil
         }
-        return (
-            Self.duration(hundredNanosecondIntervals: Self.intervals(of: user)),
-            Self.duration(hundredNanosecondIntervals: Self.intervals(of: kernel))
-        )
+        return (user, system)
+    }
+
+    @inlinable
+    static func sum(_ user: CompactDuration, _ system: CompactDuration) -> CompactDuration? {
+        let (nanoseconds, overflow) = user.nanoseconds.addingReportingOverflow(system.nanoseconds)
+        if overflow { return nil }
+        return CompactDuration(nanoseconds: nanoseconds)
     }
 
     @inlinable
@@ -147,8 +173,10 @@ struct WindowsClock: Sendable {
     }
 
     @inlinable
-    static func duration(hundredNanosecondIntervals intervals: Int64) -> CompactDuration {
-        CompactDuration(nanoseconds: intervals * 100)
+    static func duration(hundredNanosecondIntervals intervals: Int64) -> CompactDuration? {
+        let (nanoseconds, overflow) = intervals.multipliedReportingOverflow(by: 100)
+        if overflow { return nil }
+        return CompactDuration(nanoseconds: nanoseconds)
     }
 }
 

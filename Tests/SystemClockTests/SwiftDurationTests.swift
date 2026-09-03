@@ -26,21 +26,50 @@ struct SwiftDurationTests {
         #expect(remainder.nanoseconds == 1_000_000_001)
     }
 
-    @Test func `a reading whose seconds overrun the scale saturates`() {
-        #expect(Swift.Duration.seconds(Int64.max).nanoseconds == .max)
-        #expect(Swift.Duration.seconds(Int64.min).nanoseconds == .min)
+    @Test func `the largest readings that fit are exact`() {
+        let largest = Swift.Duration(
+            secondsComponent: 9_223_372_036,
+            attosecondsComponent: 854_775_807_000_000_000
+        )
+        #expect(largest.nanoseconds == .max)
+        let smallest = Swift.Duration(
+            secondsComponent: -9_223_372_036,
+            attosecondsComponent: -854_775_808_000_000_000
+        )
+        #expect(smallest.nanoseconds == .min)
     }
 
-    @Test func `a reading whose attoseconds overrun the scale saturates`() {
-        let overMaximum = Swift.Duration(
-            secondsComponent: 9_223_372_036,
-            attosecondsComponent: 999_999_999_999_999_999
-        )
-        #expect(overMaximum.nanoseconds == .max)
-        let underMinimum = Swift.Duration(
-            secondsComponent: -9_223_372_036,
-            attosecondsComponent: -999_999_999_999_999_999
-        )
-        #expect(underMinimum.nanoseconds == .min)
+    #if os(macOS) || os(Linux) || os(FreeBSD) || os(OpenBSD) || os(Windows)
+    @Test func `a reading whose seconds overrun the scale traps`() async {
+        await #expect(processExitsWith: .failure) {
+            _ = Swift.Duration.seconds(Int64.max).nanoseconds
+        }
+        await #expect(processExitsWith: .failure) {
+            _ = Swift.Duration.seconds(Int64.min).nanoseconds
+        }
     }
+
+    @Test func `a reading whose attoseconds overrun the scale traps`() async {
+        await #expect(processExitsWith: .failure) {
+            _ =
+                Swift.Duration(
+                    secondsComponent: 9_223_372_036,
+                    attosecondsComponent: 854_775_808_000_000_000
+                ).nanoseconds
+        }
+        await #expect(processExitsWith: .failure) {
+            _ =
+                Swift.Duration(
+                    secondsComponent: -9_223_372_036,
+                    attosecondsComponent: -854_775_809_000_000_000
+                ).nanoseconds
+        }
+    }
+
+    @Test func `a compact duration built from a Swift Duration outside its range traps`() async {
+        await #expect(processExitsWith: .failure) {
+            _ = CompactDuration(Swift.Duration.seconds(1e10))
+        }
+    }
+    #endif
 }

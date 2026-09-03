@@ -161,18 +161,18 @@ extension GenericSystemClock {
     ///
     /// Measures Elapsed time, from an arbitrary point
     ///
-    /// | Property                              | Value                                     |
-    /// | ------------------------------------- | ----------------------------------------- |
-    /// | Reacts to OS time changes             | ✅ No                                     |
-    /// | Reacts to NTP changes                 | Varies by platform                        |
-    /// | Counts system suspension times        | ✅ No                                     |
-    /// | Advances while thread is de-scheduled | ❌ Yes                                    |
-    /// | Might appear to go backwards          | ✅ No                                     |
-    /// | Reads a cached value                  | ✅ No                                     |
-    /// | Max staleness                         | Varies by platform                        |
-    /// | Warm read cost                        | Platform dependent; ~ 13-56ns @ 4GHz      |
-    /// | Cold read cost                        | Platform dependent; ~ 165ns-15.9µs @ 4GHz |
-    /// | Step granularity                      | Platform dependent; 20-100ns              |
+    /// | Property                              | Value                                           |
+    /// | ------------------------------------- | ----------------------------------------------- |
+    /// | Reacts to OS time changes             | ✅ No                                           |
+    /// | Reacts to NTP changes                 | Varies by platform                              |
+    /// | Counts system suspension times        | ✅ No, but runtime-dependent on WASI & Fallback |
+    /// | Advances while thread is de-scheduled | ❌ Yes                                          |
+    /// | Might appear to go backwards          | ✅ No                                           |
+    /// | Reads a cached value                  | ✅ No                                           |
+    /// | Max staleness                         | Varies by platform                              |
+    /// | Warm read cost                        | Platform dependent; ~ 13-56ns @ 4GHz            |
+    /// | Cold read cost                        | Platform dependent; ~ 165ns-15.9µs @ 4GHz       |
+    /// | Step granularity                      | Platform dependent; 20-100ns                    |
     ///
     /// | Platform       | Clock                                           |
     /// | -------------- | ----------------------------------------------- |
@@ -200,18 +200,18 @@ extension GenericSystemClock {
     ///
     /// Measures Elapsed time, from an arbitrary point
     ///
-    /// | Property                              | Value                                     |
-    /// | ------------------------------------- | ----------------------------------------- |
-    /// | Reacts to OS time changes             | ✅ No                                     |
-    /// | Reacts to NTP changes                 | Varies by platform                        |
-    /// | Counts system suspension times        | ✅ No                                     |
-    /// | Advances while thread is de-scheduled | ❌ Yes                                    |
-    /// | Might appear to go backwards          | ✅ No                                     |
-    /// | Reads a cached value                  | Varies by platform                        |
-    /// | Max staleness                         | Varies by platform                        |
-    /// | Warm read cost                        | Platform dependent; ~ 3-56ns @ 4GHz       |
-    /// | Cold read cost                        | Platform dependent; ~ 165ns-15.9µs @ 4GHz |
-    /// | Step granularity                      | Platform dependent; 42ns-1ms              |
+    /// | Property                              | Value                                           |
+    /// | ------------------------------------- | ----------------------------------------------- |
+    /// | Reacts to OS time changes             | ✅ No                                           |
+    /// | Reacts to NTP changes                 | Varies by platform                              |
+    /// | Counts system suspension times        | ✅ No, but runtime-dependent on WASI & Fallback |
+    /// | Advances while thread is de-scheduled | ❌ Yes                                          |
+    /// | Might appear to go backwards          | ✅ No                                           |
+    /// | Reads a cached value                  | Varies by platform                              |
+    /// | Max staleness                         | Varies by platform                              |
+    /// | Warm read cost                        | Platform dependent; ~ 3-56ns @ 4GHz             |
+    /// | Cold read cost                        | Platform dependent; ~ 165ns-15.9µs @ 4GHz       |
+    /// | Step granularity                      | Platform dependent; 42ns-1ms                    |
     ///
     /// | Platform       | Clock                                    |
     /// | -------------- | ---------------------------------------- |
@@ -366,8 +366,6 @@ extension GenericSystemClock {
 
     /// CPU time the kernel has used on this process's behalf.
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
-    ///
     /// Neither wasi-libc nor `<chrono>` has a cpu-time clock, so both fall back to `monotonic`.
     ///
     /// Measures CPU time the kernel spent on this process's behalf
@@ -409,8 +407,6 @@ extension GenericSystemClock {
 
     /// CPU time the calling thread has used running its own code.
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
-    ///
     /// Neither wasi-libc nor `<chrono>` has a cpu-time clock, so both fall back to `monotonic`.
     ///
     /// Measures CPU time this thread spent running its own code
@@ -451,8 +447,6 @@ extension GenericSystemClock {
     }
 
     /// CPU time the kernel has used on the calling thread's behalf.
-    ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
     ///
     /// Neither wasi-libc nor `<chrono>` has a cpu-time clock, so both fall back to `monotonic`.
     ///

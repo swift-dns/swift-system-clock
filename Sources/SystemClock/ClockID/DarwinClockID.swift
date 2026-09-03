@@ -199,7 +199,7 @@ extension DarwinClockID {
     ///
     /// [getrusage(2)](https://keith.github.io/xcode-man-pages/getrusage.2.html)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time this process spent running its own code
     ///
@@ -224,7 +224,7 @@ extension DarwinClockID {
     ///
     /// [getrusage(2)](https://keith.github.io/xcode-man-pages/getrusage.2.html)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time the kernel spent on this process's behalf
     ///
@@ -249,7 +249,7 @@ extension DarwinClockID {
     ///
     /// [thread_info](https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/mach/thread_act.defs)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time this thread spent running its own code
     ///
@@ -274,7 +274,7 @@ extension DarwinClockID {
     ///
     /// [thread_info](https://github.com/apple-oss-distributions/xnu/blob/main/osfmk/mach/thread_act.defs)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time the kernel spent on this thread's behalf
     ///

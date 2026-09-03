@@ -10,13 +10,10 @@ extern "C" {
 // `<chrono>` has no clock ids; each of its clocks is a C++ type. These ids are this library's own
 // identifiers, translated to a type in `csystem_clock_std_chrono.cpp`.
 
-#define CSYSTEM_CLOCK_STD_CHRONO_UNAVAILABLE 0
 #define CSYSTEM_CLOCK_STD_CHRONO_MONOTONIC 1
 #define CSYSTEM_CLOCK_STD_CHRONO_REALTIME 2
 #define CSYSTEM_CLOCK_STD_CHRONO_HIGH_RESOLUTION 3
 
-static const int32_t csystem_clock_std_chrono_unavailable =
-    CSYSTEM_CLOCK_STD_CHRONO_UNAVAILABLE;
 static const int32_t csystem_clock_std_chrono_monotonic = CSYSTEM_CLOCK_STD_CHRONO_MONOTONIC;
 static const int32_t csystem_clock_std_chrono_realtime = CSYSTEM_CLOCK_STD_CHRONO_REALTIME;
 static const int32_t csystem_clock_std_chrono_high_resolution =

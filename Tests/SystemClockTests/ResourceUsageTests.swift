@@ -5,47 +5,18 @@ import Testing
 
 @Suite
 struct ResourceUsageTests {
-    static var all: [TestClock<Swift.Duration>] {
-        [
-            TestClock(
-                name: "processUserTime",
-                clock: .processUserTime,
-                isMonotonic: true,
-                followsElapsedTime: false
-            ),
-            TestClock(
-                name: "processSystemTime",
-                clock: .processSystemTime,
-                isMonotonic: true,
-                followsElapsedTime: false
-            ),
-            TestClock(
-                name: "threadUserTime",
-                clock: .threadUserTime,
-                isMonotonic: true,
-                followsElapsedTime: false
-            ),
-            TestClock(
-                name: "threadSystemTime",
-                clock: .threadSystemTime,
-                isMonotonic: true,
-                followsElapsedTime: false
-            ),
-        ]
-    }
-
-    @Test(arguments: Self.all)
-    func `every half reads`(testClock: TestClock<Swift.Duration>) {
+    @Test(arguments: TestClock<Swift.Duration>.allResourceUsageClocks)
+    func `every clock reads`(testClock: TestClock<Swift.Duration>) {
         _ = testClock.clock.now
     }
 
-    @Test(arguments: Self.all)
-    func `every half reports a positive resolution`(testClock: TestClock<Swift.Duration>) {
+    @Test(arguments: TestClock<Swift.Duration>.allResourceUsageClocks)
+    func `every clock reports a positive resolution`(testClock: TestClock<Swift.Duration>) {
         #expect(testClock.clock.minimumResolution > .zero)
     }
 
-    @Test(arguments: Self.all)
-    func `no half ever goes backwards`(testClock: TestClock<Swift.Duration>) {
+    @Test(arguments: TestClock<Swift.Duration>.allResourceUsageClocks)
+    func `no clock ever goes backwards`(testClock: TestClock<Swift.Duration>) {
         var previous = testClock.clock.now
         for _ in 0..<1_000 {
             let current = testClock.clock.now
@@ -54,7 +25,7 @@ struct ResourceUsageTests {
         }
     }
 
-    /// The halves split the very reading the whole cpu-time clock takes, so they must add back up
+    /// The user and system clocks split the very reading the whole cpu-time clock takes, so they must add back up
     /// to it beyond the microsecond each is rounded to.
     @Test(
         arguments: [
@@ -70,14 +41,14 @@ struct ResourceUsageTests {
             ),
         ]
     )
-    func `the halves add up to the whole`(
+    func `the user and system clocks add up to the whole CPU time clock`(
         user: GenericSystemClock<Swift.Duration>,
         system: GenericSystemClock<Swift.Duration>,
         whole: GenericSystemClock<Swift.Duration>
     ) {
         let epoch = GenericSystemClock<Swift.Duration>.Instant.epoch
         let total = epoch.duration(to: user.now) + epoch.duration(to: system.now)
-        #expect(isClose(total, epoch.duration(to: whole.now), within: .milliseconds(50)))
+        #expect(isClose(total, epoch.duration(to: whole.now), within: .milliseconds(10)))
     }
 
     @Test(
@@ -86,7 +57,7 @@ struct ResourceUsageTests {
             GenericSystemClock<Swift.Duration>.threadUserTime,
         ]
     )
-    func `busy work advances the user half`(clock: GenericSystemClock<Swift.Duration>) {
+    func `busy work advances the user clock`(clock: GenericSystemClock<Swift.Duration>) {
         let start = clock.now
 
         let burnStart = GenericSystemClock<Swift.Duration>.suspending.now

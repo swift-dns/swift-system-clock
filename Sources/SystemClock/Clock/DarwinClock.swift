@@ -4,6 +4,7 @@ public import Darwin
 public import CSystemClock
 
 @usableFromInline
+@_assemblyVision
 struct DarwinClock: Sendable {
     @usableFromInline
     let id: clockid_t
@@ -55,7 +56,7 @@ struct DarwinClock: Sendable {
     @inlinable
     func readClockGettime() -> CompactDuration? {
         let nanoseconds = clock_gettime_nsec_np(self.id)
-        if nanoseconds == 0 {
+        guard nanoseconds &- 1 < UInt64(Int64.max) else {
             return nil
         }
         return CompactDuration(nanoseconds: Int64(bitPattern: nanoseconds))
@@ -83,7 +84,7 @@ struct DarwinClock: Sendable {
         return (Self.duration(from: info.user_time), Self.duration(from: info.system_time))
     }
 
-    /// A `thread_info(2)` reading, which Mach normalises to a remainder in `0..<1000000`.
+    /// A `thread_info` reading, which Mach normalises to a remainder in `0..<1000000`.
     @inlinable
     static func duration(from value: time_value_t) -> CompactDuration {
         let seconds = Int64(value.seconds) * 1_000_000_000

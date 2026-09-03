@@ -1,8 +1,8 @@
 /// A point in time.
 ///
 /// ```swift
-/// /// Start is of type `SystemClock.Instant` == `Instant<CompactDuration>`
-/// let start: Instant<CompactDuration> = SystemClock.suspending.now
+/// /// Start is of type `SystemClock.Instant` == `SystemInstant<CompactDuration>`
+/// let start: SystemInstant<CompactDuration> = SystemClock.suspending.now
 /// doWork()
 /// let elapsed: SystemClock.Duration = start.duration(to: SystemClock.suspending.now)
 /// ```
@@ -94,26 +94,26 @@ extension SystemInstant where Duration: AdditiveArithmetic {
 
     @inlinable
     public static func + (lhs: Self, rhs: Duration) -> Self {
-        lhs.advanced(by: rhs)
+        Self(_value: lhs._value + rhs)
     }
 
     @inlinable
     public static func += (lhs: inout Self, rhs: Duration) {
-        lhs = lhs.advanced(by: rhs)
+        lhs._value += rhs
     }
 
     @inlinable
     public static func - (lhs: Self, rhs: Duration) -> Self {
-        lhs.advanced(by: .zero - rhs)
+        Self(_value: lhs._value - rhs)
     }
 
     @inlinable
     public static func -= (lhs: inout Self, rhs: Duration) {
-        lhs = lhs.advanced(by: .zero - rhs)
+        lhs._value -= rhs
     }
 
     @inlinable
     public static func - (lhs: Self, rhs: Self) -> Duration {
-        lhs.advanced(by: .zero - rhs._value)._value
+        lhs._value - rhs._value
     }
 }

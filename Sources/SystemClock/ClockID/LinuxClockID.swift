@@ -268,7 +268,7 @@ extension LinuxClockID {
     ///
     /// [getrusage(2)](https://man7.org/linux/man-pages/man2/getrusage.2.html)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time this process spent running its own code
     ///
@@ -293,7 +293,7 @@ extension LinuxClockID {
     ///
     /// [getrusage(2)](https://man7.org/linux/man-pages/man2/getrusage.2.html)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time the kernel spent on this process's behalf
     ///
@@ -318,7 +318,7 @@ extension LinuxClockID {
     ///
     /// [getrusage(2)](https://man7.org/linux/man-pages/man2/getrusage.2.html)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time this thread spent running its own code
     ///
@@ -343,7 +343,7 @@ extension LinuxClockID {
     ///
     /// [getrusage(2)](https://man7.org/linux/man-pages/man2/getrusage.2.html)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time the kernel spent on this thread's behalf
     ///

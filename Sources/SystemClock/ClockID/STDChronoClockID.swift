@@ -14,12 +14,6 @@ public struct STDChronoClockID: Sendable, Hashable, RawRepresentable {
 }
 
 extension STDChronoClockID {
-    /// The id for a clock `<chrono>` has none of.
-    @inlinable
-    public static var unavailable: STDChronoClockID {
-        STDChronoClockID(rawValue: csystem_clock_std_chrono_unavailable)
-    }
-
     /// `std::chrono::steady_clock`
     ///
     /// [cppreference](https://en.cppreference.com/w/cpp/chrono/steady_clock)

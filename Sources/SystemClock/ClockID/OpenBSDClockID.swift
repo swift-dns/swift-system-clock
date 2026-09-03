@@ -153,7 +153,7 @@ extension OpenBSDClockID {
     ///
     /// [getrusage(2)](https://man.openbsd.org/getrusage.2)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time this process spent running its own code
     ///
@@ -178,7 +178,7 @@ extension OpenBSDClockID {
     ///
     /// [getrusage(2)](https://man.openbsd.org/getrusage.2)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time the kernel spent on this process's behalf
     ///
@@ -203,7 +203,7 @@ extension OpenBSDClockID {
     ///
     /// [getrusage(2)](https://man.openbsd.org/getrusage.2)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time this thread spent running its own code
     ///
@@ -228,7 +228,7 @@ extension OpenBSDClockID {
     ///
     /// [getrusage(2)](https://man.openbsd.org/getrusage.2)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time the kernel spent on this thread's behalf
     ///

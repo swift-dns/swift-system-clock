@@ -385,7 +385,7 @@ extension FreeBSDClockID {
     ///
     /// [getrusage(2)](https://man.freebsd.org/cgi/man.cgi?query=getrusage&sektion=2)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time this process spent running its own code
     ///
@@ -410,7 +410,7 @@ extension FreeBSDClockID {
     ///
     /// [getrusage(2)](https://man.freebsd.org/cgi/man.cgi?query=getrusage&sektion=2)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time the kernel spent on this process's behalf
     ///
@@ -435,7 +435,7 @@ extension FreeBSDClockID {
     ///
     /// [getrusage(2)](https://man.freebsd.org/cgi/man.cgi?query=getrusage&sektion=2)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time this thread spent running its own code
     ///
@@ -460,7 +460,7 @@ extension FreeBSDClockID {
     ///
     /// [getrusage(2)](https://man.freebsd.org/cgi/man.cgi?query=getrusage&sektion=2)
     ///
-    /// Not a clock id the platform declares: this library's own, selecting one half of one call.
+    /// This is this library's own clock identifier and not one of the clock ids the platform declares.
     ///
     /// Measures CPU time the kernel spent on this thread's behalf
     ///

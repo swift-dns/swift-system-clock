@@ -14,7 +14,8 @@ int64_t csystem_clock_std_chrono_read(void) {
         .count();
 }
 
-// `period` is the clock's tick as a ratio of a second, rounded up to a nanosecond.
+// `period` is the clock's tick as a ratio of a second, truncated to whole nanoseconds and never
+// reported below one.
 template <typename Clock>
 int64_t csystem_clock_std_chrono_resolution(void) {
     const int64_t nanoseconds =

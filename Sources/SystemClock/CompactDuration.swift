@@ -144,7 +144,6 @@ extension CompactDuration {
     /// ```
     ///
     /// - Returns: A `CompactDuration` representing a given number of nanoseconds.
-    @available(SwiftStdlib 6.2, *)
     public static func nanoseconds(_ nanoseconds: Double) -> CompactDuration {
         CompactDuration(nanoseconds, scale: 1)
     }

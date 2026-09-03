@@ -145,7 +145,7 @@ static const int32_t csystem_clock_openbsd_boottime = CSYSTEM_CLOCK_OPENBSD_BOOT
 
 // MARK: - Resource usage
 // No platform has a clock id for one half of its cpu time; the halves come from `getrusage(2)`,
-// or `thread_info(2)` where `getrusage(2)` is not per-thread.
+// or Mach's `thread_info` where `getrusage(2)` is not per-thread.
 
 #define CSYSTEM_CLOCK_PROCESS_USER_CPU_TIME 1001
 #define CSYSTEM_CLOCK_PROCESS_SYSTEM_CPU_TIME 1002

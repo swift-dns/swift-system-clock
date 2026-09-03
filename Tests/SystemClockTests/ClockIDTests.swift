@@ -116,13 +116,15 @@ struct ClockIDTests {
     }
 
     @Test func `std::chrono ids are all distinct`() {
-        let ids: [STDChronoClockID] = [.unavailable, .monotonic, .realtime, .highResolution]
+        let ids: [STDChronoClockID] = [.monotonic, .realtime, .highResolution]
         #expect(Set(ids).count == ids.count)
     }
 
     @Test func `RawRepresentable round-trips`() {
         #expect(DarwinClockID(rawValue: DarwinClockID.uptimeRaw.rawValue) == .uptimeRaw)
+        #expect(FreeBSDClockID(rawValue: FreeBSDClockID.uptime.rawValue) == .uptime)
         #expect(LinuxClockID(rawValue: LinuxClockID.boottime.rawValue) == .boottime)
+        #expect(OpenBSDClockID(rawValue: OpenBSDClockID.realtime.rawValue) == .realtime)
         #expect(WindowsClockID(rawValue: WindowsClockID.tickCount.rawValue) == .tickCount)
         #expect(WASIClockID(rawValue: WASIClockID.monotonic.rawValue) == .monotonic)
         #expect(
@@ -143,10 +145,9 @@ struct ClockIDTests {
         #expect(Set(ids) == Set(expected))
     }
 
-    /// WASI and Windows number their ids from zero too, so only the case keeps them apart.
+    /// WASI and Windows number their ids from one too, so only the case keeps them apart.
     @Test func `an std::chrono id never equals another platform's id of the same number`() {
         let ids: [AnySystemClockID] = [
-            .stdChrono(.unavailable),
             .stdChrono(.monotonic),
             .stdChrono(.realtime),
             .stdChrono(.highResolution),
@@ -187,6 +188,46 @@ struct ClockIDTests {
         #expect(clock.currentClockID == .stdChrono(.highResolution))
         #endif
     }
+
+    static var rejected: GenericSystemClock<Swift.Duration> {
+        GenericSystemClock(
+            darwin: DarwinClockID(rawValue: 9_999),
+            linux: LinuxClockID(rawValue: 9_999),
+            windows: WindowsClockID(rawValue: 9_999),
+            freebsd: FreeBSDClockID(rawValue: 9_999),
+            openbsd: OpenBSDClockID(rawValue: 9_999),
+            wasi: WASIClockID(rawValue: 9_999),
+            fallback: STDChronoClockID(rawValue: 9_999)
+        )
+    }
+
+    @Test func `a rejected id is still the id the clock reports`() {
+        #if canImport(Darwin)
+        #expect(Self.rejected.currentClockID == .darwin(DarwinClockID(rawValue: 9_999)))
+        #elseif os(Linux) || os(Android)
+        #expect(Self.rejected.currentClockID == .linux(LinuxClockID(rawValue: 9_999)))
+        #elseif os(Windows)
+        #expect(Self.rejected.currentClockID == .windows(WindowsClockID(rawValue: 9_999)))
+        #elseif os(FreeBSD)
+        #expect(Self.rejected.currentClockID == .freebsd(FreeBSDClockID(rawValue: 9_999)))
+        #elseif os(OpenBSD)
+        #expect(Self.rejected.currentClockID == .openbsd(OpenBSDClockID(rawValue: 9_999)))
+        #endif
+    }
+
+    #if os(macOS) || os(Linux) || os(FreeBSD) || os(OpenBSD) || os(Windows)
+    @Test func `reading a clock the operating system rejects traps`() async {
+        await #expect(processExitsWith: .failure) {
+            _ = ClockIDTests.rejected.now
+        }
+    }
+
+    @Test func `asking a rejected clock for its resolution traps`() async {
+        await #expect(processExitsWith: .failure) {
+            _ = ClockIDTests.rejected.minimumResolution
+        }
+    }
+    #endif
 }
 
 /// A default clock paired with the platform id it is built from, so that ``currentClockID`` can

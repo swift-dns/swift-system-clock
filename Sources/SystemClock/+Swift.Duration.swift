@@ -1,5 +1,8 @@
 @available(SwiftStdlib 5.7, *)
 extension Swift.Duration: SystemDurationProtocol {
+    /// The duration as a count of nanoseconds, with the attoseconds below a nanosecond dropped.
+    ///
+    /// Traps for a duration outside ±292 years, which is what 64 bits of nanoseconds hold.
     @inlinable
     public var nanoseconds: Int64 {
         let components = self.components
@@ -14,6 +17,6 @@ extension Swift.Duration: SystemDurationProtocol {
                 return total
             }
         }
-        return components.seconds < 0 ? .min : .max
+        fatalError("SystemClock: the duration does not fit in 64 bits of nanoseconds")
     }
 }

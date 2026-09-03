@@ -24,18 +24,20 @@ extension WASIClockID {
     ///
     /// Measures Wall time, counted from 1970-01-01 UTC
     ///
-    /// | Property                              | Value             |
-    /// | ------------------------------------- | ----------------- |
-    /// | Reacts to OS time changes             | Runtime-dependent |
-    /// | Reacts to NTP changes                 | Runtime-dependent |
-    /// | Counts system suspension times        | Runtime-dependent |
-    /// | Advances while thread is de-scheduled | ❌ Yes             |
-    /// | Might appear to go backwards          | Runtime-dependent |
-    /// | Reads a cached value                  | Runtime-dependent |
-    /// | Max staleness                         | ✅ None            |
-    /// | Warm read cost                        | ~ 57ns @ 4GHz     |
-    /// | Cold read cost                        | N/A               |
-    /// | Step granularity                      | 1µs               |
+    /// Whether it actually counts from 1970 (not e.g. boot time) is runtime-dependent.
+    ///
+    /// | Property                              | Value                                 |
+    /// | ------------------------------------- | ------------------------------------- |
+    /// | Reacts to OS time changes             | Runtime-dependent                     |
+    /// | Reacts to NTP changes                 | Runtime-dependent                     |
+    /// | Counts system suspension times        | Runtime-dependent                     |
+    /// | Advances while thread is de-scheduled | ❌ Yes                                |
+    /// | Might appear to go backwards          | Runtime-dependent                     |
+    /// | Reads a cached value                  | Runtime-dependent                     |
+    /// | Max staleness                         | ✅ None                               |
+    /// | Warm read cost                        | ~ 29-282ns; ~ 57ns on wasmtime @ 4GHz |
+    /// | Cold read cost                        | N/A                                   |
+    /// | Step granularity                      | 1µs on wasmtime                       |
     @inlinable
     public static var realtime: WASIClockID {
         WASIClockID(rawValue: csystem_clock_wasi_realtime)
@@ -47,18 +49,18 @@ extension WASIClockID {
     ///
     /// Measures Elapsed time, from an arbitrary point
     ///
-    /// | Property                              | Value             |
-    /// | ------------------------------------- | ----------------- |
-    /// | Reacts to OS time changes             | ✅ No              |
-    /// | Reacts to NTP changes                 | Runtime-dependent |
-    /// | Counts system suspension times        | Runtime-dependent |
-    /// | Advances while thread is de-scheduled | ❌ Yes             |
-    /// | Might appear to go backwards          | ✅ No              |
-    /// | Reads a cached value                  | Runtime-dependent |
-    /// | Max staleness                         | ✅ None            |
-    /// | Warm read cost                        | ~ 56ns @ 4GHz     |
-    /// | Cold read cost                        | N/A               |
-    /// | Step granularity                      | 42ns              |
+    /// | Property                              | Value                                 |
+    /// | ------------------------------------- | ------------------------------------- |
+    /// | Reacts to OS time changes             | ✅ No                                 |
+    /// | Reacts to NTP changes                 | Runtime-dependent                     |
+    /// | Counts system suspension times        | Runtime-dependent                     |
+    /// | Advances while thread is de-scheduled | ❌ Yes                                |
+    /// | Might appear to go backwards          | ✅ No                                 |
+    /// | Reads a cached value                  | Runtime-dependent                     |
+    /// | Max staleness                         | ✅ None                               |
+    /// | Warm read cost                        | ~ 25-284ns; ~ 56ns on wasmtime @ 4GHz |
+    /// | Cold read cost                        | N/A                                   |
+    /// | Step granularity                      | 42ns on wasmtime                      |
     @inlinable
     public static var monotonic: WASIClockID {
         WASIClockID(rawValue: csystem_clock_wasi_monotonic)

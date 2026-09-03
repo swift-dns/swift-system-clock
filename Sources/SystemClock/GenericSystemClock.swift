@@ -63,7 +63,7 @@ public struct GenericSystemClock<Duration>: Sendable {
     /// Creates a clock from the id belonging to the platform being compiled for.
     ///
     /// Android takes `linux`, and every Apple platform takes `darwin`.
-    /// Unidentified platforms or platforms with no libc will take `fallback` which uses `std::chrono` clocks.
+    /// A platform this library has no ids for takes `fallback`, which uses `std::chrono` clocks.
     @inlinable
     public init(
         darwin: DarwinClockID,
@@ -103,28 +103,34 @@ public typealias SystemClock = GenericSystemClock<CompactDuration>
 @_unavailableInEmbedded
 extension GenericSystemClock where Duration: SystemDurationProtocol {
     /// The current instant.
+    ///
+    /// Traps if the operating system rejects the clock's id, or reports a time outside the ±292
+    /// years that 64 bits of nanoseconds hold.
     @inlinable
     public var now: Instant {
         guard let reading = self.clock.read() else {
             fatalError(
-                "SystemClock: the operating system rejected either the clock's id or its reading"
+                "SystemClock: the operating system rejected the clock's id or its reading, or reported a time outside ±292 years"
             )
         }
         return Instant(_value: .nanoseconds(reading.nanoseconds))
     }
 
-    /// The smallest non-zero difference the clock reports between two instants.
+    /// The resolution the platform reports for the clock, or a fixed estimate.
     ///
-    /// This is `clock_getres` where the platform has a clock id for the clock, and a fixed
+    /// This is `clock_getres` where the platform has a clock id for the clock, the runtime's
+    /// `clock_res_get` on WASI, the `period` of the `std::chrono` type on the fallback, and a fixed
     /// estimate for the clocks that use `getrusage`/`thread_info` or Windows tick clocks.
     ///
-    /// This is a lower bound rather than a measurement.
+    /// It is neither a measurement nor a bound: the reported value can exceed the step the clock
+    /// actually takes, as with the Windows tick clocks, FreeBSD's `virtual` and `prof`, OpenBSD's
+    /// cpu-time clocks and wasmtime's `monotonic`, or fall short of it, as with cached clocks.
     /// For measurements, see the "Step granularity" row of each clock's table.
     @inlinable
     public var minimumResolution: Duration {
         guard let reading = self.clock.resolution() else {
             fatalError(
-                "SystemClock: the operating system rejected either the clock's id or its resolution"
+                "SystemClock: the operating system rejected the clock's id or its resolution, or reported a resolution outside ±292 years."
             )
         }
         return Duration.nanoseconds(reading.nanoseconds)

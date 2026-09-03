@@ -30,7 +30,6 @@ struct CompactDurationTests {
         #expect(CompactDuration.microseconds(-382.9).nanoseconds == -382_900)
     }
 
-    @available(SwiftStdlib 6.2, *)
     @Test func `the double nanosecond factory rounds to the nearest nanosecond`() {
         #expect(CompactDuration.nanoseconds(382.9).nanoseconds == 383)
         #expect(CompactDuration.nanoseconds(382.4).nanoseconds == 382)
@@ -54,10 +53,6 @@ struct CompactDurationTests {
         #expect(CompactDuration.microseconds(1) == .nanoseconds(1_000))
     }
 
-    /// `CompactDuration` is what `SystemClock` reports, so it has to agree with the `Duration`
-    /// the standard library would have reported for the same call. A fractional value can land a
-    /// nanosecond apart, because `CompactDuration` rounds where `Duration` keeps attoseconds and
-    /// this module's `nanoseconds` truncates them.
     @Test func `the integer factories agree with Swift Duration`() {
         #expect(CompactDuration.seconds(7).nanoseconds == Swift.Duration.seconds(7).nanoseconds)
         #expect(
