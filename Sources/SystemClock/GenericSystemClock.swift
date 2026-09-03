@@ -33,8 +33,6 @@
 /// ```
 @available(SwiftStdlib 5.7, *)
 @_unavailableInEmbedded
-@_assemblyVision
-@_semantics("optremark")
 public struct GenericSystemClock<Duration>: Sendable {
     public typealias Instant = SystemInstant<Duration>
 
@@ -108,7 +106,9 @@ extension GenericSystemClock where Duration: SystemDurationProtocol {
     @inlinable
     public var now: Instant {
         guard let reading = self.clock.read() else {
-            fatalError("SystemClock: the operating system rejected the clock's id")
+            fatalError(
+                "SystemClock: the operating system rejected either the clock's id or its reading"
+            )
         }
         return Instant(_value: .nanoseconds(reading.nanoseconds))
     }
@@ -123,7 +123,9 @@ extension GenericSystemClock where Duration: SystemDurationProtocol {
     @inlinable
     public var minimumResolution: Duration {
         guard let reading = self.clock.resolution() else {
-            fatalError("SystemClock: the operating system rejected the clock's id")
+            fatalError(
+                "SystemClock: the operating system rejected either the clock's id or its resolution"
+            )
         }
         return Duration.nanoseconds(reading.nanoseconds)
     }

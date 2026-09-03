@@ -4,7 +4,6 @@ public import Darwin
 public import CSystemClock
 
 @usableFromInline
-@_assemblyVision
 struct DarwinClock: Sendable {
     @usableFromInline
     let id: clockid_t

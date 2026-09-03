@@ -224,18 +224,18 @@ extension LinuxClockID {
     ///
     /// Measures CPU time used by this process
     ///
-    /// | Property                              | Value             |
-    /// | ------------------------------------- | ----------------- |
-    /// | Reacts to OS time changes             | ✅ No              |
-    /// | Reacts to NTP changes                 | ✅ No              |
-    /// | Counts system suspension times        | ✅ No              |
-    /// | Advances while thread is de-scheduled | ✅ No              |
-    /// | Might appear to go backwards          | ✅ No              |
-    /// | Reads a cached value                  | ✅ No              |
-    /// | Max staleness                         | ❌ ~ 1ms @ HZ 1000 |
-    /// | Warm read cost                        | ~ 165ns @ 4GHz    |
-    /// | Cold read cost                        | ~ 7µs @ 4GHz      |
-    /// | Step granularity                      | 170ns             |
+    /// | Property                              | Value                         |
+    /// | ------------------------------------- | ----------------------------- |
+    /// | Reacts to OS time changes             | ✅ No                         |
+    /// | Reacts to NTP changes                 | ✅ No                         |
+    /// | Counts system suspension times        | ✅ No                         |
+    /// | Advances while thread is de-scheduled | ✅ No                         |
+    /// | Might appear to go backwards          | ✅ No                         |
+    /// | Reads a cached value                  | ✅ No                         |
+    /// | Max staleness                         | ❌ ~ 1ms @ HZ 1000            |
+    /// | Warm read cost                        | ~ 165ns + ~ 6ns/thread @ 4GHz |
+    /// | Cold read cost                        | ~ 7µs @ 4GHz                  |
+    /// | Step granularity                      | 170ns                         |
     @inlinable
     public static var processCPUTime: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_linux_process_cpu_time)
@@ -272,18 +272,18 @@ extension LinuxClockID {
     ///
     /// Measures CPU time this process spent running its own code
     ///
-    /// | Property                              | Value             |
-    /// | ------------------------------------- | ----------------- |
-    /// | Reacts to OS time changes             | ✅ No              |
-    /// | Reacts to NTP changes                 | ✅ No              |
-    /// | Counts system suspension times        | ✅ No              |
-    /// | Advances while thread is de-scheduled | ✅ No              |
-    /// | Might appear to go backwards          | ✅ No              |
-    /// | Reads a cached value                  | ✅ No              |
-    /// | Max staleness                         | ❌ ~ 1ms @ HZ 1000 |
-    /// | Warm read cost                        | ~ 220ns @ 4GHz    |
-    /// | Cold read cost                        | ~ 4µs @ 4GHz      |
-    /// | Step granularity                      | 1µs               |
+    /// | Property                              | Value                          |
+    /// | ------------------------------------- | ------------------------------ |
+    /// | Reacts to OS time changes             | ✅ No                          |
+    /// | Reacts to NTP changes                 | ✅ No                          |
+    /// | Counts system suspension times        | ✅ No                          |
+    /// | Advances while thread is de-scheduled | ✅ No                          |
+    /// | Might appear to go backwards          | ✅ No                          |
+    /// | Reads a cached value                  | ✅ No                          |
+    /// | Max staleness                         | ❌ ~ 1ms @ HZ 1000             |
+    /// | Warm read cost                        | ~ 220ns + ~ 12ns/thread @ 4GHz |
+    /// | Cold read cost                        | ~ 4µs @ 4GHz                   |
+    /// | Step granularity                      | 1µs                            |
     @inlinable
     public static var processUserTime: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_process_user_cpu_time)
@@ -297,18 +297,18 @@ extension LinuxClockID {
     ///
     /// Measures CPU time the kernel spent on this process's behalf
     ///
-    /// | Property                              | Value             |
-    /// | ------------------------------------- | ----------------- |
-    /// | Reacts to OS time changes             | ✅ No              |
-    /// | Reacts to NTP changes                 | ✅ No              |
-    /// | Counts system suspension times        | ✅ No              |
-    /// | Advances while thread is de-scheduled | ✅ No              |
-    /// | Might appear to go backwards          | ✅ No              |
-    /// | Reads a cached value                  | ✅ No              |
-    /// | Max staleness                         | ❌ ~ 1ms @ HZ 1000 |
-    /// | Warm read cost                        | ~ 220ns @ 4GHz    |
-    /// | Cold read cost                        | ~ 3.5µs @ 4GHz    |
-    /// | Step granularity                      | 1µs               |
+    /// | Property                              | Value                          |
+    /// | ------------------------------------- | ------------------------------ |
+    /// | Reacts to OS time changes             | ✅ No                          |
+    /// | Reacts to NTP changes                 | ✅ No                          |
+    /// | Counts system suspension times        | ✅ No                          |
+    /// | Advances while thread is de-scheduled | ✅ No                          |
+    /// | Might appear to go backwards          | ✅ No                          |
+    /// | Reads a cached value                  | ✅ No                          |
+    /// | Max staleness                         | ❌ ~ 1ms @ HZ 1000             |
+    /// | Warm read cost                        | ~ 220ns + ~ 12ns/thread @ 4GHz |
+    /// | Cold read cost                        | ~ 3.5µs @ 4GHz                 |
+    /// | Step granularity                      | 1µs                            |
     @inlinable
     public static var processSystemTime: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_process_system_cpu_time)

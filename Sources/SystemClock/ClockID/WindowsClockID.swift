@@ -203,18 +203,18 @@ extension WindowsClockID {
     ///
     /// Measures CPU time used by this process
     ///
-    /// | Property                              | Value                  |
-    /// | ------------------------------------- | ---------------------- |
-    /// | Reacts to OS time changes             | ✅ No                   |
-    /// | Reacts to NTP changes                 | ✅ No                   |
-    /// | Counts system suspension times        | ✅ No                   |
-    /// | Advances while thread is de-scheduled | ✅ No                   |
-    /// | Might appear to go backwards          | ✅ No                   |
-    /// | Reads a cached value                  | ❌ Yes                  |
-    /// | Max staleness                         | ❌ ~ 15.6ms @ 64Hz tick |
-    /// | Warm read cost                        | ~ 120ns @ 4GHz         |
-    /// | Cold read cost                        | ~ 2.6µs @ 4GHz         |
-    /// | Step granularity                      | 15.625ms @ 64Hz tick   |
+    /// | Property                              | Value                               |
+    /// | ------------------------------------- | ----------------------------------- |
+    /// | Reacts to OS time changes             | ✅ No                               |
+    /// | Reacts to NTP changes                 | ✅ No                               |
+    /// | Counts system suspension times        | ✅ No                               |
+    /// | Advances while thread is de-scheduled | ✅ No                               |
+    /// | Might appear to go backwards          | ✅ No                               |
+    /// | Reads a cached value                  | ❌ Yes                              |
+    /// | Max staleness                         | ❌ ~ 15.6ms @ 64Hz tick             |
+    /// | Warm read cost                        | ~ 120ns + up to ~ 8ns/thread @ 4GHz |
+    /// | Cold read cost                        | ~ 2.6µs @ 4GHz                      |
+    /// | Step granularity                      | 15.625ms @ 64Hz tick                |
     @inlinable
     public static var processTime: WindowsClockID {
         WindowsClockID(rawValue: csystem_clock_windows_process_time)
@@ -251,18 +251,18 @@ extension WindowsClockID {
     ///
     /// Measures CPU time this process spent running its own code
     ///
-    /// | Property                              | Value                  |
-    /// | ------------------------------------- | ---------------------- |
-    /// | Reacts to OS time changes             | ✅ No                   |
-    /// | Reacts to NTP changes                 | ✅ No                   |
-    /// | Counts system suspension times        | ✅ No                   |
-    /// | Advances while thread is de-scheduled | ✅ No                   |
-    /// | Might appear to go backwards          | ✅ No                   |
-    /// | Reads a cached value                  | ❌ Yes                  |
-    /// | Max staleness                         | ❌ ~ 15.6ms @ 64Hz tick |
-    /// | Warm read cost                        | ~ 113ns @ 4GHz         |
-    /// | Cold read cost                        | ~ 2.7µs @ 4GHz         |
-    /// | Step granularity                      | 15.625ms @ 64Hz tick   |
+    /// | Property                              | Value                               |
+    /// | ------------------------------------- | ----------------------------------- |
+    /// | Reacts to OS time changes             | ✅ No                               |
+    /// | Reacts to NTP changes                 | ✅ No                               |
+    /// | Counts system suspension times        | ✅ No                               |
+    /// | Advances while thread is de-scheduled | ✅ No                               |
+    /// | Might appear to go backwards          | ✅ No                               |
+    /// | Reads a cached value                  | ❌ Yes                              |
+    /// | Max staleness                         | ❌ ~ 15.6ms @ 64Hz tick             |
+    /// | Warm read cost                        | ~ 113ns + up to ~ 8ns/thread @ 4GHz |
+    /// | Cold read cost                        | ~ 2.7µs @ 4GHz                      |
+    /// | Step granularity                      | 15.625ms @ 64Hz tick                |
     @inlinable
     public static var processUserTime: WindowsClockID {
         WindowsClockID(rawValue: csystem_clock_process_user_cpu_time)
@@ -276,18 +276,18 @@ extension WindowsClockID {
     ///
     /// Measures CPU time the kernel spent on this process's behalf
     ///
-    /// | Property                              | Value                  |
-    /// | ------------------------------------- | ---------------------- |
-    /// | Reacts to OS time changes             | ✅ No                   |
-    /// | Reacts to NTP changes                 | ✅ No                   |
-    /// | Counts system suspension times        | ✅ No                   |
-    /// | Advances while thread is de-scheduled | ✅ No                   |
-    /// | Might appear to go backwards          | ✅ No                   |
-    /// | Reads a cached value                  | ❌ Yes                  |
-    /// | Max staleness                         | ❌ ~ 15.6ms @ 64Hz tick |
-    /// | Warm read cost                        | ~ 115ns @ 4GHz         |
-    /// | Cold read cost                        | ~ 2.8µs @ 4GHz         |
-    /// | Step granularity                      | 15.625ms @ 64Hz tick   |
+    /// | Property                              | Value                               |
+    /// | ------------------------------------- | ----------------------------------- |
+    /// | Reacts to OS time changes             | ✅ No                               |
+    /// | Reacts to NTP changes                 | ✅ No                               |
+    /// | Counts system suspension times        | ✅ No                               |
+    /// | Advances while thread is de-scheduled | ✅ No                               |
+    /// | Might appear to go backwards          | ✅ No                               |
+    /// | Reads a cached value                  | ❌ Yes                              |
+    /// | Max staleness                         | ❌ ~ 15.6ms @ 64Hz tick             |
+    /// | Warm read cost                        | ~ 115ns + up to ~ 8ns/thread @ 4GHz |
+    /// | Cold read cost                        | ~ 2.8µs @ 4GHz                      |
+    /// | Step granularity                      | 15.625ms @ 64Hz tick                |
     @inlinable
     public static var processKernelTime: WindowsClockID {
         WindowsClockID(rawValue: csystem_clock_process_system_cpu_time)

@@ -155,18 +155,18 @@ extension DarwinClockID {
     ///
     /// Measures CPU time used by this process
     ///
-    /// | Property                              | Value          |
-    /// | ------------------------------------- | -------------- |
-    /// | Reacts to OS time changes             | ✅ No          |
-    /// | Reacts to NTP changes                 | ✅ No          |
-    /// | Counts system suspension times        | ✅ No          |
-    /// | Advances while thread is de-scheduled | ✅ No          |
-    /// | Might appear to go backwards          | ✅ No          |
-    /// | Reads a cached value                  | ✅ No          |
-    /// | Max staleness                         | ✅ None        |
-    /// | Warm read cost                        | ~ 210ns @ 4GHz |
-    /// | Cold read cost                        | ~ 1.3µs @ 4GHz |
-    /// | Step granularity                      | 1µs            |
+    /// | Property                              | Value                               |
+    /// | ------------------------------------- | ----------------------------------- |
+    /// | Reacts to OS time changes             | ✅ No                               |
+    /// | Reacts to NTP changes                 | ✅ No                               |
+    /// | Counts system suspension times        | ✅ No                               |
+    /// | Advances while thread is de-scheduled | ✅ No                               |
+    /// | Might appear to go backwards          | ✅ No                               |
+    /// | Reads a cached value                  | ✅ No                               |
+    /// | Max staleness                         | ✅ None                             |
+    /// | Warm read cost                        | ~ 210ns + up to ~ 8ns/thread @ 4GHz |
+    /// | Cold read cost                        | ~ 1.3µs @ 4GHz                      |
+    /// | Step granularity                      | 1µs                                 |
     @inlinable
     public static var processCPUTime: DarwinClockID {
         DarwinClockID(rawValue: csystem_clock_darwin_process_cpu_time)
@@ -203,18 +203,18 @@ extension DarwinClockID {
     ///
     /// Measures CPU time this process spent running its own code
     ///
-    /// | Property                              | Value          |
-    /// | ------------------------------------- | -------------- |
-    /// | Reacts to OS time changes             | ✅ No          |
-    /// | Reacts to NTP changes                 | ✅ No          |
-    /// | Counts system suspension times        | ✅ No          |
-    /// | Advances while thread is de-scheduled | ✅ No          |
-    /// | Might appear to go backwards          | ✅ No          |
-    /// | Reads a cached value                  | ✅ No          |
-    /// | Max staleness                         | ✅ None        |
-    /// | Warm read cost                        | ~ 210ns @ 4GHz |
-    /// | Cold read cost                        | ~ 4.3µs @ 4GHz |
-    /// | Step granularity                      | 1µs            |
+    /// | Property                              | Value                               |
+    /// | ------------------------------------- | ----------------------------------- |
+    /// | Reacts to OS time changes             | ✅ No                               |
+    /// | Reacts to NTP changes                 | ✅ No                               |
+    /// | Counts system suspension times        | ✅ No                               |
+    /// | Advances while thread is de-scheduled | ✅ No                               |
+    /// | Might appear to go backwards          | ✅ No                               |
+    /// | Reads a cached value                  | ✅ No                               |
+    /// | Max staleness                         | ✅ None                             |
+    /// | Warm read cost                        | ~ 210ns + up to ~ 8ns/thread @ 4GHz |
+    /// | Cold read cost                        | ~ 4.3µs @ 4GHz                      |
+    /// | Step granularity                      | 1µs                                 |
     @inlinable
     public static var processUserTime: DarwinClockID {
         DarwinClockID(rawValue: csystem_clock_process_user_cpu_time)
@@ -228,18 +228,18 @@ extension DarwinClockID {
     ///
     /// Measures CPU time the kernel spent on this process's behalf
     ///
-    /// | Property                              | Value          |
-    /// | ------------------------------------- | -------------- |
-    /// | Reacts to OS time changes             | ✅ No          |
-    /// | Reacts to NTP changes                 | ✅ No          |
-    /// | Counts system suspension times        | ✅ No          |
-    /// | Advances while thread is de-scheduled | ✅ No          |
-    /// | Might appear to go backwards          | ✅ No          |
-    /// | Reads a cached value                  | ✅ No          |
-    /// | Max staleness                         | ✅ None        |
-    /// | Warm read cost                        | ~ 210ns @ 4GHz |
-    /// | Cold read cost                        | ~ 4.5µs @ 4GHz |
-    /// | Step granularity                      | 1µs            |
+    /// | Property                              | Value                               |
+    /// | ------------------------------------- | ----------------------------------- |
+    /// | Reacts to OS time changes             | ✅ No                               |
+    /// | Reacts to NTP changes                 | ✅ No                               |
+    /// | Counts system suspension times        | ✅ No                               |
+    /// | Advances while thread is de-scheduled | ✅ No                               |
+    /// | Might appear to go backwards          | ✅ No                               |
+    /// | Reads a cached value                  | ✅ No                               |
+    /// | Max staleness                         | ✅ None                             |
+    /// | Warm read cost                        | ~ 210ns + up to ~ 8ns/thread @ 4GHz |
+    /// | Cold read cost                        | ~ 4.5µs @ 4GHz                      |
+    /// | Step granularity                      | 1µs                                 |
     @inlinable
     public static var processSystemTime: DarwinClockID {
         DarwinClockID(rawValue: csystem_clock_process_system_cpu_time)

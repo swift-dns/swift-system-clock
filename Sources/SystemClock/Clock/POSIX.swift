@@ -15,7 +15,11 @@ enum POSIX {
         /// This can overflow for year 2262, or if the number is too big and reports
         /// something else (for example imagine cumulative CPU time of lots of CPU cores).
         /// Therefore we won't do unchecked arithmetic here just to be safe.
-        let seconds = Int64(value.tv_sec) * 1_000_000_000
+        let (seconds, overflow) = Int64(value.tv_sec)
+            .multipliedReportingOverflow(by: 1_000_000_000)
+        if overflow {
+            fatalError("SystemClock: the operating system reported an out of range time")
+        }
         let nanoseconds = Int64(value.tv_nsec)
         /// Checked math here is unnecessary because `seconds` calc would likely overflow first anyway.
         return CompactDuration(nanoseconds: seconds &+ nanoseconds)
@@ -27,7 +31,11 @@ enum POSIX {
         /// This can overflow for year 2262, or if the number is too big and reports
         /// something else (for example imagine cumulative CPU time of lots of CPU cores).
         /// Therefore we won't do unchecked arithmetic here just to be safe.
-        let seconds = Int64(value.tv_sec) * 1_000_000_000
+        let (seconds, overflow) = Int64(value.tv_sec)
+            .multipliedReportingOverflow(by: 1_000_000_000)
+        if overflow {
+            fatalError("SystemClock: the operating system reported an out of range time")
+        }
         let microseconds = Int64(value.tv_usec) * 1_000
         /// Checked math here is unnecessary because `seconds` calc would likely overflow first anyway.
         return CompactDuration(nanoseconds: seconds &+ microseconds)
