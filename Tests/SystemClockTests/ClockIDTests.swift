@@ -115,11 +115,19 @@ struct ClockIDTests {
         #expect(Set(ids).count == ids.count)
     }
 
+    @Test func `std::chrono ids are all distinct`() {
+        let ids: [STDChronoClockID] = [.unavailable, .monotonic, .realtime, .highResolution]
+        #expect(Set(ids).count == ids.count)
+    }
+
     @Test func `RawRepresentable round-trips`() {
         #expect(DarwinClockID(rawValue: DarwinClockID.uptimeRaw.rawValue) == .uptimeRaw)
         #expect(LinuxClockID(rawValue: LinuxClockID.boottime.rawValue) == .boottime)
         #expect(WindowsClockID(rawValue: WindowsClockID.tickCount.rawValue) == .tickCount)
         #expect(WASIClockID(rawValue: WASIClockID.monotonic.rawValue) == .monotonic)
+        #expect(
+            STDChronoClockID(rawValue: STDChronoClockID.highResolution.rawValue) == .highResolution
+        )
     }
 
     @Test(arguments: ClockIDExpectation.all)
@@ -135,6 +143,24 @@ struct ClockIDTests {
         #expect(Set(ids) == Set(expected))
     }
 
+    /// WASI and Windows number their ids from zero too, so only the case keeps them apart.
+    @Test func `an std::chrono id never equals another platform's id of the same number`() {
+        let ids: [AnySystemClockID] = [
+            .stdChrono(.unavailable),
+            .stdChrono(.monotonic),
+            .stdChrono(.realtime),
+            .stdChrono(.highResolution),
+            .wasi(.realtime),
+            .wasi(.monotonic),
+            .windows(.performanceCounter),
+            .windows(.systemTime),
+            .linux(.realtime),
+            .linux(.monotonic),
+            .darwin(.realtime),
+        ]
+        #expect(Set(ids).count == ids.count)
+    }
+
     @Test func `an explicitly built clock reports the currentClockID it was given`() {
         let clock = GenericSystemClock<Swift.Duration>(
             darwin: .monotonic,
@@ -142,7 +168,8 @@ struct ClockIDTests {
             windows: .tickCount,
             freebsd: .second,
             openbsd: .monotonic,
-            wasi: .monotonic
+            wasi: .monotonic,
+            fallback: .highResolution
         )
         #if canImport(Darwin)
         #expect(clock.currentClockID == .darwin(.monotonic))
@@ -156,6 +183,8 @@ struct ClockIDTests {
         #expect(clock.currentClockID == .openbsd(.monotonic))
         #elseif os(WASI)
         #expect(clock.currentClockID == .wasi(.monotonic))
+        #else
+        #expect(clock.currentClockID == .stdChrono(.highResolution))
         #endif
     }
 }
@@ -241,7 +270,16 @@ extension ClockIDExpectation {
             .wasi(.monotonic),
         ]
         #else
-        #error("The SystemClock tests do not know which clock ids your platform uses.")
+        let ids: [AnySystemClockID] = [
+            .stdChrono(.realtime),
+            .stdChrono(.realtime),
+            .stdChrono(.monotonic),
+            .stdChrono(.monotonic),
+            .stdChrono(.monotonic),
+            .stdChrono(.monotonic),
+            .stdChrono(.monotonic),
+            .stdChrono(.monotonic),
+        ]
         #endif
 
         let clocks: [(String, GenericSystemClock<Swift.Duration>)] = [

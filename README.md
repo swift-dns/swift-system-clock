@@ -29,8 +29,8 @@
 
 Implements `SystemClock` which reads operating system clocks with no overhead.
 
-Supports `Darwin` (`Apple` platforms), `Linux` (Including `Android`), `Windows`, `FreeBSD`, `OpenBSD`[^1] and `WASI`.
-Also compiles on embedded platforms in a similar fashion to Swift standard library's `ContinuousClock`.
+Supports `Darwin` (`Apple` platforms), `Linux` (Including `Android`), `Windows`, `FreeBSD`, `OpenBSD`[^1], `WASI` and more.   
+Also compiles (merely) on embedded platforms in a similar fashion to Swift standard library's `ContinuousClock`.
 
 [^1]: Swift support for `OpenBSD` is a work-in-progress. This library doesn't have CI for `OpenBSD` yet so things can be flaky.
 
@@ -80,7 +80,8 @@ let realtimeClock = SystemClock(
     windows: .systemTimePrecise,
     freebsd: .realtimePrecise,
     openbsd: .realtime,
-    wasi: .realtime
+    wasi: .realtime,
+    fallback: .realtime
 )
 
 /// You can use `Swift.Duration` as well although `CompactDuration` is generally recommended.
@@ -90,11 +91,13 @@ let processCPUTimeClock = GenericSystemClock<Swift.Duration>(
     windows: .processTime,
     freebsd: .processCPUTime,
     openbsd: .processCPUTime,
-    wasi: .monotonic
+    wasi: .monotonic,
+    fallback: .monotonic
 )
 ```
 
-Every Apple platform takes `darwin`. Android takes `linux`.
+Every Apple platform takes `darwin`. Android takes `linux`.   
+Unidentified platforms or platforms with no libc will take `fallback` which uses `std::chrono` clocks.
 
 > [!NOTE]
 > `SystemClock` will only compile code for the platform you're deploying to.   
@@ -158,48 +161,49 @@ Here is a list of all supported clocks on each platform.
 > For better accuracy, measure under your own specific hardware and kernel.   
 > If you find a value generally/widely incorrect, please file an issue or open a pull request for it.
 
-| Clock                          | Darwin | Linux | Windows | FreeBSD | OpenBSD | WASI |
-| ------------------------------ | ------ | ----- | ------- | ------- | ------- | ---- |
-| `realtime`                     | ✅     | ✅     |         | ✅      | ✅      | ✅    |
-| `realtimePrecise`              |        |       |         | ✅       |         |      |
-| `realtimeFast`                 |        |       |         | ✅       |         |      |
-| `realtimeCoarse`               |        | ✅     |         |         |         |      |
-| `realtimeAlarm`                |        | ✅     |         |         |         |      |
-| `systemTime`                   |        |       | ✅       |         |         |      |
-| `systemTimePrecise`            |        |       | ✅       |         |         |      |
-| `second`                       |        |       |         | ✅       |         |      |
-| `tai`                          |        | ✅     |         | ✅       |        |      |
-| `monotonic`                    | ✅     | ✅     |         | ✅      | ✅      | ✅    |
-| `monotonicPrecise`             |        |       |         | ✅       |         |      |
-| `monotonicFast`                |        |       |         | ✅       |         |      |
-| `monotonicCoarse`              |        | ✅     |         |         |         |      |
-| `monotonicRaw`                 | ✅     | ✅     |         |         |         |      |
-| `monotonicRawApproximate`      | ✅     |        |         |         |         |      |
-| `performanceCounter`           |        |       | ✅       |         |         |      |
-| `interruptTime`                |        |       | ✅       |         |         |      |
-| `interruptTimePrecise`         |        |       | ✅       |         |         |      |
-| `unbiasedInterruptTime`        |        |       | ✅       |         |         |      |
-| `unbiasedInterruptTimePrecise` |        |       | ✅       |         |         |      |
-| `tickCount`                    |        |       | ✅       |         |         |      |
-| `boottime`                     |        | ✅     |         | ✅       | ✅      |      |
-| `boottimeAlarm`                |        | ✅     |         |         |         |      |
-| `uptime`                       |        |       |         | ✅       | ✅      |      |
-| `uptimePrecise`                |        |       |         | ✅       |         |      |
-| `uptimeFast`                   |        |       |         | ✅       |         |      |
-| `uptimeRaw`                    | ✅     |        |         |         |         |      |
-| `uptimeRawApproximate`         | ✅     |        |         |         |         |      |
-| `processCPUTime`               | ✅     | ✅     |         | ✅       | ✅      |      |
-| `processTime`                  |        |       | ✅       |         |         |      |
-| `threadCPUTime`                | ✅     | ✅     |         | ✅       | ✅      |      |
-| `threadTime`                   |        |       | ✅       |         |         |      |
-| `processUserTime`              | ✅     | ✅     | ✅      | ✅       | ✅      |      |
-| `processSystemTime`            | ✅     | ✅     |         | ✅       | ✅      |      |
-| `processKernelTime`            |        |       | ✅       |         |         |      |
-| `threadUserTime`               | ✅     | ✅     | ✅      | ✅       | ✅      |      |
-| `threadSystemTime`             | ✅     | ✅     |         | ✅       | ✅      |      |
-| `threadKernelTime`             |        |       | ✅       |         |         |      |
-| `virtual`                      |        |       |         | ✅       |         |      |
-| `prof`                         |        |       |         | ✅       |         |      |
+| Clock                          | Darwin | Linux | Windows | FreeBSD | OpenBSD | WASI | Fallback |
+| ------------------------------ | ------ | ----- | ------- | ------- | ------- | ---- | -------- |
+| `realtime`                     | ✅     | ✅     |         | ✅      | ✅      | ✅    | ✅        |
+| `realtimePrecise`              |        |       |         | ✅       |         |      |          |
+| `realtimeFast`                 |        |       |         | ✅       |         |      |          |
+| `realtimeCoarse`               |        | ✅     |         |         |         |      |          |
+| `realtimeAlarm`                |        | ✅     |         |         |         |      |          |
+| `systemTime`                   |        |       | ✅       |         |         |      |          |
+| `systemTimePrecise`            |        |       | ✅       |         |         |      |          |
+| `second`                       |        |       |         | ✅       |         |      |          |
+| `tai`                          |        | ✅     |         | ✅       |        |      |          |
+| `monotonic`                    | ✅     | ✅     |         | ✅      | ✅      | ✅    | ✅        |
+| `monotonicPrecise`             |        |       |         | ✅       |         |      |          |
+| `monotonicFast`                |        |       |         | ✅       |         |      |          |
+| `monotonicCoarse`              |        | ✅     |         |         |         |      |          |
+| `monotonicRaw`                 | ✅     | ✅     |         |         |         |      |          |
+| `monotonicRawApproximate`      | ✅     |        |         |         |         |      |          |
+| `performanceCounter`           |        |       | ✅       |         |         |      |          |
+| `interruptTime`                |        |       | ✅       |         |         |      |          |
+| `interruptTimePrecise`         |        |       | ✅       |         |         |      |          |
+| `unbiasedInterruptTime`        |        |       | ✅       |         |         |      |          |
+| `unbiasedInterruptTimePrecise` |        |       | ✅       |         |         |      |          |
+| `tickCount`                    |        |       | ✅       |         |         |      |          |
+| `boottime`                     |        | ✅     |         | ✅       | ✅      |      |          |
+| `boottimeAlarm`                |        | ✅     |         |         |         |      |          |
+| `uptime`                       |        |       |         | ✅       | ✅      |      |          |
+| `uptimePrecise`                |        |       |         | ✅       |         |      |          |
+| `uptimeFast`                   |        |       |         | ✅       |         |      |          |
+| `uptimeRaw`                    | ✅     |        |         |         |         |      |          |
+| `uptimeRawApproximate`         | ✅     |        |         |         |         |      |          |
+| `processCPUTime`               | ✅     | ✅     |         | ✅       | ✅      |      |          |
+| `processTime`                  |        |       | ✅       |         |         |      |          |
+| `threadCPUTime`                | ✅     | ✅     |         | ✅       | ✅      |      |          |
+| `threadTime`                   |        |       | ✅       |         |         |      |          |
+| `processUserTime`              | ✅     | ✅     | ✅      | ✅       | ✅      |      |          |
+| `processSystemTime`            | ✅     | ✅     |         | ✅       | ✅      |      |          |
+| `processKernelTime`            |        |       | ✅       |         |         |      |          |
+| `threadUserTime`               | ✅     | ✅     | ✅      | ✅       | ✅      |      |          |
+| `threadSystemTime`             | ✅     | ✅     |         | ✅       | ✅      |      |          |
+| `threadKernelTime`             |        |       | ✅       |         |         |      |          |
+| `virtual`                      |        |       |         | ✅       |         |      |          |
+| `prof`                         |        |       |         | ✅       |         |      |          |
+| `highResolution`               |        |       |         |         |         |      | ✅        |
 
 <details>
   <summary><b>Darwin (Apple platforms)</b></summary>
@@ -1874,6 +1878,77 @@ Measures Elapsed time, from an arbitrary point
 | Warm read cost                        | ~ 56ns @ 4GHz     |
 | Cold read cost                        | N/A               |
 | Step granularity                      | 42ns              |
+
+</details>
+
+</details>
+
+<details>
+  <summary><b>Fallback</b></summary>
+
+<details>
+  <summary><code>monotonic</code> (<code>std::chrono::steady_clock</code>)</summary>
+
+[cppreference](https://en.cppreference.com/w/cpp/chrono/steady_clock)
+
+Measures Elapsed time, from an arbitrary point
+
+| Property                              | Value                    |
+| ------------------------------------- | ------------------------ |
+| Reacts to OS time changes             | ✅ No                    |
+| Reacts to NTP changes                 | ✅ No                    |
+| Counts system suspension times        | Implementation-dependant |
+| Advances while thread is de-scheduled | ❌ Yes                   |
+| Might appear to go backwards          | ✅ No                    |
+| Reads a cached value                  | Implementation-dependant |
+| Max staleness                         | Implementation-dependant |
+| Warm read cost                        | Implementation-dependant |
+| Cold read cost                        | Implementation-dependant |
+| Step granularity                      | Implementation-dependant |
+
+</details>
+
+<details>
+  <summary><code>realtime</code> (<code>std::chrono::system_clock</code>)</summary>
+
+[cppreference](https://en.cppreference.com/w/cpp/chrono/system_clock)
+
+Measures Wall time, counted from 1970-01-01 UTC (guaranteed since C++20)
+
+| Property                              | Value                    |
+| ------------------------------------- | ------------------------ |
+| Reacts to OS time changes             | ❌ Yes                   |
+| Reacts to NTP changes                 | ❌ Yes                   |
+| Counts system suspension times        | ❌ Yes                   |
+| Advances while thread is de-scheduled | ❌ Yes                   |
+| Might appear to go backwards          | ❌ Yes                   |
+| Reads a cached value                  | Implementation-dependant |
+| Max staleness                         | Implementation-dependant |
+| Warm read cost                        | Implementation-dependant |
+| Cold read cost                        | Implementation-dependant |
+| Step granularity                      | Implementation-dependant |
+
+</details>
+
+<details>
+  <summary><code>highResolution</code> (<code>std::chrono::high_resolution_clock</code>)</summary>
+
+[cppreference](https://en.cppreference.com/w/cpp/chrono/high_resolution_clock)
+
+Measurements dependant on the underlying implementation: `monotonic` on libc++ and Microsoft's STL, `realtime` on libstdc++
+
+| Property                              | Value                    |
+| ------------------------------------- | ------------------------ |
+| Reacts to OS time changes             | Implementation-dependant |
+| Reacts to NTP changes                 | Implementation-dependant |
+| Counts system suspension times        | Implementation-dependant |
+| Advances while thread is de-scheduled | ❌ Yes                   |
+| Might appear to go backwards          | Implementation-dependant |
+| Reads a cached value                  | Implementation-dependant |
+| Max staleness                         | Implementation-dependant |
+| Warm read cost                        | Implementation-dependant |
+| Cold read cost                        | Implementation-dependant |
+| Step granularity                      | Implementation-dependant |
 
 </details>
 

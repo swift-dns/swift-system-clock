@@ -10,7 +10,8 @@
 ///     windows: .unbiasedInterruptTimePrecise,
 ///     freebsd: .uptime,
 ///     openbsd: .uptime,
-///     wasi: .monotonic
+///     wasi: .monotonic,
+///     fallback: .monotonic
 /// )
 /// ```
 ///
@@ -26,7 +27,8 @@
 ///     windows: .unbiasedInterruptTimePrecise,
 ///     freebsd: .uptime,
 ///     openbsd: .uptime,
-///     wasi: .monotonic
+///     wasi: .monotonic,
+///     fallback: .monotonic
 /// )
 /// ```
 @available(SwiftStdlib 5.7, *)
@@ -55,7 +57,7 @@ public struct GenericSystemClock<Duration>: Sendable {
         #elseif os(WASI)
         .wasi(self.clock.id)
         #else
-        #error("The SystemClock module does not know which clock ids your platform uses.")
+        .stdChrono(self.clock.id)
         #endif
     }
     #endif
@@ -63,6 +65,7 @@ public struct GenericSystemClock<Duration>: Sendable {
     /// Creates a clock from the id belonging to the platform being compiled for.
     ///
     /// Android takes `linux`, and every Apple platform takes `darwin`.
+    /// Unidentified platforms or platforms with no libc will take `fallback` which uses `std::chrono` clocks.
     @inlinable
     public init(
         darwin: DarwinClockID,
@@ -70,7 +73,8 @@ public struct GenericSystemClock<Duration>: Sendable {
         windows: WindowsClockID,
         freebsd: FreeBSDClockID,
         openbsd: OpenBSDClockID,
-        wasi: WASIClockID
+        wasi: WASIClockID,
+        fallback: STDChronoClockID
     ) {
         #if $Embedded
         self.clock = UnavailableClock()
@@ -87,7 +91,7 @@ public struct GenericSystemClock<Duration>: Sendable {
         #elseif os(WASI)
         self.clock = WASIClock(id: wasi)
         #else
-        #error("The SystemClock module does not know which clock ids your platform uses.")
+        self.clock = STDChronoClock(id: fallback)
         #endif
     }
 }

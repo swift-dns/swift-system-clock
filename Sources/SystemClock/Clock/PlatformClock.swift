@@ -23,5 +23,6 @@ typealias _PlatformClockTypealias = WindowsClock
 @usableFromInline
 typealias _PlatformClockTypealias = WASIClock
 #else
-#error("The SystemClock module does not know which clock ids your platform uses.")
+@usableFromInline
+typealias _PlatformClockTypealias = STDChronoClock
 #endif

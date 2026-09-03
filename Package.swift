@@ -22,10 +22,11 @@ let package = Package(
         ),
         .testTarget(
             name: "SystemClockTests",
-            dependencies: ["SystemClock"],
+            dependencies: ["SystemClock", "CSystemClock"],
             swiftSettings: settings
         ),
-    ]
+    ],
+    cxxLanguageStandard: .cxx17
 )
 
 var settings: [SwiftSetting] {

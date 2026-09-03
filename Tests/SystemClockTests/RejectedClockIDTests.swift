@@ -12,7 +12,8 @@ struct RejectedClockIDTests {
             windows: WindowsClockID(rawValue: 9_999),
             freebsd: FreeBSDClockID(rawValue: 9_999),
             openbsd: OpenBSDClockID(rawValue: 9_999),
-            wasi: WASIClockID(rawValue: 9_999)
+            wasi: WASIClockID(rawValue: 9_999),
+            fallback: STDChronoClockID(rawValue: 9_999)
         )
     }
 

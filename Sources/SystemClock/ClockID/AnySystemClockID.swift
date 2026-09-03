@@ -7,4 +7,5 @@ public enum AnySystemClockID: Sendable, Hashable {
     case freebsd(FreeBSDClockID)
     case openbsd(OpenBSDClockID)
     case wasi(WASIClockID)
+    case stdChrono(STDChronoClockID)
 }

@@ -26,6 +26,7 @@ extension GenericSystemClock {
     /// | FreeBSD        | ``FreeBSDClockID/realtimePrecise``   |
     /// | OpenBSD        | ``OpenBSDClockID/realtime``          |
     /// | WASI           | ``WASIClockID/realtime``             |
+    /// | Fallback       | ``STDChronoClockID/realtime``        |
     @inlinable
     public static var realtime: GenericSystemClock {
         GenericSystemClock(
@@ -34,7 +35,8 @@ extension GenericSystemClock {
             windows: .systemTimePrecise,
             freebsd: .realtimePrecise,
             openbsd: .realtime,
-            wasi: .realtime
+            wasi: .realtime,
+            fallback: .realtime
         )
     }
 
@@ -63,6 +65,7 @@ extension GenericSystemClock {
     /// | FreeBSD        | ``FreeBSDClockID/realtimeFast`` |
     /// | OpenBSD        | ``OpenBSDClockID/realtime``     |
     /// | WASI           | ``WASIClockID/realtime``        |
+    /// | Fallback       | ``STDChronoClockID/realtime``   |
     @inlinable
     public static var realtimeCoarse: GenericSystemClock {
         GenericSystemClock(
@@ -71,7 +74,8 @@ extension GenericSystemClock {
             windows: .systemTime,
             freebsd: .realtimeFast,
             openbsd: .realtime,
-            wasi: .realtime
+            wasi: .realtime,
+            fallback: .realtime
         )
     }
 
@@ -100,6 +104,7 @@ extension GenericSystemClock {
     /// | FreeBSD        | ``FreeBSDClockID/monotonic``            | ❌                  |
     /// | OpenBSD        | ``OpenBSDClockID/boottime``             | ❌                  |
     /// | WASI           | ``WASIClockID/monotonic``               | ✅                  |
+    /// | Fallback       | ``STDChronoClockID/monotonic``          | ❌                  |
     @inlinable
     public static var continuous: GenericSystemClock {
         GenericSystemClock(
@@ -108,7 +113,8 @@ extension GenericSystemClock {
             windows: .interruptTimePrecise,
             freebsd: .monotonic,
             openbsd: .boottime,
-            wasi: .monotonic
+            wasi: .monotonic,
+            fallback: .monotonic
         )
     }
 
@@ -137,6 +143,7 @@ extension GenericSystemClock {
     /// | FreeBSD        | ``FreeBSDClockID/monotonicFast``          |
     /// | OpenBSD        | ``OpenBSDClockID/boottime``               |
     /// | WASI           | ``WASIClockID/monotonic``                 |
+    /// | Fallback       | ``STDChronoClockID/monotonic``            |
     @inlinable
     public static var continuousCoarse: GenericSystemClock {
         GenericSystemClock(
@@ -145,7 +152,8 @@ extension GenericSystemClock {
             windows: .interruptTime,
             freebsd: .monotonicFast,
             openbsd: .boottime,
-            wasi: .monotonic
+            wasi: .monotonic,
+            fallback: .monotonic
         )
     }
 
@@ -174,6 +182,7 @@ extension GenericSystemClock {
     /// | FreeBSD        | ``FreeBSDClockID/uptime``                       |
     /// | OpenBSD        | ``OpenBSDClockID/uptime``                       |
     /// | WASI           | ``WASIClockID/monotonic``                       |
+    /// | Fallback       | ``STDChronoClockID/monotonic``                  |
     @inlinable
     public static var suspending: GenericSystemClock {
         GenericSystemClock(
@@ -182,7 +191,8 @@ extension GenericSystemClock {
             windows: .unbiasedInterruptTimePrecise,
             freebsd: .uptime,
             openbsd: .uptime,
-            wasi: .monotonic
+            wasi: .monotonic,
+            fallback: .monotonic
         )
     }
 
@@ -211,6 +221,7 @@ extension GenericSystemClock {
     /// | FreeBSD        | ``FreeBSDClockID/uptimeFast``            |
     /// | OpenBSD        | ``OpenBSDClockID/uptime``                |
     /// | WASI           | ``WASIClockID/monotonic``                |
+    /// | Fallback       | ``STDChronoClockID/monotonic``           |
     @inlinable
     public static var suspendingCoarse: GenericSystemClock {
         GenericSystemClock(
@@ -219,7 +230,8 @@ extension GenericSystemClock {
             windows: .unbiasedInterruptTime,
             freebsd: .uptimeFast,
             openbsd: .uptime,
-            wasi: .monotonic
+            wasi: .monotonic,
+            fallback: .monotonic
         )
     }
 }
@@ -229,7 +241,7 @@ extension GenericSystemClock {
 extension GenericSystemClock {
     /// CPU time this process has used.
     ///
-    /// wasi-libc has no cpu-time clock, so this falls back to ``WASIClockID/monotonic``.
+    /// Neither wasi-libc nor `<chrono>` has a cpu-time clock, so both fall back to `monotonic`.
     ///
     /// Measures CPU time used by this process
     ///
@@ -254,6 +266,7 @@ extension GenericSystemClock {
     /// | FreeBSD        | ``FreeBSDClockID/processCPUTime`` |
     /// | OpenBSD        | ``OpenBSDClockID/processCPUTime`` |
     /// | WASI           | ``WASIClockID/monotonic``         |
+    /// | Fallback       | ``STDChronoClockID/monotonic``    |
     @inlinable
     public static var processCPUTime: GenericSystemClock {
         GenericSystemClock(
@@ -262,13 +275,14 @@ extension GenericSystemClock {
             windows: .processTime,
             freebsd: .processCPUTime,
             openbsd: .processCPUTime,
-            wasi: .monotonic
+            wasi: .monotonic,
+            fallback: .monotonic
         )
     }
 
     /// CPU time the calling thread has used.
     ///
-    /// wasi-libc has no cpu-time clock, so this falls back to ``WASIClockID/monotonic``.
+    /// Neither wasi-libc nor `<chrono>` has a cpu-time clock, so both fall back to `monotonic`.
     ///
     /// Measures CPU time used by this thread
     ///
@@ -293,6 +307,7 @@ extension GenericSystemClock {
     /// | FreeBSD        | ``FreeBSDClockID/threadCPUTime`` |
     /// | OpenBSD        | ``OpenBSDClockID/threadCPUTime`` |
     /// | WASI           | ``WASIClockID/monotonic``        |
+    /// | Fallback       | ``STDChronoClockID/monotonic``   |
     @inlinable
     public static var threadCPUTime: GenericSystemClock {
         GenericSystemClock(
@@ -301,7 +316,8 @@ extension GenericSystemClock {
             windows: .threadTime,
             freebsd: .threadCPUTime,
             openbsd: .threadCPUTime,
-            wasi: .monotonic
+            wasi: .monotonic,
+            fallback: .monotonic
         )
     }
 
@@ -309,7 +325,7 @@ extension GenericSystemClock {
     ///
     /// Not a clock id the platform declares: this library's own, selecting one half of one call.
     ///
-    /// wasi-libc has no cpu-time clock, so this falls back to ``WASIClockID/monotonic``.
+    /// Neither wasi-libc nor `<chrono>` has a cpu-time clock, so both fall back to `monotonic`.
     ///
     /// Measures CPU time this process spent running its own code
     ///
@@ -334,6 +350,7 @@ extension GenericSystemClock {
     /// | FreeBSD        | ``FreeBSDClockID/processUserTime`` |
     /// | OpenBSD        | ``OpenBSDClockID/processUserTime`` |
     /// | WASI           | ``WASIClockID/monotonic``          |
+    /// | Fallback       | ``STDChronoClockID/monotonic``     |
     @inlinable
     public static var processUserTime: GenericSystemClock {
         GenericSystemClock(
@@ -342,7 +359,8 @@ extension GenericSystemClock {
             windows: .processUserTime,
             freebsd: .processUserTime,
             openbsd: .processUserTime,
-            wasi: .monotonic
+            wasi: .monotonic,
+            fallback: .monotonic
         )
     }
 
@@ -350,7 +368,7 @@ extension GenericSystemClock {
     ///
     /// Not a clock id the platform declares: this library's own, selecting one half of one call.
     ///
-    /// wasi-libc has no cpu-time clock, so this falls back to ``WASIClockID/monotonic``.
+    /// Neither wasi-libc nor `<chrono>` has a cpu-time clock, so both fall back to `monotonic`.
     ///
     /// Measures CPU time the kernel spent on this process's behalf
     ///
@@ -375,6 +393,7 @@ extension GenericSystemClock {
     /// | FreeBSD        | ``FreeBSDClockID/processSystemTime`` |
     /// | OpenBSD        | ``OpenBSDClockID/processSystemTime`` |
     /// | WASI           | ``WASIClockID/monotonic``            |
+    /// | Fallback       | ``STDChronoClockID/monotonic``       |
     @inlinable
     public static var processSystemTime: GenericSystemClock {
         GenericSystemClock(
@@ -383,7 +402,8 @@ extension GenericSystemClock {
             windows: .processKernelTime,
             freebsd: .processSystemTime,
             openbsd: .processSystemTime,
-            wasi: .monotonic
+            wasi: .monotonic,
+            fallback: .monotonic
         )
     }
 
@@ -391,7 +411,7 @@ extension GenericSystemClock {
     ///
     /// Not a clock id the platform declares: this library's own, selecting one half of one call.
     ///
-    /// wasi-libc has no cpu-time clock, so this falls back to ``WASIClockID/monotonic``.
+    /// Neither wasi-libc nor `<chrono>` has a cpu-time clock, so both fall back to `monotonic`.
     ///
     /// Measures CPU time this thread spent running its own code
     ///
@@ -416,6 +436,7 @@ extension GenericSystemClock {
     /// | FreeBSD        | ``FreeBSDClockID/threadUserTime`` |
     /// | OpenBSD        | ``OpenBSDClockID/threadUserTime`` |
     /// | WASI           | ``WASIClockID/monotonic``         |
+    /// | Fallback       | ``STDChronoClockID/monotonic``    |
     @inlinable
     public static var threadUserTime: GenericSystemClock {
         GenericSystemClock(
@@ -424,7 +445,8 @@ extension GenericSystemClock {
             windows: .threadUserTime,
             freebsd: .threadUserTime,
             openbsd: .threadUserTime,
-            wasi: .monotonic
+            wasi: .monotonic,
+            fallback: .monotonic
         )
     }
 
@@ -432,7 +454,7 @@ extension GenericSystemClock {
     ///
     /// Not a clock id the platform declares: this library's own, selecting one half of one call.
     ///
-    /// wasi-libc has no cpu-time clock, so this falls back to ``WASIClockID/monotonic``.
+    /// Neither wasi-libc nor `<chrono>` has a cpu-time clock, so both fall back to `monotonic`.
     ///
     /// Measures CPU time the kernel spent on this thread's behalf
     ///
@@ -457,6 +479,7 @@ extension GenericSystemClock {
     /// | FreeBSD        | ``FreeBSDClockID/threadSystemTime`` |
     /// | OpenBSD        | ``OpenBSDClockID/threadSystemTime`` |
     /// | WASI           | ``WASIClockID/monotonic``           |
+    /// | Fallback       | ``STDChronoClockID/monotonic``      |
     @inlinable
     public static var threadSystemTime: GenericSystemClock {
         GenericSystemClock(
@@ -465,7 +488,8 @@ extension GenericSystemClock {
             windows: .threadKernelTime,
             freebsd: .threadSystemTime,
             openbsd: .threadSystemTime,
-            wasi: .monotonic
+            wasi: .monotonic,
+            fallback: .monotonic
         )
     }
 }
