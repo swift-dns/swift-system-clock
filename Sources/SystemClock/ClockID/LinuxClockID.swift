@@ -63,8 +63,8 @@ extension LinuxClockID {
     ///
     /// Measures Wall time, counted from 1970-01-01 UTC
     ///
-    /// | Property                              | Value             |
-    /// | ------------------------------------- | ----------------- |
+    /// | Property                              | Value              |
+    /// | ------------------------------------- | ------------------ |
     /// | Reacts to OS time changes             | ❌ Yes             |
     /// | Reacts to NTP changes                 | ❌ Yes             |
     /// | Counts system suspension times        | ❌ Yes             |
@@ -72,9 +72,9 @@ extension LinuxClockID {
     /// | Might appear to go backwards          | ❌ Yes             |
     /// | Reads a cached value                  | ❌ Yes             |
     /// | Max staleness                         | ❌ ~ 1ms @ HZ 1000 |
-    /// | Warm read cost                        | ~ 4.5ns @ 4GHz    |
-    /// | Cold read cost                        | ~ 9µs @ 4GHz      |
-    /// | Step granularity                      | 1ms @ HZ 1000     |
+    /// | Warm read cost                        | ~ 4.5ns @ 4GHz     |
+    /// | Cold read cost                        | ~ 9µs @ 4GHz       |
+    /// | Step granularity                      | 1ms @ HZ 1000      |
     @inlinable
     public static var realtimeCoarse: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_linux_realtime_coarse)
@@ -132,8 +132,8 @@ extension LinuxClockID {
     ///
     /// Measures Elapsed time, since the machine booted
     ///
-    /// | Property                              | Value             |
-    /// | ------------------------------------- | ----------------- |
+    /// | Property                              | Value              |
+    /// | ------------------------------------- | ------------------ |
     /// | Reacts to OS time changes             | ✅ No              |
     /// | Reacts to NTP changes                 | ❌ Yes             |
     /// | Counts system suspension times        | ✅ No              |
@@ -141,9 +141,9 @@ extension LinuxClockID {
     /// | Might appear to go backwards          | ✅ No              |
     /// | Reads a cached value                  | ❌ Yes             |
     /// | Max staleness                         | ❌ ~ 1ms @ HZ 1000 |
-    /// | Warm read cost                        | ~ 4.5ns @ 4GHz    |
-    /// | Cold read cost                        | ~ 9µs @ 4GHz      |
-    /// | Step granularity                      | 1ms @ HZ 1000     |
+    /// | Warm read cost                        | ~ 4.5ns @ 4GHz     |
+    /// | Cold read cost                        | ~ 9µs @ 4GHz       |
+    /// | Step granularity                      | 1ms @ HZ 1000      |
     @inlinable
     public static var monotonicCoarse: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_linux_monotonic_coarse)
@@ -224,18 +224,18 @@ extension LinuxClockID {
     ///
     /// Measures CPU time used by this process
     ///
-    /// | Property                              | Value                         |
-    /// | ------------------------------------- | ----------------------------- |
-    /// | Reacts to OS time changes             | ✅ No                         |
-    /// | Reacts to NTP changes                 | ✅ No                         |
-    /// | Counts system suspension times        | ✅ No                         |
-    /// | Advances while thread is de-scheduled | ✅ No                         |
-    /// | Might appear to go backwards          | ✅ No                         |
-    /// | Reads a cached value                  | ✅ No                         |
-    /// | Max staleness                         | ❌ ~ 1ms @ HZ 1000            |
-    /// | Warm read cost                        | ~ 165ns + ~ 6ns/thread @ 4GHz |
-    /// | Cold read cost                        | ~ 7µs @ 4GHz                  |
-    /// | Step granularity                      | 170ns                         |
+    /// | Property                               | Value                                  |
+    /// | -------------------------------------- | -------------------------------------- |
+    /// | Reacts to OS time changes              | ✅ No                                  |
+    /// | Reacts to NTP changes                  | ✅ No                                  |
+    /// | Counts system suspension times         | ✅ No                                  |
+    /// | Advances while process is de-scheduled | ✅ No                                  |
+    /// | Might appear to go backwards           | ✅ No                                  |
+    /// | Reads a cached value                   | ❌ Yes, for other threads              |
+    /// | Max staleness                          | ❌ ~ 1ms @ HZ 1000, from other threads |
+    /// | Warm read cost                         | ~ 165ns + ~ 6ns/thread @ 4GHz          |
+    /// | Cold read cost                         | ~ 7µs @ 4GHz                           |
+    /// | Step granularity                       | 170ns                                  |
     @inlinable
     public static var processCPUTime: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_linux_process_cpu_time)
@@ -272,18 +272,18 @@ extension LinuxClockID {
     ///
     /// Measures CPU time this process spent running its own code
     ///
-    /// | Property                              | Value                          |
-    /// | ------------------------------------- | ------------------------------ |
-    /// | Reacts to OS time changes             | ✅ No                          |
-    /// | Reacts to NTP changes                 | ✅ No                          |
-    /// | Counts system suspension times        | ✅ No                          |
-    /// | Advances while thread is de-scheduled | ✅ No                          |
-    /// | Might appear to go backwards          | ✅ No                          |
-    /// | Reads a cached value                  | ✅ No                          |
-    /// | Max staleness                         | ❌ ~ 1ms @ HZ 1000             |
-    /// | Warm read cost                        | ~ 220ns + ~ 12ns/thread @ 4GHz |
-    /// | Cold read cost                        | ~ 4µs @ 4GHz                   |
-    /// | Step granularity                      | 1µs                            |
+    /// | Property                               | Value                                  |
+    /// | -------------------------------------- | -------------------------------------- |
+    /// | Reacts to OS time changes              | ✅ No                                  |
+    /// | Reacts to NTP changes                  | ✅ No                                  |
+    /// | Counts system suspension times         | ✅ No                                  |
+    /// | Advances while process is de-scheduled | ✅ No                                  |
+    /// | Might appear to go backwards           | ✅ No                                  |
+    /// | Reads a cached value                   | ❌ Yes, for other threads              |
+    /// | Max staleness                          | ❌ ~ 1ms @ HZ 1000, from other threads |
+    /// | Warm read cost                         | ~ 220ns + ~ 12ns/thread @ 4GHz         |
+    /// | Cold read cost                         | ~ 4µs @ 4GHz                           |
+    /// | Step granularity                       | 1µs                                    |
     @inlinable
     public static var processUserTime: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_process_user_cpu_time)
@@ -297,18 +297,18 @@ extension LinuxClockID {
     ///
     /// Measures CPU time the kernel spent on this process's behalf
     ///
-    /// | Property                              | Value                          |
-    /// | ------------------------------------- | ------------------------------ |
-    /// | Reacts to OS time changes             | ✅ No                          |
-    /// | Reacts to NTP changes                 | ✅ No                          |
-    /// | Counts system suspension times        | ✅ No                          |
-    /// | Advances while thread is de-scheduled | ✅ No                          |
-    /// | Might appear to go backwards          | ✅ No                          |
-    /// | Reads a cached value                  | ✅ No                          |
-    /// | Max staleness                         | ❌ ~ 1ms @ HZ 1000             |
-    /// | Warm read cost                        | ~ 220ns + ~ 12ns/thread @ 4GHz |
-    /// | Cold read cost                        | ~ 3.5µs @ 4GHz                 |
-    /// | Step granularity                      | 1µs                            |
+    /// | Property                               | Value                                  |
+    /// | -------------------------------------- | -------------------------------------- |
+    /// | Reacts to OS time changes              | ✅ No                                  |
+    /// | Reacts to NTP changes                  | ✅ No                                  |
+    /// | Counts system suspension times         | ✅ No                                  |
+    /// | Advances while process is de-scheduled | ✅ No                                  |
+    /// | Might appear to go backwards           | ✅ No                                  |
+    /// | Reads a cached value                   | ❌ Yes, for other threads              |
+    /// | Max staleness                          | ❌ ~ 1ms @ HZ 1000, from other threads |
+    /// | Warm read cost                         | ~ 220ns + ~ 12ns/thread @ 4GHz         |
+    /// | Cold read cost                         | ~ 3.5µs @ 4GHz                         |
+    /// | Step granularity                       | 1µs                                    |
     @inlinable
     public static var processSystemTime: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_process_system_cpu_time)
@@ -322,8 +322,8 @@ extension LinuxClockID {
     ///
     /// Measures CPU time this thread spent running its own code
     ///
-    /// | Property                              | Value             |
-    /// | ------------------------------------- | ----------------- |
+    /// | Property                              | Value              |
+    /// | ------------------------------------- | ------------------ |
     /// | Reacts to OS time changes             | ✅ No              |
     /// | Reacts to NTP changes                 | ✅ No              |
     /// | Counts system suspension times        | ✅ No              |
@@ -331,9 +331,9 @@ extension LinuxClockID {
     /// | Might appear to go backwards          | ✅ No              |
     /// | Reads a cached value                  | ❌ Yes             |
     /// | Max staleness                         | ❌ ~ 1ms @ HZ 1000 |
-    /// | Warm read cost                        | ~ 150ns @ 4GHz    |
-    /// | Cold read cost                        | ~ 3.1µs @ 4GHz    |
-    /// | Step granularity                      | ~ 1ms @ HZ 1000   |
+    /// | Warm read cost                        | ~ 150ns @ 4GHz     |
+    /// | Cold read cost                        | ~ 3.1µs @ 4GHz     |
+    /// | Step granularity                      | ~ 1ms @ HZ 1000    |
     @inlinable
     public static var threadUserTime: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_thread_user_cpu_time)
@@ -347,8 +347,8 @@ extension LinuxClockID {
     ///
     /// Measures CPU time the kernel spent on this thread's behalf
     ///
-    /// | Property                              | Value             |
-    /// | ------------------------------------- | ----------------- |
+    /// | Property                              | Value              |
+    /// | ------------------------------------- | ------------------ |
     /// | Reacts to OS time changes             | ✅ No              |
     /// | Reacts to NTP changes                 | ✅ No              |
     /// | Counts system suspension times        | ✅ No              |
@@ -356,9 +356,9 @@ extension LinuxClockID {
     /// | Might appear to go backwards          | ✅ No              |
     /// | Reads a cached value                  | ❌ Yes             |
     /// | Max staleness                         | ❌ ~ 1ms @ HZ 1000 |
-    /// | Warm read cost                        | ~ 150ns @ 4GHz    |
-    /// | Cold read cost                        | ~ 2.7µs @ 4GHz    |
-    /// | Step granularity                      | ~ 1ms @ HZ 1000   |
+    /// | Warm read cost                        | ~ 150ns @ 4GHz     |
+    /// | Cold read cost                        | ~ 2.7µs @ 4GHz     |
+    /// | Step granularity                      | ~ 1ms @ HZ 1000    |
     @inlinable
     public static var threadSystemTime: LinuxClockID {
         LinuxClockID(rawValue: csystem_clock_thread_system_cpu_time)

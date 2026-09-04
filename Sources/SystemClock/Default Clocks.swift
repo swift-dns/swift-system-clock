@@ -245,18 +245,18 @@ extension GenericSystemClock {
     ///
     /// Measures CPU time used by this process
     ///
-    /// | Property                              | Value                                                       |
-    /// | ------------------------------------- | ----------------------------------------------------------- |
-    /// | Reacts to OS time changes             | ✅ No                                                       |
-    /// | Reacts to NTP changes                 | ✅ No                                                       |
-    /// | Counts system suspension times        | ✅ No                                                       |
-    /// | Advances while thread is de-scheduled | Varies by platform                                          |
-    /// | Might appear to go backwards          | ✅ No                                                       |
-    /// | Reads a cached value                  | Varies by platform                                          |
-    /// | Max staleness                         | Varies by platform                                          |
-    /// | Warm read cost                        | Platform dependent; ~ 56-235ns + up to ~ 11ns/thread @ 4GHz |
-    /// | Cold read cost                        | Platform dependent; ~ 595ns-15.4µs @ 4GHz                   |
-    /// | Step granularity                      | Platform dependent; 42ns-15.6ms                             |
+    /// | Property                               | Value                                                       |
+    /// | -------------------------------------- | ----------------------------------------------------------- |
+    /// | Reacts to OS time changes              | ✅ No                                                       |
+    /// | Reacts to NTP changes                  | ✅ No                                                       |
+    /// | Counts system suspension times         | ✅ No                                                       |
+    /// | Advances while process is de-scheduled | Varies by platform                                          |
+    /// | Might appear to go backwards           | ✅ No                                                       |
+    /// | Reads a cached value                   | Varies by platform                                          |
+    /// | Max staleness                          | Varies by platform                                          |
+    /// | Warm read cost                         | Platform dependent; ~ 56-235ns + up to ~ 11ns/thread @ 4GHz |
+    /// | Cold read cost                         | Platform dependent; ~ 595ns-15.4µs @ 4GHz                   |
+    /// | Step granularity                       | Platform dependent; 42ns-15.6ms                             |
     ///
     /// | Platform       | Clock                             |
     /// | -------------- | --------------------------------- |
@@ -329,18 +329,18 @@ extension GenericSystemClock {
     ///
     /// Measures CPU time this process spent running its own code
     ///
-    /// | Property                              | Value                                                       |
-    /// | ------------------------------------- | ----------------------------------------------------------- |
-    /// | Reacts to OS time changes             | ✅ No                                                       |
-    /// | Reacts to NTP changes                 | ✅ No                                                       |
-    /// | Counts system suspension times        | ✅ No                                                       |
-    /// | Advances while thread is de-scheduled | Varies by platform                                          |
-    /// | Might appear to go backwards          | ✅ No                                                       |
-    /// | Reads a cached value                  | Varies by platform                                          |
-    /// | Max staleness                         | Varies by platform                                          |
-    /// | Warm read cost                        | Platform dependent; ~ 56-220ns + up to ~ 16ns/thread @ 4GHz |
-    /// | Cold read cost                        | Platform dependent; ~ 490ns-5µs @ 4GHz                      |
-    /// | Step granularity                      | Platform dependent; 42ns-15.6ms                             |
+    /// | Property                               | Value                                                       |
+    /// | -------------------------------------- | ----------------------------------------------------------- |
+    /// | Reacts to OS time changes              | ✅ No                                                       |
+    /// | Reacts to NTP changes                  | ✅ No                                                       |
+    /// | Counts system suspension times         | ✅ No                                                       |
+    /// | Advances while process is de-scheduled | Varies by platform                                          |
+    /// | Might appear to go backwards           | ✅ No                                                       |
+    /// | Reads a cached value                   | Varies by platform                                          |
+    /// | Max staleness                          | Varies by platform                                          |
+    /// | Warm read cost                         | Platform dependent; ~ 56-220ns + up to ~ 16ns/thread @ 4GHz |
+    /// | Cold read cost                         | Platform dependent; ~ 490ns-5µs @ 4GHz                      |
+    /// | Step granularity                       | Platform dependent; 42ns-15.6ms                             |
     ///
     /// | Platform       | Clock                              |
     /// | -------------- | ---------------------------------- |
@@ -370,18 +370,18 @@ extension GenericSystemClock {
     ///
     /// Measures CPU time the kernel spent on this process's behalf
     ///
-    /// | Property                              | Value                                                       |
-    /// | ------------------------------------- | ----------------------------------------------------------- |
-    /// | Reacts to OS time changes             | ✅ No                                                       |
-    /// | Reacts to NTP changes                 | ✅ No                                                       |
-    /// | Counts system suspension times        | ✅ No                                                       |
-    /// | Advances while thread is de-scheduled | Varies by platform                                          |
-    /// | Might appear to go backwards          | ✅ No                                                       |
-    /// | Reads a cached value                  | Varies by platform                                          |
-    /// | Max staleness                         | Varies by platform                                          |
-    /// | Warm read cost                        | Platform dependent; ~ 56-220ns + up to ~ 16ns/thread @ 4GHz |
-    /// | Cold read cost                        | Platform dependent; ~ 490ns-5µs @ 4GHz                      |
-    /// | Step granularity                      | Platform dependent; 42ns-15.6ms                             |
+    /// | Property                               | Value                                                       |
+    /// | -------------------------------------- | ----------------------------------------------------------- |
+    /// | Reacts to OS time changes              | ✅ No                                                       |
+    /// | Reacts to NTP changes                  | ✅ No                                                       |
+    /// | Counts system suspension times         | ✅ No                                                       |
+    /// | Advances while process is de-scheduled | Varies by platform                                          |
+    /// | Might appear to go backwards           | ✅ No                                                       |
+    /// | Reads a cached value                   | Varies by platform                                          |
+    /// | Max staleness                          | Varies by platform                                          |
+    /// | Warm read cost                         | Platform dependent; ~ 56-220ns + up to ~ 16ns/thread @ 4GHz |
+    /// | Cold read cost                         | Platform dependent; ~ 490ns-5µs @ 4GHz                      |
+    /// | Step granularity                       | Platform dependent; 42ns-15.6ms                             |
     ///
     /// | Platform       | Clock                                |
     /// | -------------- | ------------------------------------ |

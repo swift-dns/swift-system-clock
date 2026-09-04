@@ -347,18 +347,18 @@ Measures Elapsed time, from an arbitrary point
 
 Measures CPU time used by this process
 
-| Property                              | Value                               |
-| ------------------------------------- | ----------------------------------- |
-| Reacts to OS time changes             | ✅ No                               |
-| Reacts to NTP changes                 | ✅ No                               |
-| Counts system suspension times        | ✅ No                               |
-| Advances while thread is de-scheduled | ✅ No                               |
-| Might appear to go backwards          | ✅ No                               |
-| Reads a cached value                  | ✅ No                               |
-| Max staleness                         | ✅ None                             |
-| Warm read cost                        | ~ 210ns + up to ~ 8ns/thread @ 4GHz |
-| Cold read cost                        | ~ 1.3µs @ 4GHz                      |
-| Step granularity                      | 1µs                                 |
+| Property                               | Value                               |
+| -------------------------------------- | ----------------------------------- |
+| Reacts to OS time changes              | ✅ No                               |
+| Reacts to NTP changes                  | ✅ No                               |
+| Counts system suspension times         | ✅ No                               |
+| Advances while process is de-scheduled | ✅ No                               |
+| Might appear to go backwards           | ✅ No                               |
+| Reads a cached value                   | ❌ Yes, for other threads           |
+| Max staleness                          | ❌ ~ 10ms, from other threads       |
+| Warm read cost                         | ~ 210ns + up to ~ 8ns/thread @ 4GHz |
+| Cold read cost                         | ~ 1.3µs @ 4GHz                      |
+| Step granularity                       | 1µs                                 |
 
 </details>
 
@@ -393,18 +393,18 @@ This is this library's own clock identifier and not one of the clock ids the pla
 
 Measures CPU time this process spent running its own code
 
-| Property                              | Value                               |
-| ------------------------------------- | ----------------------------------- |
-| Reacts to OS time changes             | ✅ No                               |
-| Reacts to NTP changes                 | ✅ No                               |
-| Counts system suspension times        | ✅ No                               |
-| Advances while thread is de-scheduled | ✅ No                               |
-| Might appear to go backwards          | ✅ No                               |
-| Reads a cached value                  | ✅ No                               |
-| Max staleness                         | ✅ None                             |
-| Warm read cost                        | ~ 210ns + up to ~ 8ns/thread @ 4GHz |
-| Cold read cost                        | ~ 4.3µs @ 4GHz                      |
-| Step granularity                      | 1µs                                 |
+| Property                               | Value                               |
+| -------------------------------------- | ----------------------------------- |
+| Reacts to OS time changes              | ✅ No                               |
+| Reacts to NTP changes                  | ✅ No                               |
+| Counts system suspension times         | ✅ No                               |
+| Advances while process is de-scheduled | ✅ No                               |
+| Might appear to go backwards           | ✅ No                               |
+| Reads a cached value                   | ❌ Yes, for other threads           |
+| Max staleness                          | ❌ ~ 10ms, from other threads       |
+| Warm read cost                         | ~ 210ns + up to ~ 8ns/thread @ 4GHz |
+| Cold read cost                         | ~ 4.3µs @ 4GHz                      |
+| Step granularity                       | 1µs                                 |
 
 </details>
 
@@ -417,18 +417,18 @@ This is this library's own clock identifier and not one of the clock ids the pla
 
 Measures CPU time the kernel spent on this process's behalf
 
-| Property                              | Value                               |
-| ------------------------------------- | ----------------------------------- |
-| Reacts to OS time changes             | ✅ No                               |
-| Reacts to NTP changes                 | ✅ No                               |
-| Counts system suspension times        | ✅ No                               |
-| Advances while thread is de-scheduled | ✅ No                               |
-| Might appear to go backwards          | ✅ No                               |
-| Reads a cached value                  | ✅ No                               |
-| Max staleness                         | ✅ None                             |
-| Warm read cost                        | ~ 210ns + up to ~ 8ns/thread @ 4GHz |
-| Cold read cost                        | ~ 4.5µs @ 4GHz                      |
-| Step granularity                      | 1µs                                 |
+| Property                               | Value                               |
+| -------------------------------------- | ----------------------------------- |
+| Reacts to OS time changes              | ✅ No                               |
+| Reacts to NTP changes                  | ✅ No                               |
+| Counts system suspension times         | ✅ No                               |
+| Advances while process is de-scheduled | ✅ No                               |
+| Might appear to go backwards           | ✅ No                               |
+| Reads a cached value                   | ❌ Yes, for other threads           |
+| Max staleness                          | ❌ ~ 10ms, from other threads       |
+| Warm read cost                         | ~ 210ns + up to ~ 8ns/thread @ 4GHz |
+| Cold read cost                         | ~ 4.5µs @ 4GHz                      |
+| Step granularity                       | 1µs                                 |
 
 </details>
 
@@ -536,8 +536,8 @@ Measures Wall time, counted from 1970-01-01 UTC
 
 Measures Wall time, counted from 1970-01-01 UTC
 
-| Property                              | Value             |
-| ------------------------------------- | ----------------- |
+| Property                              | Value              |
+| ------------------------------------- | ------------------ |
 | Reacts to OS time changes             | ❌ Yes             |
 | Reacts to NTP changes                 | ❌ Yes             |
 | Counts system suspension times        | ❌ Yes             |
@@ -545,9 +545,9 @@ Measures Wall time, counted from 1970-01-01 UTC
 | Might appear to go backwards          | ❌ Yes             |
 | Reads a cached value                  | ❌ Yes             |
 | Max staleness                         | ❌ ~ 1ms @ HZ 1000 |
-| Warm read cost                        | ~ 4.5ns @ 4GHz    |
-| Cold read cost                        | ~ 9µs @ 4GHz      |
-| Step granularity                      | 1ms @ HZ 1000     |
+| Warm read cost                        | ~ 4.5ns @ 4GHz     |
+| Cold read cost                        | ~ 9µs @ 4GHz       |
+| Step granularity                      | 1ms @ HZ 1000      |
 
 </details>
 
@@ -602,8 +602,8 @@ Measures Elapsed time, since the machine booted
 
 Measures Elapsed time, since the machine booted
 
-| Property                              | Value             |
-| ------------------------------------- | ----------------- |
+| Property                              | Value              |
+| ------------------------------------- | ------------------ |
 | Reacts to OS time changes             | ✅ No              |
 | Reacts to NTP changes                 | ❌ Yes             |
 | Counts system suspension times        | ✅ No              |
@@ -611,9 +611,9 @@ Measures Elapsed time, since the machine booted
 | Might appear to go backwards          | ✅ No              |
 | Reads a cached value                  | ❌ Yes             |
 | Max staleness                         | ❌ ~ 1ms @ HZ 1000 |
-| Warm read cost                        | ~ 4.5ns @ 4GHz    |
-| Cold read cost                        | ~ 9µs @ 4GHz      |
-| Step granularity                      | 1ms @ HZ 1000     |
+| Warm read cost                        | ~ 4.5ns @ 4GHz     |
+| Cold read cost                        | ~ 9µs @ 4GHz       |
+| Step granularity                      | 1ms @ HZ 1000      |
 
 </details>
 
@@ -690,18 +690,18 @@ Measures Elapsed time, since the machine booted
 
 Measures CPU time used by this process
 
-| Property                              | Value                         |
-| ------------------------------------- | ----------------------------- |
-| Reacts to OS time changes             | ✅ No                         |
-| Reacts to NTP changes                 | ✅ No                         |
-| Counts system suspension times        | ✅ No                         |
-| Advances while thread is de-scheduled | ✅ No                         |
-| Might appear to go backwards          | ✅ No                         |
-| Reads a cached value                  | ✅ No                         |
-| Max staleness                         | ❌ ~ 1ms @ HZ 1000            |
-| Warm read cost                        | ~ 165ns + ~ 6ns/thread @ 4GHz |
-| Cold read cost                        | ~ 7µs @ 4GHz                  |
-| Step granularity                      | 170ns                         |
+| Property                               | Value                                  |
+| -------------------------------------- | -------------------------------------- |
+| Reacts to OS time changes              | ✅ No                                  |
+| Reacts to NTP changes                  | ✅ No                                  |
+| Counts system suspension times         | ✅ No                                  |
+| Advances while process is de-scheduled | ✅ No                                  |
+| Might appear to go backwards           | ✅ No                                  |
+| Reads a cached value                   | ❌ Yes, for other threads              |
+| Max staleness                          | ❌ ~ 1ms @ HZ 1000, from other threads |
+| Warm read cost                         | ~ 165ns + ~ 6ns/thread @ 4GHz          |
+| Cold read cost                         | ~ 7µs @ 4GHz                           |
+| Step granularity                       | 170ns                                  |
 
 </details>
 
@@ -736,18 +736,18 @@ This is this library's own clock identifier and not one of the clock ids the pla
 
 Measures CPU time this process spent running its own code
 
-| Property                              | Value                          |
-| ------------------------------------- | ------------------------------ |
-| Reacts to OS time changes             | ✅ No                          |
-| Reacts to NTP changes                 | ✅ No                          |
-| Counts system suspension times        | ✅ No                          |
-| Advances while thread is de-scheduled | ✅ No                          |
-| Might appear to go backwards          | ✅ No                          |
-| Reads a cached value                  | ✅ No                          |
-| Max staleness                         | ❌ ~ 1ms @ HZ 1000             |
-| Warm read cost                        | ~ 220ns + ~ 12ns/thread @ 4GHz |
-| Cold read cost                        | ~ 4µs @ 4GHz                   |
-| Step granularity                      | 1µs                            |
+| Property                               | Value                                  |
+| -------------------------------------- | -------------------------------------- |
+| Reacts to OS time changes              | ✅ No                                  |
+| Reacts to NTP changes                  | ✅ No                                  |
+| Counts system suspension times         | ✅ No                                  |
+| Advances while process is de-scheduled | ✅ No                                  |
+| Might appear to go backwards           | ✅ No                                  |
+| Reads a cached value                   | ❌ Yes, for other threads              |
+| Max staleness                          | ❌ ~ 1ms @ HZ 1000, from other threads |
+| Warm read cost                         | ~ 220ns + ~ 12ns/thread @ 4GHz         |
+| Cold read cost                         | ~ 4µs @ 4GHz                           |
+| Step granularity                       | 1µs                                    |
 
 </details>
 
@@ -760,18 +760,18 @@ This is this library's own clock identifier and not one of the clock ids the pla
 
 Measures CPU time the kernel spent on this process's behalf
 
-| Property                              | Value                          |
-| ------------------------------------- | ------------------------------ |
-| Reacts to OS time changes             | ✅ No                          |
-| Reacts to NTP changes                 | ✅ No                          |
-| Counts system suspension times        | ✅ No                          |
-| Advances while thread is de-scheduled | ✅ No                          |
-| Might appear to go backwards          | ✅ No                          |
-| Reads a cached value                  | ✅ No                          |
-| Max staleness                         | ❌ ~ 1ms @ HZ 1000             |
-| Warm read cost                        | ~ 220ns + ~ 12ns/thread @ 4GHz |
-| Cold read cost                        | ~ 3.5µs @ 4GHz                 |
-| Step granularity                      | 1µs                            |
+| Property                               | Value                                  |
+| -------------------------------------- | -------------------------------------- |
+| Reacts to OS time changes              | ✅ No                                  |
+| Reacts to NTP changes                  | ✅ No                                  |
+| Counts system suspension times         | ✅ No                                  |
+| Advances while process is de-scheduled | ✅ No                                  |
+| Might appear to go backwards           | ✅ No                                  |
+| Reads a cached value                   | ❌ Yes, for other threads              |
+| Max staleness                          | ❌ ~ 1ms @ HZ 1000, from other threads |
+| Warm read cost                         | ~ 220ns + ~ 12ns/thread @ 4GHz         |
+| Cold read cost                         | ~ 3.5µs @ 4GHz                         |
+| Step granularity                       | 1µs                                    |
 
 </details>
 
@@ -784,8 +784,8 @@ This is this library's own clock identifier and not one of the clock ids the pla
 
 Measures CPU time this thread spent running its own code
 
-| Property                              | Value             |
-| ------------------------------------- | ----------------- |
+| Property                              | Value              |
+| ------------------------------------- | ------------------ |
 | Reacts to OS time changes             | ✅ No              |
 | Reacts to NTP changes                 | ✅ No              |
 | Counts system suspension times        | ✅ No              |
@@ -793,9 +793,9 @@ Measures CPU time this thread spent running its own code
 | Might appear to go backwards          | ✅ No              |
 | Reads a cached value                  | ❌ Yes             |
 | Max staleness                         | ❌ ~ 1ms @ HZ 1000 |
-| Warm read cost                        | ~ 150ns @ 4GHz    |
-| Cold read cost                        | ~ 3.1µs @ 4GHz    |
-| Step granularity                      | ~ 1ms @ HZ 1000   |
+| Warm read cost                        | ~ 150ns @ 4GHz     |
+| Cold read cost                        | ~ 3.1µs @ 4GHz     |
+| Step granularity                      | ~ 1ms @ HZ 1000    |
 
 </details>
 
@@ -808,8 +808,8 @@ This is this library's own clock identifier and not one of the clock ids the pla
 
 Measures CPU time the kernel spent on this thread's behalf
 
-| Property                              | Value             |
-| ------------------------------------- | ----------------- |
+| Property                              | Value              |
+| ------------------------------------- | ------------------ |
 | Reacts to OS time changes             | ✅ No              |
 | Reacts to NTP changes                 | ✅ No              |
 | Counts system suspension times        | ✅ No              |
@@ -817,9 +817,9 @@ Measures CPU time the kernel spent on this thread's behalf
 | Might appear to go backwards          | ✅ No              |
 | Reads a cached value                  | ❌ Yes             |
 | Max staleness                         | ❌ ~ 1ms @ HZ 1000 |
-| Warm read cost                        | ~ 150ns @ 4GHz    |
-| Cold read cost                        | ~ 2.7µs @ 4GHz    |
-| Step granularity                      | ~ 1ms @ HZ 1000   |
+| Warm read cost                        | ~ 150ns @ 4GHz     |
+| Cold read cost                        | ~ 2.7µs @ 4GHz     |
+| Step granularity                      | ~ 1ms @ HZ 1000    |
 
 </details>
 
@@ -857,8 +857,8 @@ Measures Elapsed time, since the machine booted
 
 Measures Wall time, counted from 1970-01-01 UTC
 
-| Property                              | Value                |
-| ------------------------------------- | -------------------- |
+| Property                              | Value                 |
+| ------------------------------------- | --------------------- |
 | Reacts to OS time changes             | ❌ Yes                |
 | Reacts to NTP changes                 | ❌ Yes                |
 | Counts system suspension times        | ❌ Yes                |
@@ -866,9 +866,9 @@ Measures Wall time, counted from 1970-01-01 UTC
 | Might appear to go backwards          | ❌ Yes                |
 | Reads a cached value                  | ❌ Yes                |
 | Max staleness                         | ❌ ~ 16ms @ 64Hz tick |
-| Warm read cost                        | ~ 4ns @ 4GHz         |
-| Cold read cost                        | ~ 1.5µs @ 4GHz       |
-| Step granularity                      | ~ 0.5ms              |
+| Warm read cost                        | ~ 4ns @ 4GHz          |
+| Cold read cost                        | ~ 1.5µs @ 4GHz        |
+| Step granularity                      | ~ 0.5ms               |
 
 </details>
 
@@ -901,8 +901,8 @@ Measures Wall time, counted from 1970-01-01 UTC
 
 Measures Elapsed time, since the machine booted
 
-| Property                              | Value                |
-| ------------------------------------- | -------------------- |
+| Property                              | Value                 |
+| ------------------------------------- | --------------------- |
 | Reacts to OS time changes             | ✅ No                 |
 | Reacts to NTP changes                 | ✅ No                 |
 | Counts system suspension times        | ❌ Yes                |
@@ -910,9 +910,9 @@ Measures Elapsed time, since the machine booted
 | Might appear to go backwards          | ✅ No                 |
 | Reads a cached value                  | ❌ Yes                |
 | Max staleness                         | ❌ ~ 16ms @ 64Hz tick |
-| Warm read cost                        | ~ 2ns @ 4GHz         |
-| Cold read cost                        | ~ 1.9µs @ 4GHz       |
-| Step granularity                      | ~ 0.5ms              |
+| Warm read cost                        | ~ 2ns @ 4GHz          |
+| Cold read cost                        | ~ 1.9µs @ 4GHz        |
+| Step granularity                      | ~ 0.5ms               |
 
 </details>
 
@@ -945,8 +945,8 @@ Measures Elapsed time, since the machine booted
 
 Measures Elapsed time, since the machine booted
 
-| Property                              | Value                |
-| ------------------------------------- | -------------------- |
+| Property                              | Value                 |
+| ------------------------------------- | --------------------- |
 | Reacts to OS time changes             | ✅ No                 |
 | Reacts to NTP changes                 | ✅ No                 |
 | Counts system suspension times        | ✅ No                 |
@@ -954,9 +954,9 @@ Measures Elapsed time, since the machine booted
 | Might appear to go backwards          | ✅ No                 |
 | Reads a cached value                  | ❌ Yes                |
 | Max staleness                         | ❌ ~ 16ms @ 64Hz tick |
-| Warm read cost                        | ~ 3ns @ 4GHz         |
-| Cold read cost                        | ~ 1.9µs @ 4GHz       |
-| Step granularity                      | ~ 0.5ms              |
+| Warm read cost                        | ~ 3ns @ 4GHz          |
+| Cold read cost                        | ~ 1.9µs @ 4GHz        |
+| Step granularity                      | ~ 0.5ms               |
 
 </details>
 
@@ -989,8 +989,8 @@ Measures Elapsed time, since the machine booted
 
 Measures Elapsed time, since the machine booted
 
-| Property                              | Value                |
-| ------------------------------------- | -------------------- |
+| Property                              | Value                 |
+| ------------------------------------- | --------------------- |
 | Reacts to OS time changes             | ✅ No                 |
 | Reacts to NTP changes                 | ✅ No                 |
 | Counts system suspension times        | ❌ Yes                |
@@ -998,9 +998,9 @@ Measures Elapsed time, since the machine booted
 | Might appear to go backwards          | ✅ No                 |
 | Reads a cached value                  | ❌ Yes                |
 | Max staleness                         | ❌ ~ 18ms @ 64Hz tick |
-| Warm read cost                        | ~ 1.5ns @ 4GHz       |
-| Cold read cost                        | ~ 1.8µs @ 4GHz       |
-| Step granularity                      | 15ms                 |
+| Warm read cost                        | ~ 1.5ns @ 4GHz        |
+| Cold read cost                        | ~ 1.8µs @ 4GHz        |
+| Step granularity                      | 15ms                  |
 
 </details>
 
@@ -1011,18 +1011,18 @@ Measures Elapsed time, since the machine booted
 
 Measures CPU time used by this process
 
-| Property                              | Value                               |
-| ------------------------------------- | ----------------------------------- |
-| Reacts to OS time changes             | ✅ No                               |
-| Reacts to NTP changes                 | ✅ No                               |
-| Counts system suspension times        | ✅ No                               |
-| Advances while thread is de-scheduled | ✅ No                               |
-| Might appear to go backwards          | ✅ No                               |
-| Reads a cached value                  | ❌ Yes                              |
-| Max staleness                         | ❌ ~ 15.6ms @ 64Hz tick             |
-| Warm read cost                        | ~ 120ns + up to ~ 8ns/thread @ 4GHz |
-| Cold read cost                        | ~ 2.6µs @ 4GHz                      |
-| Step granularity                      | 15.625ms @ 64Hz tick                |
+| Property                               | Value                                     |
+| -------------------------------------- | ----------------------------------------- |
+| Reacts to OS time changes              | ✅ No                                     |
+| Reacts to NTP changes                  | ✅ No                                     |
+| Counts system suspension times         | ✅ No                                     |
+| Advances while process is de-scheduled | ✅ No                                     |
+| Might appear to go backwards           | ✅ No                                     |
+| Reads a cached value                   | ❌ Yes, for all threads                   |
+| Max staleness                          | ❌ ~ 15.6ms @ 64Hz tick, from all threads |
+| Warm read cost                         | ~ 120ns + up to ~ 8ns/thread @ 4GHz       |
+| Cold read cost                         | ~ 2.6µs @ 4GHz                            |
+| Step granularity                       | 15.625ms @ 64Hz tick                      |
 
 </details>
 
@@ -1033,8 +1033,8 @@ Measures CPU time used by this process
 
 Measures CPU time used by this thread
 
-| Property                              | Value                  |
-| ------------------------------------- | ---------------------- |
+| Property                              | Value                   |
+| ------------------------------------- | ----------------------- |
 | Reacts to OS time changes             | ✅ No                   |
 | Reacts to NTP changes                 | ✅ No                   |
 | Counts system suspension times        | ✅ No                   |
@@ -1042,9 +1042,9 @@ Measures CPU time used by this thread
 | Might appear to go backwards          | ✅ No                   |
 | Reads a cached value                  | ❌ Yes                  |
 | Max staleness                         | ❌ ~ 15.6ms @ 64Hz tick |
-| Warm read cost                        | ~ 86ns @ 4GHz          |
-| Cold read cost                        | ~ 585ns @ 4GHz         |
-| Step granularity                      | 15.625ms @ 64Hz tick   |
+| Warm read cost                        | ~ 86ns @ 4GHz           |
+| Cold read cost                        | ~ 585ns @ 4GHz          |
+| Step granularity                      | 15.625ms @ 64Hz tick    |
 
 </details>
 
@@ -1057,18 +1057,18 @@ One half of the pair `GetProcessTimes` reports; `processTime` and `threadTime` r
 
 Measures CPU time this process spent running its own code
 
-| Property                              | Value                               |
-| ------------------------------------- | ----------------------------------- |
-| Reacts to OS time changes             | ✅ No                               |
-| Reacts to NTP changes                 | ✅ No                               |
-| Counts system suspension times        | ✅ No                               |
-| Advances while thread is de-scheduled | ✅ No                               |
-| Might appear to go backwards          | ✅ No                               |
-| Reads a cached value                  | ❌ Yes                              |
-| Max staleness                         | ❌ ~ 15.6ms @ 64Hz tick             |
-| Warm read cost                        | ~ 113ns + up to ~ 8ns/thread @ 4GHz |
-| Cold read cost                        | ~ 2.7µs @ 4GHz                      |
-| Step granularity                      | 15.625ms @ 64Hz tick                |
+| Property                               | Value                                     |
+| -------------------------------------- | ----------------------------------------- |
+| Reacts to OS time changes              | ✅ No                                     |
+| Reacts to NTP changes                  | ✅ No                                     |
+| Counts system suspension times         | ✅ No                                     |
+| Advances while process is de-scheduled | ✅ No                                     |
+| Might appear to go backwards           | ✅ No                                     |
+| Reads a cached value                   | ❌ Yes, for all threads                   |
+| Max staleness                          | ❌ ~ 15.6ms @ 64Hz tick, from all threads |
+| Warm read cost                         | ~ 113ns + up to ~ 8ns/thread @ 4GHz       |
+| Cold read cost                         | ~ 2.7µs @ 4GHz                            |
+| Step granularity                       | 15.625ms @ 64Hz tick                      |
 
 </details>
 
@@ -1081,18 +1081,18 @@ One half of the pair `GetProcessTimes` reports; `processTime` and `threadTime` r
 
 Measures CPU time the kernel spent on this process's behalf
 
-| Property                              | Value                               |
-| ------------------------------------- | ----------------------------------- |
-| Reacts to OS time changes             | ✅ No                               |
-| Reacts to NTP changes                 | ✅ No                               |
-| Counts system suspension times        | ✅ No                               |
-| Advances while thread is de-scheduled | ✅ No                               |
-| Might appear to go backwards          | ✅ No                               |
-| Reads a cached value                  | ❌ Yes                              |
-| Max staleness                         | ❌ ~ 15.6ms @ 64Hz tick             |
-| Warm read cost                        | ~ 115ns + up to ~ 8ns/thread @ 4GHz |
-| Cold read cost                        | ~ 2.8µs @ 4GHz                      |
-| Step granularity                      | 15.625ms @ 64Hz tick                |
+| Property                               | Value                                     |
+| -------------------------------------- | ----------------------------------------- |
+| Reacts to OS time changes              | ✅ No                                     |
+| Reacts to NTP changes                  | ✅ No                                     |
+| Counts system suspension times         | ✅ No                                     |
+| Advances while process is de-scheduled | ✅ No                                     |
+| Might appear to go backwards           | ✅ No                                     |
+| Reads a cached value                   | ❌ Yes, for all threads                   |
+| Max staleness                          | ❌ ~ 15.6ms @ 64Hz tick, from all threads |
+| Warm read cost                         | ~ 115ns + up to ~ 8ns/thread @ 4GHz       |
+| Cold read cost                         | ~ 2.8µs @ 4GHz                            |
+| Step granularity                       | 15.625ms @ 64Hz tick                      |
 
 </details>
 
@@ -1105,8 +1105,8 @@ One half of the pair `GetThreadTimes` reports; `processTime` and `threadTime` re
 
 Measures CPU time this thread spent running its own code
 
-| Property                              | Value                  |
-| ------------------------------------- | ---------------------- |
+| Property                              | Value                   |
+| ------------------------------------- | ----------------------- |
 | Reacts to OS time changes             | ✅ No                   |
 | Reacts to NTP changes                 | ✅ No                   |
 | Counts system suspension times        | ✅ No                   |
@@ -1114,9 +1114,9 @@ Measures CPU time this thread spent running its own code
 | Might appear to go backwards          | ✅ No                   |
 | Reads a cached value                  | ❌ Yes                  |
 | Max staleness                         | ❌ ~ 15.6ms @ 64Hz tick |
-| Warm read cost                        | ~ 87ns @ 4GHz          |
-| Cold read cost                        | ~ 610ns @ 4GHz         |
-| Step granularity                      | 15.625ms @ 64Hz tick   |
+| Warm read cost                        | ~ 87ns @ 4GHz           |
+| Cold read cost                        | ~ 610ns @ 4GHz          |
+| Step granularity                      | 15.625ms @ 64Hz tick    |
 
 </details>
 
@@ -1129,8 +1129,8 @@ One half of the pair `GetThreadTimes` reports; `processTime` and `threadTime` re
 
 Measures CPU time the kernel spent on this thread's behalf
 
-| Property                              | Value                  |
-| ------------------------------------- | ---------------------- |
+| Property                              | Value                   |
+| ------------------------------------- | ----------------------- |
 | Reacts to OS time changes             | ✅ No                   |
 | Reacts to NTP changes                 | ✅ No                   |
 | Counts system suspension times        | ✅ No                   |
@@ -1138,9 +1138,9 @@ Measures CPU time the kernel spent on this thread's behalf
 | Might appear to go backwards          | ✅ No                   |
 | Reads a cached value                  | ❌ Yes                  |
 | Max staleness                         | ❌ ~ 15.6ms @ 64Hz tick |
-| Warm read cost                        | ~ 87ns @ 4GHz          |
-| Cold read cost                        | ~ 630ns @ 4GHz         |
-| Step granularity                      | 15.625ms @ 64Hz tick   |
+| Warm read cost                        | ~ 87ns @ 4GHz           |
+| Cold read cost                        | ~ 630ns @ 4GHz          |
+| Step granularity                      | 15.625ms @ 64Hz tick    |
 
 </details>
 
@@ -1266,8 +1266,8 @@ Measures Elapsed time, from an arbitrary point
 
 Measures Elapsed time, from an arbitrary point
 
-| Property                              | Value                  |
-| ------------------------------------- | ---------------------- |
+| Property                              | Value                   |
+| ------------------------------------- | ----------------------- |
 | Reacts to OS time changes             | ✅ No                   |
 | Reacts to NTP changes                 | ❌ Yes                  |
 | Counts system suspension times        | ✅ No                   |
@@ -1275,9 +1275,9 @@ Measures Elapsed time, from an arbitrary point
 | Might appear to go backwards          | ✅ No                   |
 | Reads a cached value                  | ❌ Yes                  |
 | Max staleness                         | ❌ ~ 1ms @ kern.hz 1000 |
-| Warm read cost                        | ~ 3.5ns @ 4GHz         |
-| Cold read cost                        | ~ 235ns @ 4GHz         |
-| Step granularity                      | 1ms @ kern.hz 1000     |
+| Warm read cost                        | ~ 3.5ns @ 4GHz          |
+| Cold read cost                        | ~ 235ns @ 4GHz          |
+| Step granularity                      | 1ms @ kern.hz 1000      |
 
 </details>
 
@@ -1332,8 +1332,8 @@ Measures Elapsed time, from an arbitrary point
 
 Measures Elapsed time, from an arbitrary point
 
-| Property                              | Value                  |
-| ------------------------------------- | ---------------------- |
+| Property                              | Value                   |
+| ------------------------------------- | ----------------------- |
 | Reacts to OS time changes             | ✅ No                   |
 | Reacts to NTP changes                 | ❌ Yes                  |
 | Counts system suspension times        | ✅ No                   |
@@ -1341,9 +1341,9 @@ Measures Elapsed time, from an arbitrary point
 | Might appear to go backwards          | ✅ No                   |
 | Reads a cached value                  | ❌ Yes                  |
 | Max staleness                         | ❌ ~ 1ms @ kern.hz 1000 |
-| Warm read cost                        | ~ 3.5ns @ 4GHz         |
-| Cold read cost                        | ~ 265ns @ 4GHz         |
-| Step granularity                      | 1ms @ kern.hz 1000     |
+| Warm read cost                        | ~ 3.5ns @ 4GHz          |
+| Cold read cost                        | ~ 265ns @ 4GHz          |
+| Step granularity                      | 1ms @ kern.hz 1000      |
 
 </details>
 
@@ -1400,18 +1400,18 @@ Rejected with `EINVAL` until the machine's TAI offset has been set. Traps on run
 
 Measures CPU time used by this process, user mode only
 
-| Property                              | Value                                |
-| ------------------------------------- | ------------------------------------ |
-| Reacts to OS time changes             | ✅ No                                |
-| Reacts to NTP changes                 | ✅ No                                |
-| Counts system suspension times        | ✅ No                                |
-| Advances while thread is de-scheduled | ✅ No                                |
-| Might appear to go backwards          | ✅ No                                |
-| Reads a cached value                  | ✅ No                                |
-| Max staleness                         | ✅ None                              |
-| Warm read cost                        | ~ 145ns + up to ~ 10ns/thread @ 4GHz |
-| Cold read cost                        | ~ 495ns @ 4GHz                       |
-| Step granularity                      | 1µs                                  |
+| Property                               | Value                                   |
+| -------------------------------------- | --------------------------------------- |
+| Reacts to OS time changes              | ✅ No                                   |
+| Reacts to NTP changes                  | ✅ No                                   |
+| Counts system suspension times         | ✅ No                                   |
+| Advances while process is de-scheduled | ✅ No                                   |
+| Might appear to go backwards           | ✅ No                                   |
+| Reads a cached value                   | ❌ Yes, for all threads                 |
+| Max staleness                          | ❌ ~ 8ms @ stathz 127, from all threads |
+| Warm read cost                         | ~ 145ns + up to ~ 10ns/thread @ 4GHz    |
+| Cold read cost                         | ~ 495ns @ 4GHz                          |
+| Step granularity                       | 1µs                                     |
 
 </details>
 
@@ -1422,18 +1422,18 @@ Measures CPU time used by this process, user mode only
 
 Measures CPU time used by this process
 
-| Property                              | Value                                |
-| ------------------------------------- | ------------------------------------ |
-| Reacts to OS time changes             | ✅ No                                |
-| Reacts to NTP changes                 | ✅ No                                |
-| Counts system suspension times        | ✅ No                                |
-| Advances while thread is de-scheduled | ✅ No                                |
-| Might appear to go backwards          | ✅ No                                |
-| Reads a cached value                  | ✅ No                                |
-| Max staleness                         | ✅ None                              |
-| Warm read cost                        | ~ 145ns + up to ~ 10ns/thread @ 4GHz |
-| Cold read cost                        | ~ 560ns @ 4GHz                       |
-| Step granularity                      | 1µs                                  |
+| Property                               | Value                                   |
+| -------------------------------------- | --------------------------------------- |
+| Reacts to OS time changes              | ✅ No                                   |
+| Reacts to NTP changes                  | ✅ No                                   |
+| Counts system suspension times         | ✅ No                                   |
+| Advances while process is de-scheduled | ✅ No                                   |
+| Might appear to go backwards           | ✅ No                                   |
+| Reads a cached value                   | ❌ Yes, for all threads                 |
+| Max staleness                          | ❌ ~ 8ms @ stathz 127, from all threads |
+| Warm read cost                         | ~ 145ns + up to ~ 10ns/thread @ 4GHz    |
+| Cold read cost                         | ~ 560ns @ 4GHz                          |
+| Step granularity                       | 1µs                                     |
 
 </details>
 
@@ -1466,18 +1466,18 @@ Measures Wall time, whole seconds only
 
 Measures CPU time used by this process
 
-| Property                              | Value                          |
-| ------------------------------------- | ------------------------------ |
-| Reacts to OS time changes             | ✅ No                          |
-| Reacts to NTP changes                 | ✅ No                          |
-| Counts system suspension times        | ✅ No                          |
-| Advances while thread is de-scheduled | ✅ No                          |
-| Might appear to go backwards          | ✅ No                          |
-| Reads a cached value                  | ✅ No                          |
-| Max staleness                         | ✅ None                        |
-| Warm read cost                        | ~ 145ns + ~ 11ns/thread @ 4GHz |
-| Cold read cost                        | ~ 595ns @ 4GHz                 |
-| Step granularity                      | 170ns                          |
+| Property                               | Value                                     |
+| -------------------------------------- | ----------------------------------------- |
+| Reacts to OS time changes              | ✅ No                                     |
+| Reacts to NTP changes                  | ✅ No                                     |
+| Counts system suspension times         | ✅ No                                     |
+| Advances while process is de-scheduled | ✅ No                                     |
+| Might appear to go backwards           | ✅ No                                     |
+| Reads a cached value                   | ❌ Yes, for other threads                 |
+| Max staleness                          | ❌ ~ 8ms @ stathz 127, from other threads |
+| Warm read cost                         | ~ 145ns + ~ 11ns/thread @ 4GHz            |
+| Cold read cost                         | ~ 595ns @ 4GHz                            |
+| Step granularity                       | 170ns                                     |
 
 </details>
 
@@ -1512,18 +1512,18 @@ This is this library's own clock identifier and not one of the clock ids the pla
 
 Measures CPU time this process spent running its own code
 
-| Property                              | Value                          |
-| ------------------------------------- | ------------------------------ |
-| Reacts to OS time changes             | ✅ No                          |
-| Reacts to NTP changes                 | ✅ No                          |
-| Counts system suspension times        | ✅ No                          |
-| Advances while thread is de-scheduled | ✅ No                          |
-| Might appear to go backwards          | ✅ No                          |
-| Reads a cached value                  | ✅ No                          |
-| Max staleness                         | ✅ None                        |
-| Warm read cost                        | ~ 150ns + ~ 16ns/thread @ 4GHz |
-| Cold read cost                        | ~ 490ns @ 4GHz                 |
-| Step granularity                      | 1µs                            |
+| Property                               | Value                                   |
+| -------------------------------------- | --------------------------------------- |
+| Reacts to OS time changes              | ✅ No                                   |
+| Reacts to NTP changes                  | ✅ No                                   |
+| Counts system suspension times         | ✅ No                                   |
+| Advances while process is de-scheduled | ✅ No                                   |
+| Might appear to go backwards           | ✅ No                                   |
+| Reads a cached value                   | ❌ Yes, for all threads                 |
+| Max staleness                          | ❌ ~ 8ms @ stathz 127, from all threads |
+| Warm read cost                         | ~ 150ns + ~ 16ns/thread @ 4GHz          |
+| Cold read cost                         | ~ 490ns @ 4GHz                          |
+| Step granularity                       | 1µs                                     |
 
 </details>
 
@@ -1536,18 +1536,18 @@ This is this library's own clock identifier and not one of the clock ids the pla
 
 Measures CPU time the kernel spent on this process's behalf
 
-| Property                              | Value                          |
-| ------------------------------------- | ------------------------------ |
-| Reacts to OS time changes             | ✅ No                          |
-| Reacts to NTP changes                 | ✅ No                          |
-| Counts system suspension times        | ✅ No                          |
-| Advances while thread is de-scheduled | ✅ No                          |
-| Might appear to go backwards          | ✅ No                          |
-| Reads a cached value                  | ✅ No                          |
-| Max staleness                         | ✅ None                        |
-| Warm read cost                        | ~ 150ns + ~ 16ns/thread @ 4GHz |
-| Cold read cost                        | ~ 490ns @ 4GHz                 |
-| Step granularity                      | 1µs                            |
+| Property                               | Value                                   |
+| -------------------------------------- | --------------------------------------- |
+| Reacts to OS time changes              | ✅ No                                   |
+| Reacts to NTP changes                  | ✅ No                                   |
+| Counts system suspension times         | ✅ No                                   |
+| Advances while process is de-scheduled | ✅ No                                   |
+| Might appear to go backwards           | ✅ No                                   |
+| Reads a cached value                   | ❌ Yes, for all threads                 |
+| Max staleness                          | ❌ ~ 8ms @ stathz 127, from all threads |
+| Warm read cost                         | ~ 150ns + ~ 16ns/thread @ 4GHz          |
+| Cold read cost                         | ~ 490ns @ 4GHz                          |
+| Step granularity                       | 1µs                                     |
 
 </details>
 
@@ -1560,18 +1560,18 @@ This is this library's own clock identifier and not one of the clock ids the pla
 
 Measures CPU time this thread spent running its own code
 
-| Property                              | Value            |
-| ------------------------------------- | ---------------- |
-| Reacts to OS time changes             | ✅ No            |
-| Reacts to NTP changes                 | ✅ No            |
-| Counts system suspension times        | ✅ No            |
-| Advances while thread is de-scheduled | ✅ No            |
-| Might appear to go backwards          | ✅ No            |
-| Reads a cached value                  | ✅ No            |
-| Max staleness                         | ✅ None          |
-| Warm read cost                        | ~ 145ns @ 4GHz   |
-| Cold read cost                        | ~ 425ns @ 4GHz   |
-| Step granularity                      | 1µs              |
+| Property                              | Value                 |
+| ------------------------------------- | --------------------- |
+| Reacts to OS time changes             | ✅ No                 |
+| Reacts to NTP changes                 | ✅ No                 |
+| Counts system suspension times        | ✅ No                 |
+| Advances while thread is de-scheduled | ✅ No                 |
+| Might appear to go backwards          | ✅ No                 |
+| Reads a cached value                  | ❌ Yes                |
+| Max staleness                         | ❌ ~ 8ms @ stathz 127 |
+| Warm read cost                        | ~ 145ns @ 4GHz        |
+| Cold read cost                        | ~ 425ns @ 4GHz        |
+| Step granularity                      | 1µs                   |
 
 </details>
 
@@ -1584,18 +1584,18 @@ This is this library's own clock identifier and not one of the clock ids the pla
 
 Measures CPU time the kernel spent on this thread's behalf
 
-| Property                              | Value            |
-| ------------------------------------- | ---------------- |
-| Reacts to OS time changes             | ✅ No            |
-| Reacts to NTP changes                 | ✅ No            |
-| Counts system suspension times        | ✅ No            |
-| Advances while thread is de-scheduled | ✅ No            |
-| Might appear to go backwards          | ✅ No            |
-| Reads a cached value                  | ✅ No            |
-| Max staleness                         | ✅ None          |
-| Warm read cost                        | ~ 145ns @ 4GHz   |
-| Cold read cost                        | ~ 425ns @ 4GHz   |
-| Step granularity                      | 1µs              |
+| Property                              | Value                 |
+| ------------------------------------- | --------------------- |
+| Reacts to OS time changes             | ✅ No                 |
+| Reacts to NTP changes                 | ✅ No                 |
+| Counts system suspension times        | ✅ No                 |
+| Advances while thread is de-scheduled | ✅ No                 |
+| Might appear to go backwards          | ✅ No                 |
+| Reads a cached value                  | ❌ Yes                |
+| Max staleness                         | ❌ ~ 8ms @ stathz 127 |
+| Warm read cost                        | ~ 145ns @ 4GHz        |
+| Cold read cost                        | ~ 425ns @ 4GHz        |
+| Step granularity                      | 1µs                   |
 
 </details>
 
@@ -1699,18 +1699,18 @@ Measures Elapsed time, since the machine booted
 
 Measures CPU time used by this process
 
-| Property                              | Value                         |
-| ------------------------------------- | ----------------------------- |
-| Reacts to OS time changes             | ✅ No                         |
-| Reacts to NTP changes                 | ✅ No                         |
-| Counts system suspension times        | ✅ No                         |
-| Advances while thread is de-scheduled | ✅ No                         |
-| Might appear to go backwards          | ✅ No                         |
-| Reads a cached value                  | ✅ No                         |
-| Max staleness                         | ✅ None                       |
-| Warm read cost                        | ~ 235ns + ~ 5ns/thread @ 4GHz |
-| Cold read cost                        | ~ 15.4µs @ 4GHz               |
-| Step granularity                      | 291ns                         |
+| Property                               | Value                          |
+| -------------------------------------- | ------------------------------ |
+| Reacts to OS time changes              | ✅ No                          |
+| Reacts to NTP changes                  | ✅ No                          |
+| Counts system suspension times         | ✅ No                          |
+| Advances while process is de-scheduled | ✅ No                          |
+| Might appear to go backwards           | ✅ No                          |
+| Reads a cached value                   | ❌ Yes, for other threads      |
+| Max staleness                          | ❌ ~ 200ms, from other threads |
+| Warm read cost                         | ~ 235ns + ~ 5ns/thread @ 4GHz  |
+| Cold read cost                         | ~ 15.4µs @ 4GHz                |
+| Step granularity                       | 291ns                          |
 
 </details>
 
@@ -1745,18 +1745,18 @@ This is this library's own clock identifier and not one of the clock ids the pla
 
 Measures CPU time this process spent running its own code
 
-| Property                              | Value                          |
-| ------------------------------------- | ------------------------------ |
-| Reacts to OS time changes             | ✅ No                          |
-| Reacts to NTP changes                 | ✅ No                          |
-| Counts system suspension times        | ✅ No                          |
-| Advances while thread is de-scheduled | ✅ No                          |
-| Might appear to go backwards          | ✅ No                          |
-| Reads a cached value                  | ❌ Yes                         |
-| Max staleness                         | ❌ ~ 10ms @ stathz 100         |
-| Warm read cost                        | ~ 190ns + ~ 11ns/thread @ 4GHz |
-| Cold read cost                        | ~ 5µs @ 4GHz                   |
-| Step granularity                      | 10ms @ stathz 100              |
+| Property                               | Value                                    |
+| -------------------------------------- | ---------------------------------------- |
+| Reacts to OS time changes              | ✅ No                                    |
+| Reacts to NTP changes                  | ✅ No                                    |
+| Counts system suspension times         | ✅ No                                    |
+| Advances while process is de-scheduled | ✅ No                                    |
+| Might appear to go backwards           | ✅ No                                    |
+| Reads a cached value                   | ❌ Yes, for all threads                  |
+| Max staleness                          | ❌ ~ 10ms @ stathz 100, from all threads |
+| Warm read cost                         | ~ 190ns + ~ 11ns/thread @ 4GHz           |
+| Cold read cost                         | ~ 5µs @ 4GHz                             |
+| Step granularity                       | 10ms @ stathz 100                        |
 
 </details>
 
@@ -1769,18 +1769,18 @@ This is this library's own clock identifier and not one of the clock ids the pla
 
 Measures CPU time the kernel spent on this process's behalf
 
-| Property                              | Value                          |
-| ------------------------------------- | ------------------------------ |
-| Reacts to OS time changes             | ✅ No                          |
-| Reacts to NTP changes                 | ✅ No                          |
-| Counts system suspension times        | ✅ No                          |
-| Advances while thread is de-scheduled | ✅ No                          |
-| Might appear to go backwards          | ✅ No                          |
-| Reads a cached value                  | ❌ Yes                         |
-| Max staleness                         | ❌ ~ 10ms @ stathz 100         |
-| Warm read cost                        | ~ 190ns + ~ 11ns/thread @ 4GHz |
-| Cold read cost                        | ~ 5µs @ 4GHz                   |
-| Step granularity                      | 10ms @ stathz 100              |
+| Property                               | Value                                    |
+| -------------------------------------- | ---------------------------------------- |
+| Reacts to OS time changes              | ✅ No                                    |
+| Reacts to NTP changes                  | ✅ No                                    |
+| Counts system suspension times         | ✅ No                                    |
+| Advances while process is de-scheduled | ✅ No                                    |
+| Might appear to go backwards           | ✅ No                                    |
+| Reads a cached value                   | ❌ Yes, for all threads                  |
+| Max staleness                          | ❌ ~ 10ms @ stathz 100, from all threads |
+| Warm read cost                         | ~ 190ns + ~ 11ns/thread @ 4GHz           |
+| Cold read cost                         | ~ 5µs @ 4GHz                             |
+| Step granularity                       | 10ms @ stathz 100                        |
 
 </details>
 
@@ -1970,17 +1970,17 @@ These were performed on my M1 Pro MacBook, on macOS 27.
 
 | Benchmark        | `SystemClock` (ns/op) | Standard Library (ns/op) | Speedup |
 | ---------------- | --------------------- | ------------------------ | ------- |
-| `continuous.now` | 10.6 ns               | 24.9 ns                  | 2.35x   |
-| `suspending.now` | 10.8 ns               | 24.3 ns                  | 2.25x   |
+| `continuous.now` | 10.6 ns               | 24.7 ns                  | 2.34x   |
+| `suspending.now` | 10.8 ns               | 23.1 ns                  | 2.14x   |
 
 | Benchmark              | `SystemClock` instructions | Standard Library instructions |
 | ---------------------- | -------------------------- | ----------------------------- |
-| `realtime.now`         | 145                        | N/A                           |
-| `realtimeCoarse.now`   | 145                        | N/A                           |
-| `continuous.now`       | 93                         | 205                           |
-| `continuousCoarse.now` | 103                        | N/A                           |
-| `suspending.now`       | 100                        | 210                           |
-| `suspendingCoarse.now` | 90                         | N/A                           |
+| `realtime.now`         | 146                        | N/A                           |
+| `realtimeCoarse.now`   | 146                        | N/A                           |
+| `continuous.now`       | 94                         | 205                           |
+| `continuousCoarse.now` | 104                        | N/A                           |
+| `suspending.now`       | 101                        | 210                           |
+| `suspendingCoarse.now` | 91                         | N/A                           |
 
 ### Against glibc
 

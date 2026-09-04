@@ -109,18 +109,18 @@ extension OpenBSDClockID {
     ///
     /// Measures CPU time used by this process
     ///
-    /// | Property                              | Value                         |
-    /// | ------------------------------------- | ----------------------------- |
-    /// | Reacts to OS time changes             | ✅ No                         |
-    /// | Reacts to NTP changes                 | ✅ No                         |
-    /// | Counts system suspension times        | ✅ No                         |
-    /// | Advances while thread is de-scheduled | ✅ No                         |
-    /// | Might appear to go backwards          | ✅ No                         |
-    /// | Reads a cached value                  | ✅ No                         |
-    /// | Max staleness                         | ✅ None                       |
-    /// | Warm read cost                        | ~ 235ns + ~ 5ns/thread @ 4GHz |
-    /// | Cold read cost                        | ~ 15.4µs @ 4GHz               |
-    /// | Step granularity                      | 291ns                         |
+    /// | Property                               | Value                          |
+    /// | -------------------------------------- | ------------------------------ |
+    /// | Reacts to OS time changes              | ✅ No                          |
+    /// | Reacts to NTP changes                  | ✅ No                          |
+    /// | Counts system suspension times         | ✅ No                          |
+    /// | Advances while process is de-scheduled | ✅ No                          |
+    /// | Might appear to go backwards           | ✅ No                          |
+    /// | Reads a cached value                   | ❌ Yes, for other threads      |
+    /// | Max staleness                          | ❌ ~ 200ms, from other threads |
+    /// | Warm read cost                         | ~ 235ns + ~ 5ns/thread @ 4GHz  |
+    /// | Cold read cost                         | ~ 15.4µs @ 4GHz                |
+    /// | Step granularity                       | 291ns                          |
     @inlinable
     public static var processCPUTime: OpenBSDClockID {
         OpenBSDClockID(rawValue: csystem_clock_openbsd_process_cpu_time)
@@ -157,18 +157,18 @@ extension OpenBSDClockID {
     ///
     /// Measures CPU time this process spent running its own code
     ///
-    /// | Property                              | Value                          |
-    /// | ------------------------------------- | ------------------------------ |
-    /// | Reacts to OS time changes             | ✅ No                          |
-    /// | Reacts to NTP changes                 | ✅ No                          |
-    /// | Counts system suspension times        | ✅ No                          |
-    /// | Advances while thread is de-scheduled | ✅ No                          |
-    /// | Might appear to go backwards          | ✅ No                          |
-    /// | Reads a cached value                  | ❌ Yes                         |
-    /// | Max staleness                         | ❌ ~ 10ms @ stathz 100         |
-    /// | Warm read cost                        | ~ 190ns + ~ 11ns/thread @ 4GHz |
-    /// | Cold read cost                        | ~ 5µs @ 4GHz                   |
-    /// | Step granularity                      | 10ms @ stathz 100              |
+    /// | Property                               | Value                                    |
+    /// | -------------------------------------- | ---------------------------------------- |
+    /// | Reacts to OS time changes              | ✅ No                                    |
+    /// | Reacts to NTP changes                  | ✅ No                                    |
+    /// | Counts system suspension times         | ✅ No                                    |
+    /// | Advances while process is de-scheduled | ✅ No                                    |
+    /// | Might appear to go backwards           | ✅ No                                    |
+    /// | Reads a cached value                   | ❌ Yes, for all threads                  |
+    /// | Max staleness                          | ❌ ~ 10ms @ stathz 100, from all threads |
+    /// | Warm read cost                         | ~ 190ns + ~ 11ns/thread @ 4GHz           |
+    /// | Cold read cost                         | ~ 5µs @ 4GHz                             |
+    /// | Step granularity                       | 10ms @ stathz 100                        |
     @inlinable
     public static var processUserTime: OpenBSDClockID {
         OpenBSDClockID(rawValue: csystem_clock_process_user_cpu_time)
@@ -182,18 +182,18 @@ extension OpenBSDClockID {
     ///
     /// Measures CPU time the kernel spent on this process's behalf
     ///
-    /// | Property                              | Value                          |
-    /// | ------------------------------------- | ------------------------------ |
-    /// | Reacts to OS time changes             | ✅ No                          |
-    /// | Reacts to NTP changes                 | ✅ No                          |
-    /// | Counts system suspension times        | ✅ No                          |
-    /// | Advances while thread is de-scheduled | ✅ No                          |
-    /// | Might appear to go backwards          | ✅ No                          |
-    /// | Reads a cached value                  | ❌ Yes                         |
-    /// | Max staleness                         | ❌ ~ 10ms @ stathz 100         |
-    /// | Warm read cost                        | ~ 190ns + ~ 11ns/thread @ 4GHz |
-    /// | Cold read cost                        | ~ 5µs @ 4GHz                   |
-    /// | Step granularity                      | 10ms @ stathz 100              |
+    /// | Property                               | Value                                    |
+    /// | -------------------------------------- | ---------------------------------------- |
+    /// | Reacts to OS time changes              | ✅ No                                    |
+    /// | Reacts to NTP changes                  | ✅ No                                    |
+    /// | Counts system suspension times         | ✅ No                                    |
+    /// | Advances while process is de-scheduled | ✅ No                                    |
+    /// | Might appear to go backwards           | ✅ No                                    |
+    /// | Reads a cached value                   | ❌ Yes, for all threads                  |
+    /// | Max staleness                          | ❌ ~ 10ms @ stathz 100, from all threads |
+    /// | Warm read cost                         | ~ 190ns + ~ 11ns/thread @ 4GHz           |
+    /// | Cold read cost                         | ~ 5µs @ 4GHz                             |
+    /// | Step granularity                       | 10ms @ stathz 100                        |
     @inlinable
     public static var processSystemTime: OpenBSDClockID {
         OpenBSDClockID(rawValue: csystem_clock_process_system_cpu_time)
