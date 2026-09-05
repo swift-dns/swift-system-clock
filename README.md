@@ -161,50 +161,6 @@ Here is a list of all supported clocks on each platform.
 > For better accuracy, measure under your own specific hardware and kernel.   
 > If you find a value generally/widely incorrect, please file an issue or open a pull request for it.
 
-| Clock                          | Darwin | Linux | Windows | FreeBSD | OpenBSD | WASI | Fallback |
-| ------------------------------ | ------ | ----- | ------- | ------- | ------- | ---- | -------- |
-| `realtime`                     | ✅     | ✅     |         | ✅      | ✅      | ✅    | ✅        |
-| `realtimePrecise`              |        |       |         | ✅       |         |      |          |
-| `realtimeFast`                 |        |       |         | ✅       |         |      |          |
-| `realtimeCoarse`               |        | ✅     |         |         |         |      |          |
-| `realtimeAlarm`                |        | ✅     |         |         |         |      |          |
-| `systemTime`                   |        |       | ✅       |         |         |      |          |
-| `systemTimePrecise`            |        |       | ✅       |         |         |      |          |
-| `second`                       |        |       |         | ✅       |         |      |          |
-| `tai`                          |        | ✅     |         | ✅       |        |      |          |
-| `monotonic`                    | ✅     | ✅     |         | ✅      | ✅      | ✅    | ✅        |
-| `monotonicPrecise`             |        |       |         | ✅       |         |      |          |
-| `monotonicFast`                |        |       |         | ✅       |         |      |          |
-| `monotonicCoarse`              |        | ✅     |         |         |         |      |          |
-| `monotonicRaw`                 | ✅     | ✅     |         |         |         |      |          |
-| `monotonicRawApproximate`      | ✅     |        |         |         |         |      |          |
-| `performanceCounter`           |        |       | ✅       |         |         |      |          |
-| `interruptTime`                |        |       | ✅       |         |         |      |          |
-| `interruptTimePrecise`         |        |       | ✅       |         |         |      |          |
-| `unbiasedInterruptTime`        |        |       | ✅       |         |         |      |          |
-| `unbiasedInterruptTimePrecise` |        |       | ✅       |         |         |      |          |
-| `tickCount`                    |        |       | ✅       |         |         |      |          |
-| `boottime`                     |        | ✅     |         | ✅       | ✅      |      |          |
-| `boottimeAlarm`                |        | ✅     |         |         |         |      |          |
-| `uptime`                       |        |       |         | ✅       | ✅      |      |          |
-| `uptimePrecise`                |        |       |         | ✅       |         |      |          |
-| `uptimeFast`                   |        |       |         | ✅       |         |      |          |
-| `uptimeRaw`                    | ✅     |        |         |         |         |      |          |
-| `uptimeRawApproximate`         | ✅     |        |         |         |         |      |          |
-| `processCPUTime`               | ✅     | ✅     |         | ✅       | ✅      |      |          |
-| `processTime`                  |        |       | ✅       |         |         |      |          |
-| `threadCPUTime`                | ✅     | ✅     |         | ✅       | ✅      |      |          |
-| `threadTime`                   |        |       | ✅       |         |         |      |          |
-| `processUserTime`              | ✅     | ✅     | ✅      | ✅       | ✅      |      |          |
-| `processSystemTime`            | ✅     | ✅     |         | ✅       | ✅      |      |          |
-| `processKernelTime`            |        |       | ✅       |         |         |      |          |
-| `threadUserTime`               | ✅     | ✅     | ✅      | ✅       | ✅      |      |          |
-| `threadSystemTime`             | ✅     | ✅     |         | ✅       | ✅      |      |          |
-| `threadKernelTime`             |        |       | ✅       |         |         |      |          |
-| `virtual`                      |        |       |         | ✅       |         |      |          |
-| `prof`                         |        |       |         | ✅       |         |      |          |
-| `highResolution`               |        |       |         |         |         |      | ✅        |
-
 <details>
   <summary><b>Darwin (Apple platforms)</b></summary>
 
