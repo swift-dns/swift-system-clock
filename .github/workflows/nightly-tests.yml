@@ -3,7 +3,6 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 on:
-  pull_request: { types: [opened, reopened, synchronize] }
   push: { branches: [main] }
   schedule:
     - cron: "0 6 * * 6"
@@ -14,9 +13,12 @@ defaults:
 
 jobs:
   check-ci-config:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     timeout-minutes: 5
+
+    env:
+      IS_FORK_PULL_REQUEST: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
 
     outputs:
       android: ${{ steps.ci-config.outputs.android }}
@@ -25,6 +27,9 @@ jobs:
       musl: ${{ steps.ci-config.outputs.musl }}
       wasm: ${{ steps.ci-config.outputs.wasm }}
       windows: ${{ steps.ci-config.outputs.windows }}
+      cxx-interoperability-arguments: ${{ steps.ci-config.outputs.cxx-interoperability-arguments }}
+      android-swift-build-arguments: ${{ steps.ci-config.outputs.android-swift-build-arguments }}
+      wasi-swift-build-arguments: ${{ steps.ci-config.outputs.wasi-swift-build-arguments }}
 
     steps:
       - name: Check out ${{ github.event.repository.name }}
@@ -32,8 +37,22 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Check out the ci config of the base branch
+        if: ${{ env.IS_FORK_PULL_REQUEST == 'true' }} # A fork must not turn off the jobs that check it
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base-ref
+          sparse-checkout: |
+            .github/ci-config.yml
+            .github/ci-config.yaml
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
       - name: Check the ci config
         id: ci-config
+        env:
+          CI_CONFIG_DIR: ${{ env.IS_FORK_PULL_REQUEST == 'true' && 'base-ref/.github' || '.github' }}
         run: .github/scripts/ci-config.sh >> "${GITHUB_OUTPUT}"
 
   linux-nightly-tests:
@@ -46,7 +65,7 @@ jobs:
           - mode: "debug"
           - mode: "release"
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     container: ${{ matrix.swift-image.name }}
 
@@ -238,6 +257,7 @@ jobs:
         macos:
           - version: macos-15
           - version: macos-26
+          - version: xcode-27
         xcode:
           - version: latest-stable
         swift:
@@ -403,12 +423,15 @@ jobs:
           - mode: "debug"
           - mode: "release"
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     needs: check-ci-config
     if: ${{ needs.check-ci-config.outputs.android == 'true' }}
 
     timeout-minutes: 30
+
+    env:
+      ANDROID_SWIFT_BUILD_ARGUMENTS: ${{ needs.check-ci-config.outputs.android-swift-build-arguments }}
 
     permissions:
       actions: read # For reading the previous commit's workflow runs
@@ -479,7 +502,9 @@ jobs:
           copy-files: Tests
           swift-build-flags: >-
             --build-tests
+            --disable-xctest
             --explicit-target-dependency-import-check error
+            ${ANDROID_SWIFT_BUILD_ARGUMENTS}
           swift-test-flags: --skip "IntegrationTests."
 
       - name: Cache .build
@@ -508,6 +533,9 @@ jobs:
     if: ${{ needs.check-ci-config.outputs.windows == 'true' }}
 
     timeout-minutes: 60
+
+    env:
+      CXX_INTEROPERABILITY_ARGUMENTS: ${{ needs.check-ci-config.outputs.cxx-interoperability-arguments }}
 
     permissions:
       actions: read # For reading the previous commit's workflow runs
@@ -565,10 +593,15 @@ jobs:
 
           swift --version
 
-          swift build --build-tests --disable-xctest --explicit-target-dependency-import-check error -Xswiftc -require-explicit-sendable -c $env:BUILD_MODE
+          $CxxArguments = @()
+          if ($env:CXX_INTEROPERABILITY_ARGUMENTS) {
+            $CxxArguments = $env:CXX_INTEROPERABILITY_ARGUMENTS -split ' ' | Where-Object { $_ }
+          }
+
+          swift build --build-tests --disable-xctest --explicit-target-dependency-import-check error -Xswiftc -require-explicit-sendable @CxxArguments -c $env:BUILD_MODE
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
 
-          swift test --skip "IntegrationTests." --skip-build --disable-xctest -Xswiftc -require-explicit-sendable -c $env:BUILD_MODE
+          swift test --skip "IntegrationTests." --skip-build --disable-xctest -Xswiftc -require-explicit-sendable @CxxArguments -c $env:BUILD_MODE
           if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
           '@ | Set-Content -Path "${env:RUNNER_TEMP}\container-script\run.ps1"
 
@@ -580,6 +613,7 @@ jobs:
         run: |
           docker run --rm `
             --env BUILD_MODE `
+            --env CXX_INTEROPERABILITY_ARGUMENTS `
             --workdir C:\source `
             --volume "${env:GITHUB_WORKSPACE}:C:\source" `
             --volume "${env:RUNNER_TEMP}\container-script:C:\container-script" `
@@ -603,7 +637,7 @@ jobs:
           - mode: "debug"
           - mode: "release"
 
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
 
     needs: check-ci-config
     if: ${{ needs.check-ci-config.outputs.freebsd == 'true' }}
@@ -657,7 +691,7 @@ jobs:
 
       - name: Build ${{ github.event.repository.name }} and run tests
         if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
-        uses: vmactions/freebsd-vm@f0552d3b69211736abd97f02ff3d4674c56b73b1 # v1.5.5
+        uses: vmactions/freebsd-vm@8b0f1a8fc0ea0def307835c258940ca358fe6480 # v1.5.6
         env:
           BUILD_MODE: ${{ matrix.config.mode }}
         with:
@@ -712,7 +746,7 @@ jobs:
           - mode: "debug"
           - mode: "release"
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     needs: check-ci-config
     if: ${{ needs.check-ci-config.outputs.musl == 'true' }}
@@ -796,7 +830,7 @@ jobs:
           - mode: "debug"
           - mode: "release"
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     needs: check-ci-config
     if: ${{ needs.check-ci-config.outputs.wasm == 'true' }}
@@ -804,6 +838,9 @@ jobs:
     container: ${{ matrix.swift-image.name }}
 
     timeout-minutes: 30
+
+    env:
+      WASI_SWIFT_BUILD_ARGUMENTS: ${{ needs.check-ci-config.outputs.wasi-swift-build-arguments }}
 
     permissions:
       actions: read # For reading the previous commit's workflow runs
@@ -856,9 +893,9 @@ jobs:
           SWIFT_VERSION: ${{ matrix.swift.version }}
           BUILD_MODE: ${{ matrix.config.mode }}
           BUILD_FLAGS: >-
-            --build-tests
-            --explicit-target-dependency-import-check error
-            -Xswiftc -require-explicit-sendable
+            --disable-xctest
+            ${{ env.WASI_SWIFT_BUILD_ARGUMENTS
+            || '--build-tests --explicit-target-dependency-import-check error -Xswiftc -require-explicit-sendable' }}
         run: .github/scripts/build-with-sdk.sh
 
       - name: Cache .build
@@ -868,8 +905,10 @@ jobs:
           path: .build
           key: "${{ github.event.repository.name }}-nightly-unit-tests-wasi-${{ matrix.config.mode }}-build-${{ matrix.swift-image.name }}-${{ runner.os }}-${{ steps.swift-toolchain.outputs.toolchain-id }}-${{ hashFiles('./Package.resolved') }}"
 
+      # A repository that replaced the flags above dropped '--build-tests' from them, so it has no
+      # test bundle to run here.
       - name: Run tests with wasmtime
-        if: ${{ steps.check-relevance.outputs.should-run == 'true' }}
+        if: ${{ steps.check-relevance.outputs.should-run == 'true' && env.WASI_SWIFT_BUILD_ARGUMENTS == '' }}
         env:
           BUILD_MODE: ${{ matrix.config.mode }}
           WASMTIME_VERSION: "48.0.1"
@@ -890,7 +929,7 @@ jobs:
           - mode: "debug"
           - mode: "release"
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     needs: check-ci-config
     if: ${{ needs.check-ci-config.outputs.wasm == 'true' && needs.check-ci-config.outputs.embedded == 'true' }}
@@ -973,7 +1012,7 @@ jobs:
           - name: aarch64-none-none-elf
           - name: riscv32-none-none-eabi
 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     needs: check-ci-config
     if: ${{ needs.check-ci-config.outputs.embedded == 'true' }}
