@@ -14,9 +14,12 @@ defaults:
 
 jobs:
   check-ci-config:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-26.04
 
     timeout-minutes: 5
+
+    env:
+      IS_FORK_PULL_REQUEST: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository }}
 
     outputs:
       android: ${{ steps.ci-config.outputs.android }}
@@ -28,8 +31,22 @@ jobs:
         with:
           persist-credentials: false
 
+      - name: Check out the ci config of the base branch
+        if: ${{ env.IS_FORK_PULL_REQUEST == 'true' }} # A fork must not turn off the jobs that check it
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+          path: base-ref
+          sparse-checkout: |
+            .github/ci-config.yml
+            .github/ci-config.yaml
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
+
       - name: Check the ci config
         id: ci-config
+        env:
+          CI_CONFIG_DIR: ${{ env.IS_FORK_PULL_REQUEST == 'true' && 'base-ref/.github' || '.github' }}
         run: .github/scripts/ci-config.sh >> "${GITHUB_OUTPUT}"
 
   linux-integration-tests:
@@ -38,11 +55,17 @@ jobs:
       matrix:
         swift-image:
           - name: swift:6.3-noble
+          - name: swift:6.4-resolute
         config:
           - mode: "debug"
           - mode: "release"
+        include:
+          - swift-image: { name: swift:6.3-noble }
+            runner: ubuntu-24.04
+          - swift-image: { name: swift:6.4-resolute }
+            runner: ubuntu-26.04
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
 
     needs: check-ci-config
     if: ${{ needs.check-ci-config.outputs.integration-tests == 'true' }}
@@ -152,6 +175,7 @@ jobs:
       matrix:
         swift:
           - version: 6.3
+          - version: 6.4
 
     runs-on: macos-26
 
@@ -259,6 +283,7 @@ jobs:
           - version: latest-stable
         swift:
           - version: 6.3
+          - version: 6.4
         config:
           - mode: "debug"
           - mode: "release"
@@ -438,11 +463,17 @@ jobs:
       matrix:
         swift:
           - version: 6.3
+          - version: 6.4.0
         config:
           - mode: "debug"
           - mode: "release"
+        include:
+          - swift: { version: 6.3 }
+            runner: ubuntu-24.04
+          - swift: { version: 6.4.0 }
+            runner: ubuntu-26.04
 
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.runner }}
 
     needs: check-ci-config
     if: ${{ needs.check-ci-config.outputs.integration-tests == 'true' && needs.check-ci-config.outputs.android == 'true' }}
@@ -505,6 +536,7 @@ jobs:
           copy-files: Tests
           swift-build-flags: >-
             --build-tests
+            --disable-xctest
             --explicit-target-dependency-import-check error
           swift-test-flags: --filter "IntegrationTests."
 
