@@ -1922,20 +1922,20 @@ Measurements dependant on the underlying implementation: `monotonic` on libc++ a
 
 ### Against Darwin
 
-These were performed on my M1 Pro MacBook, on macOS 27.
+These were performed on a M6 processor, on macOS 27.
 
 | Benchmark        | `SystemClock` (ns/op) | Standard Library (ns/op) | Speedup |
 | ---------------- | --------------------- | ------------------------ | ------- |
-| `continuous.now` | 10.6 ns               | 24.7 ns                  | 2.34x   |
-| `suspending.now` | 10.8 ns               | 23.1 ns                  | 2.14x   |
+| `continuous.now` | 7.6 ns                | 13.6 ns                  | 1.81x   |
+| `suspending.now` | 7.6 ns                | 13.5 ns                  | 1.78x   |
 
 | Benchmark              | `SystemClock` instructions | Standard Library instructions |
 | ---------------------- | -------------------------- | ----------------------------- |
 | `realtime.now`         | 146                        | N/A                           |
 | `realtimeCoarse.now`   | 146                        | N/A                           |
-| `continuous.now`       | 94                         | 205                           |
+| `continuous.now`       | 94                         | 203                           |
 | `continuousCoarse.now` | 104                        | N/A                           |
-| `suspending.now`       | 101                        | 210                           |
+| `suspending.now`       | 101                        | 208                           |
 | `suspendingCoarse.now` | 91                         | N/A                           |
 
 ### Against glibc
